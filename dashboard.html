@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Dashboard – Enabled</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="shell">
+    <header class="site-header">
+      <div class="site-header-inner">
+        <a href="index.html#hero" class="brand">
+          <div class="brand-mark" aria-hidden="true"></div>
+          <div>
+            <div class="brand-text-primary">Enabled</div>
+            <div class="brand-text-secondary">Dashboard</div>
+          </div>
+        </a>
+        <a href="index.html" class="dashboard-back">Back to site</a>
+      </div>
+    </header>
+
+    <main>
+      <section class="section dashboard-gate" id="dashboardGate">
+        <div class="section-inner dashboard-gate-inner">
+          <h1 class="dashboard-gate-title">Dashboard</h1>
+          <p class="dashboard-gate-text">Enter the password to continue.</p>
+          <form class="dashboard-gate-form" id="gateForm">
+            <input type="password" id="dashboardPassword" class="dashboard-gate-input" placeholder="Password" autocomplete="current-password" required />
+            <button type="submit" class="btn-primary">Enter</button>
+          </form>
+          <p class="dashboard-gate-error" id="gateError" aria-live="polite"></p>
+        </div>
+      </section>
+
+      <section class="section dashboard-content" id="dashboardContent" hidden>
+        <div class="section-inner">
+          <h1 class="dashboard-heading">Dashboard</h1>
+          <div class="dashboard-metrics">
+            <article class="dashboard-metric">
+              <h2 class="dashboard-metric-label">Number of Clients</h2>
+              <div class="dashboard-metric-value-wrap">
+                <span class="dashboard-metric-value" id="clientsValue">0/10</span>
+                <button type="button" class="dashboard-metric-edit" id="clientsEdit" aria-label="Edit maximum" title="Edit maximum">
+                  <svg class="dashboard-edit-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                </button>
+              </div>
+              <div class="dashboard-metric-edit-row dashboard-metric-edit-row-hidden" id="clientsEditRow">
+                <label for="clientsMaxInput" class="dashboard-metric-edit-label">Max:</label>
+                <input type="number" id="clientsMaxInput" class="dashboard-metric-max-input" min="1" max="500" value="10" />
+                <button type="button" class="dashboard-metric-save" id="clientsSave">Save</button>
+              </div>
+              <div class="dashboard-metric-controls">
+                <button type="button" class="dashboard-metric-btn dashboard-metric-down" id="clientsDown" aria-label="Decrease">↓</button>
+                <button type="button" class="dashboard-metric-btn dashboard-metric-up" id="clientsUp" aria-label="Increase">↑</button>
+              </div>
+            </article>
+            <article class="dashboard-metric">
+              <h2 class="dashboard-metric-label">Business Assessment+</h2>
+              <div class="dashboard-metric-value-wrap">
+                <span class="dashboard-metric-value" id="assessmentValue">0/10</span>
+                <button type="button" class="dashboard-metric-edit" id="assessmentEdit" aria-label="Edit maximum" title="Edit maximum">
+                  <svg class="dashboard-edit-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                </button>
+              </div>
+              <div class="dashboard-metric-edit-row dashboard-metric-edit-row-hidden" id="assessmentEditRow">
+                <label for="assessmentMaxInput" class="dashboard-metric-edit-label">Max:</label>
+                <input type="number" id="assessmentMaxInput" class="dashboard-metric-max-input" min="1" max="500" value="10" />
+                <button type="button" class="dashboard-metric-save" id="assessmentSave">Save</button>
+              </div>
+              <div class="dashboard-metric-controls">
+                <button type="button" class="dashboard-metric-btn dashboard-metric-down" id="assessmentDown" aria-label="Decrease">↓</button>
+                <button type="button" class="dashboard-metric-btn dashboard-metric-up" id="assessmentUp" aria-label="Increase">↑</button>
+              </div>
+            </article>
+          </div>
+          <p class="dashboard-logout">
+            <button type="button" class="btn-secondary" id="logoutBtn">Log out</button>
+          </p>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script>
+  (function() {
+    var AUTH_KEY = 'enabled_dashboard_auth';
+    var CLIENTS_KEY = 'enabled_dashboard_clients';
+    var ASSESSMENT_KEY = 'enabled_dashboard_assessment';
+    var CLIENTS_MAX_KEY = 'enabled_dashboard_clients_max';
+    var ASSESSMENT_MAX_KEY = 'enabled_dashboard_assessment_max';
+    var PASSWORD = 'enabled';
+    var ABSOLUTE_MAX = 500;
+    var DEFAULT_MAX = 10;
+
+    var gate = document.getElementById('dashboardGate');
+    var content = document.getElementById('dashboardContent');
+    var form = document.getElementById('gateForm');
+    var input = document.getElementById('dashboardPassword');
+    var errorEl = document.getElementById('gateError');
+
+    function isAuthenticated() { return sessionStorage.getItem(AUTH_KEY) === '1'; }
+    function setAuthenticated(ok) { if (ok) sessionStorage.setItem(AUTH_KEY, '1'); else sessionStorage.removeItem(AUTH_KEY); }
+    function showGate() { gate.hidden = false; content.hidden = true; }
+    function showDashboard() { gate.hidden = true; content.hidden = false; errorEl.textContent = ''; input.value = ''; initMetrics(); }
+
+    if (isAuthenticated()) showDashboard(); else showGate();
+
+    form.addEventListener('submit', function(e) {
+      e.preventDefault();
+      if (input.value.trim() === PASSWORD) { setAuthenticated(true); showDashboard(); }
+      else { errorEl.textContent = 'Incorrect password. Try again.'; input.focus(); }
+    });
+
+    document.getElementById('logoutBtn').addEventListener('click', function() { setAuthenticated(false); showGate(); });
+
+    function getStored(key, def) { var v = localStorage.getItem(key); return v !== null ? parseInt(v, 10) : def; }
+    function setStored(key, val) { localStorage.setItem(key, String(val)); }
+    function getMax(key, def) { var m = getStored(key, def); return Math.max(1, Math.min(ABSOLUTE_MAX, isNaN(m) ? def : m)); }
+
+    function initMetrics() {
+      var clientsValEl = document.getElementById('clientsValue');
+      var assessmentValEl = document.getElementById('assessmentValue');
+      var clientsEditRow = document.getElementById('clientsEditRow');
+      var assessmentEditRow = document.getElementById('assessmentEditRow');
+      var clientsMaxInput = document.getElementById('clientsMaxInput');
+      var assessmentMaxInput = document.getElementById('assessmentMaxInput');
+
+      function render() {
+        var cMax = getMax(CLIENTS_MAX_KEY, DEFAULT_MAX);
+        var aMax = getMax(ASSESSMENT_MAX_KEY, DEFAULT_MAX);
+        var c = getStored(CLIENTS_KEY, 0);
+        var a = getStored(ASSESSMENT_KEY, 0);
+        if (c > cMax) { setStored(CLIENTS_KEY, cMax); c = cMax; }
+        if (a > aMax) { setStored(ASSESSMENT_KEY, aMax); a = aMax; }
+        clientsValEl.textContent = c + '/' + cMax;
+        assessmentValEl.textContent = a + '/' + aMax;
+        clientsMaxInput.value = cMax;
+        assessmentMaxInput.value = aMax;
+      }
+
+      function adjust(key, maxKey, delta) {
+        var maxVal = getMax(maxKey, DEFAULT_MAX);
+        var n = getStored(key, 0) + delta;
+        n = Math.max(0, Math.min(maxVal, n));
+        setStored(key, n);
+        render();
+      }
+
+      function saveMax(maxKey, inputEl, editRow) {
+        var v = parseInt(inputEl.value, 10);
+        if (isNaN(v) || v < 1 || v > ABSOLUTE_MAX) { inputEl.focus(); return; }
+        setStored(maxKey, v);
+        var valKey = maxKey === CLIENTS_MAX_KEY ? CLIENTS_KEY : ASSESSMENT_KEY;
+        if (getStored(valKey, 0) > v) setStored(valKey, v);
+        editRow.classList.add('dashboard-metric-edit-row-hidden');
+        render();
+      }
+
+      document.getElementById('clientsUp').onclick = function() { adjust(CLIENTS_KEY, CLIENTS_MAX_KEY, 1); };
+      document.getElementById('clientsDown').onclick = function() { adjust(CLIENTS_KEY, CLIENTS_MAX_KEY, -1); };
+      document.getElementById('assessmentUp').onclick = function() { adjust(ASSESSMENT_KEY, ASSESSMENT_MAX_KEY, 1); };
+      document.getElementById('assessmentDown').onclick = function() { adjust(ASSESSMENT_KEY, ASSESSMENT_MAX_KEY, -1); };
+      document.getElementById('clientsEdit').onclick = function() { clientsEditRow.classList.remove('dashboard-metric-edit-row-hidden'); clientsMaxInput.focus(); };
+      document.getElementById('assessmentEdit').onclick = function() { assessmentEditRow.classList.remove('dashboard-metric-edit-row-hidden'); assessmentMaxInput.focus(); };
+      document.getElementById('clientsSave').onclick = function() { saveMax(CLIENTS_MAX_KEY, clientsMaxInput, clientsEditRow); };
+      document.getElementById('assessmentSave').onclick = function() { saveMax(ASSESSMENT_MAX_KEY, assessmentMaxInput, assessmentEditRow); };
+      clientsMaxInput.addEventListener('keydown', function(e) { if (e.key === 'Enter') { e.preventDefault(); saveMax(CLIENTS_MAX_KEY, clientsMaxInput, clientsEditRow); } });
+      assessmentMaxInput.addEventListener('keydown', function(e) { if (e.key === 'Enter') { e.preventDefault(); saveMax(ASSESSMENT_MAX_KEY, assessmentMaxInput, assessmentEditRow); } });
+      render();
+    }
+  })();
+  </script>
+</body>
+</html>
