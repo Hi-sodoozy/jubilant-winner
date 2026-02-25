@@ -29,7 +29,11 @@
   box-sizing: border-box;
 }
 
-html,
+html {
+  overflow-x: hidden;
+  -webkit-text-size-adjust: 100%;
+}
+
 body {
   margin: 0;
   padding: 0;
@@ -37,6 +41,7 @@ body {
   color: var(--text-dark);
   font-family: "IBM Plex Sans", system-ui, -apple-system, sans-serif;
   scroll-behavior: smooth;
+  overflow-x: hidden;
 }
 
 body {
@@ -58,6 +63,7 @@ img {
   display: flex;
   flex-direction: column;
   background-color: var(--cream);
+  overflow-x: hidden;
 }
 
 main {
@@ -1701,22 +1707,29 @@ a.website-case-client:hover {
 
 @media (max-width: 768px) {
   .site-header-inner {
-    padding-inline: 1.25rem;
+    padding: 0.75rem 1rem;
+    gap: 1rem;
   }
   .nav-toggle {
     display: inline-flex;
+    min-width: 44px;
+    min-height: 44px;
+    align-items: center;
+    justify-content: center;
   }
   .nav {
     position: fixed;
-    inset: 3.3rem 1.25rem auto 1.25rem;
-    padding: 1rem 1.1rem;
+    inset: 3.5rem 0.75rem auto 0.75rem;
+    max-height: calc(100vh - 5rem);
+    overflow-y: auto;
+    padding: 1rem 1rem 1.25rem;
     border-radius: var(--radius-lg);
     background: var(--cream);
     border: 1px solid rgba(15, 23, 42, 0.1);
     box-shadow: var(--shadow-card);
     flex-direction: column;
-    align-items: flex-start;
-    gap: 0.8rem;
+    align-items: stretch;
+    gap: 0;
     transform-origin: top right;
     transform: scale(0.98);
     opacity: 0;
@@ -1724,23 +1737,153 @@ a.website-case-client:hover {
     transition: opacity 0.18s ease, transform 0.18s ease;
     z-index: 20;
   }
+  .nav a {
+    display: block;
+    padding: 0.75rem 1rem;
+    min-height: 44px;
+    box-sizing: border-box;
+    border-bottom: 2px solid transparent;
+  }
+  .nav-cta {
+    margin-top: 0.5rem;
+    padding: 0.75rem 1.25rem;
+    text-align: center;
+    min-height: 44px;
+  }
+  .nav-dashboard-dot {
+    min-width: 44px;
+    min-height: 44px;
+    margin-left: 0;
+    padding: 0.75rem;
+  }
   .nav-dropdown .nav-dropdown-panel {
     position: static;
     opacity: 1;
     visibility: visible;
     transform: none;
     margin-top: 0.25rem;
-    margin-left: 0.5rem;
-    padding: 0.25rem 0;
+    margin-left: 0;
+    margin-bottom: 0.5rem;
+    padding: 0 0 0 0.5rem;
     background: transparent;
     border: none;
     box-shadow: none;
     display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+  .nav-dropdown .nav-dropdown-panel a {
+    padding: 0.6rem 0.75rem;
+    min-height: 44px;
+    font-size: 0.95rem;
+  }
+  .nav-dropdown-trigger {
+    padding: 0.75rem 1rem;
+    min-height: 44px;
+  }
+  .section {
+    padding-top: 3rem;
+    padding-bottom: 3rem;
+    padding-inline: 1rem;
+  }
+  .section-inner {
+    padding-inline: 0;
   }
   .hero {
-    padding-top: 2.5rem;
+    padding-top: 2rem;
+    padding-bottom: 2.5rem;
   }
   .hero-title {
-    font-size: clamp(1.9rem, 8vw, 2.5rem);
+    font-size: clamp(1.75rem, 7vw, 2.25rem);
+    margin-bottom: 1.5rem;
+  }
+  .hero-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .hero-actions .btn-primary,
+  .hero-actions .btn-secondary {
+    min-height: 48px;
+    justify-content: center;
+    font-size: 1rem;
+  }
+  .btn-primary,
+  .btn-secondary {
+    min-height: 48px;
+    padding: 0.85rem 1.5rem;
+    font-size: 1rem;
+  }
+  .need-grid {
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+  }
+  .need-card {
+    padding: 1.25rem 1rem;
+  }
+  .contact-form {
+    max-width: none;
+  }
+  .form-row input,
+  .form-row textarea {
+    min-height: 48px;
+    font-size: 16px;
+    padding: 0.85rem 1rem;
+  }
+  .form-row textarea {
+    min-height: 140px;
+  }
+  .page-title {
+    font-size: clamp(1.6rem, 6vw, 2rem);
+  }
+  .page-subtitle {
+    font-size: 1rem;
+  }
+  .website-option,
+  .section-service {
+    padding-bottom: 1.5rem;
+  }
+  .todo-card {
+    padding: 1.5rem 1.25rem;
+  }
+  .section-need-title {
+    font-size: clamp(1.5rem, 5vw, 1.9rem);
+  }
+  .contact-title {
+    font-size: clamp(1.5rem, 5vw, 1.75rem);
+  }
+}
+
+@media (max-width: 480px) {
+  .site-header-inner {
+    padding: 0.6rem 0.75rem;
+  }
+  .brand-text-secondary {
+    font-size: 0.7rem;
+  }
+  .section {
+    padding-top: 2.5rem;
+    padding-bottom: 2.5rem;
+    padding-inline: 0.75rem;
+  }
+  .hero-title {
+    font-size: clamp(1.5rem, 8vw, 1.9rem);
+  }
+  .section-two-col-right-title {
+    font-size: clamp(1.35rem, 5vw, 1.6rem);
+  }
+  .card {
+    padding: 1.25rem 1rem;
+  }
+  .need-card-title {
+    font-size: 1.15rem;
+  }
+  .page-intro-title {
+    font-size: clamp(1.5rem, 6vw, 1.75rem);
+  }
+  .service-title {
+    font-size: 1.25rem;
+  }
+  .website-option-title {
+    font-size: 1.2rem;
   }
 }
