@@ -901,11 +901,11 @@ main {
   gap: 1rem;
 }
 
-/* Services page */
+/* Services page – aligned with home page light colouring */
 .section-page-hero {
   padding-top: 3rem;
   padding-bottom: 2rem;
-  background-color: var(--midnight);
+  background: linear-gradient(180deg, var(--teal-pale) 0%, var(--cream) 100%);
 }
 
 .section-services-intro.section-page-hero {
@@ -917,11 +917,12 @@ main {
   font-weight: 700;
   font-size: clamp(1.8rem, 3vw, 2.2rem);
   margin: 0 0 0.5rem;
+  color: var(--text-dark);
 }
 
 .page-subtitle {
   margin: 0 0 1.5rem;
-  color: var(--text-light-secondary);
+  color: var(--text-muted);
   font-size: 1.1rem;
 }
 
@@ -933,44 +934,44 @@ main {
 .services-intro-body p {
   margin: 0 0 0.75rem;
   line-height: 1.6;
-  color: var(--text-light-primary);
+  color: var(--text-dark);
 }
 
-/* "Don't know what you need?" – inline link style, distinct from hero */
+/* "Don't know what you need?" – inline link style */
 .services-not-sure {
   display: flex;
   flex-wrap: wrap;
   align-items: baseline;
   gap: 0.5rem 0.75rem;
   padding: 1rem 0 0;
-  border-top: 1px solid rgba(148, 163, 184, 0.25);
+  border-top: 1px solid rgba(15, 23, 42, 0.1);
   margin-top: 1.25rem;
 }
 
 .services-not-sure-text {
   margin: 0;
   font-size: 1.05rem;
-  color: var(--text-light-secondary);
+  color: var(--text-muted);
 }
 
 .services-not-sure-link {
   font-family: "Plus Jakarta Sans", system-ui, sans-serif;
   font-weight: 600;
-  color: var(--lime);
+  color: var(--deep-teal);
   text-underline-offset: 4px;
 }
 
 .services-not-sure-link:hover {
-  color: var(--lime-hover);
+  color: var(--teal-soft);
   text-decoration: underline;
 }
 
-/* Delineation between hero and services list */
+/* Divider between hero and services list – minimal, light */
 .section-services-divider {
-  padding-top: 2rem;
-  padding-bottom: 0.5rem;
-  background-color: var(--midnight);
-  border-top: 2px solid rgba(163, 230, 53, 0.35);
+  padding-top: 1.5rem;
+  padding-bottom: 0;
+  background-color: var(--cream);
+  border: none;
 }
 
 .services-list-heading {
@@ -978,7 +979,7 @@ main {
   font-weight: 600;
   font-size: 1.35rem;
   margin: 0;
-  color: var(--text-light-primary);
+  color: var(--text-dark);
   letter-spacing: 0.02em;
 }
 
@@ -993,9 +994,9 @@ main {
   justify-content: center;
   padding: 0.65rem 1.35rem;
   border-radius: var(--radius-pill);
-  border: 1px solid rgba(163, 230, 53, 0.7);
+  border: 1px solid var(--deep-teal);
   background: transparent;
-  color: var(--lime);
+  color: var(--deep-teal);
   font-family: "Plus Jakarta Sans", system-ui, sans-serif;
   font-weight: 600;
   font-size: 0.9rem;
@@ -1004,9 +1005,9 @@ main {
 }
 
 .btn-service-cta:hover {
-  border-color: var(--lime);
-  background: rgba(163, 230, 53, 0.12);
-  color: var(--lime-hover);
+  border-color: var(--teal-soft);
+  background: var(--teal-pale);
+  color: var(--deep-teal);
 }
 
 /* Website service page */
@@ -1172,11 +1173,11 @@ a.website-case-client:hover {
 .section-service {
   padding-top: 2rem;
   padding-bottom: 2rem;
-  background-color: var(--deep-teal);
+  background-color: var(--cream);
 }
 
 .section-service:nth-child(even) {
-  background-color: rgba(15, 23, 42, 0.5);
+  background-color: var(--teal-pale);
 }
 
 .service-title {
@@ -1184,11 +1185,12 @@ a.website-case-client:hover {
   font-weight: 600;
   font-size: 1.5rem;
   margin: 0 0 0.25rem;
+  color: var(--text-dark);
 }
 
 .service-tagline {
   margin: 0 0 0.5rem;
-  color: var(--text-light-secondary);
+  color: var(--text-muted);
   font-size: 0.95rem;
 }
 
@@ -1198,7 +1200,7 @@ a.website-case-client:hover {
   margin: 0 0 0.75rem;
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  color: var(--text-light-secondary);
+  color: var(--text-muted);
 }
 
 .service-body {
@@ -1208,7 +1210,7 @@ a.website-case-client:hover {
 .service-body p {
   margin: 0 0 0.75rem;
   line-height: 1.6;
-  color: rgba(226, 232, 240, 0.95);
+  color: var(--text-dark);
 }
 
 .service-body p:last-child {
@@ -1225,9 +1227,9 @@ a.website-case-client:hover {
   padding-bottom: 4rem;
 }
 
-/* Business Assessment page */
+/* Business Assessment, Referrals, About – light theme */
 .page-intro {
-  background-color: var(--midnight);
+  background: linear-gradient(180deg, var(--teal-pale) 0%, var(--cream) 100%);
   padding-top: 3rem;
   padding-bottom: 3rem;
 }
@@ -1237,20 +1239,20 @@ a.website-case-client:hover {
   font-weight: 700;
   font-size: clamp(1.9rem, 3vw, 2.4rem);
   margin: 0 0 0.5rem;
-  color: var(--text-light-primary);
+  color: var(--text-dark);
 }
 
 .page-intro-subtitle {
   margin: 0 0 1.5rem;
   font-size: 1.15rem;
-  color: var(--text-light-secondary);
+  color: var(--text-muted);
 }
 
 .page-intro-body {
   max-width: 42rem;
   font-size: 1.05rem;
   line-height: 1.65;
-  color: var(--text-light-primary);
+  color: var(--text-dark);
 }
 
 .page-intro-body p {
@@ -1263,14 +1265,14 @@ a.website-case-client:hover {
 }
 
 .section-casa {
-  background-color: var(--deep-teal);
-  color: var(--text-light-primary);
+  background-color: var(--cream);
+  color: var(--text-dark);
 }
 
 .section-casa-subtitle {
   margin: 0.5rem 0 0;
   font-size: 1.05rem;
-  color: var(--text-light-secondary);
+  color: var(--text-muted);
 }
 
 .casa-grid {
@@ -1322,8 +1324,8 @@ a.website-case-client:hover {
 }
 
 .section-benefits {
-  background-color: var(--midnight);
-  color: var(--text-light-primary);
+  background-color: var(--teal-pale);
+  color: var(--text-dark);
 }
 
 .benefits-heading {
@@ -1332,7 +1334,7 @@ a.website-case-client:hover {
   font-size: clamp(1.9rem, 3vw, 2.4rem);
   letter-spacing: -0.03em;
   margin: 0 0 2rem;
-  color: var(--text-light-primary);
+  color: var(--text-dark);
   text-align: left;
 }
 
@@ -1347,7 +1349,7 @@ a.website-case-client:hover {
   display: flex;
   align-items: stretch;
   gap: 0;
-  border-bottom: 1px solid rgba(148, 163, 184, 0.2);
+  border-bottom: 1px solid rgba(15, 23, 42, 0.1);
   padding: 1.75rem 0;
 }
 
@@ -1363,7 +1365,7 @@ a.website-case-client:hover {
 .benefit-row-accent {
   width: 4px;
   flex-shrink: 0;
-  background: var(--lime);
+  background: var(--deep-teal);
   border-radius: 2px;
   margin-right: 1.5rem;
   margin-top: 0.2rem;
@@ -1379,13 +1381,13 @@ a.website-case-client:hover {
   font-weight: 600;
   font-size: 1.35rem;
   margin: 0 0 0.5rem;
-  color: var(--text-light-primary);
+  color: var(--text-dark);
 }
 
 .benefit-row-body {
   margin: 0;
   font-size: 1rem;
-  color: var(--text-light-secondary);
+  color: var(--text-dark);
   line-height: 1.6;
 }
 
@@ -1407,7 +1409,7 @@ a.website-case-client:hover {
 }
 
 .dashboard-gate {
-  background-color: var(--midnight);
+  background: linear-gradient(180deg, var(--teal-pale) 0%, var(--cream) 100%);
   padding-top: 4rem;
   padding-bottom: 4rem;
 }
@@ -1421,12 +1423,12 @@ a.website-case-client:hover {
   font-weight: 700;
   font-size: 1.75rem;
   margin: 0 0 0.5rem;
-  color: var(--text-light-primary);
+  color: var(--text-dark);
 }
 
 .dashboard-gate-text {
   margin: 0 0 1.5rem;
-  color: var(--text-light-secondary);
+  color: var(--text-muted);
   font-size: 1rem;
 }
 
@@ -1440,9 +1442,9 @@ a.website-case-client:hover {
   width: 100%;
   padding: 0.75rem 1rem;
   border-radius: 12px;
-  border: 1px solid rgba(148, 163, 184, 0.4);
-  background: rgba(15, 23, 42, 0.6);
-  color: var(--text-light-primary);
+  border: 1px solid rgba(15, 23, 42, 0.2);
+  background: #fff;
+  color: var(--text-dark);
   font-size: 1rem;
 }
 
@@ -1458,7 +1460,7 @@ a.website-case-client:hover {
 }
 
 .dashboard-content {
-  background-color: var(--midnight);
+  background-color: var(--cream);
   padding-top: 3rem;
   padding-bottom: 4rem;
 }
@@ -1468,7 +1470,7 @@ a.website-case-client:hover {
   font-weight: 700;
   font-size: 1.75rem;
   margin: 0 0 2rem;
-  color: var(--text-light-primary);
+  color: var(--text-dark);
 }
 
 .dashboard-metrics {
