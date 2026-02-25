@@ -1010,6 +1010,93 @@ main {
   color: var(--deep-teal);
 }
 
+/* Commercial Production page – same light theme as Website page */
+.commercial-production-page .section-page-hero {
+  background: linear-gradient(180deg, var(--teal-pale) 0%, var(--cream) 100%);
+}
+
+.commercial-production-page .website-intro-body p {
+  margin: 0;
+  padding-bottom: 1.6em;
+  line-height: 1.6;
+  color: var(--text-dark);
+}
+
+.commercial-production-page .website-intro-body p:last-child {
+  padding-bottom: 0;
+}
+
+.commercial-production-page .section-inner p,
+.commercial-production-page .website-option-desc {
+  color: var(--text-dark);
+  line-height: 1.6;
+}
+
+.commercial-production-page .page-title,
+.commercial-production-page .website-section-heading,
+.commercial-production-page .website-option-title {
+  color: var(--text-dark);
+}
+
+.commercial-production-page .page-subtitle {
+  color: var(--text-muted);
+}
+
+.commercial-production-page .section-website-options {
+  background-color: var(--cream);
+}
+
+.commercial-production-page .section-website-cta {
+  background-color: var(--teal-pale);
+}
+
+.commercial-production-page .website-cta-text {
+  color: var(--text-dark);
+}
+
+.commercial-production-page .website-option-desc p {
+  margin: 0 0 1rem;
+  color: var(--text-dark);
+  line-height: 1.6;
+}
+
+.commercial-production-page .website-option-desc p:last-child {
+  margin-bottom: 0;
+}
+
+.commercial-production-page .commercial-note {
+  margin-top: 1.25rem;
+  font-size: 0.95rem;
+  color: var(--text-muted);
+  font-style: italic;
+}
+
+/* Any extra copy or new sections on Commercial Production use light theme */
+.commercial-production-page .section-inner > p,
+.commercial-production-page .section-inner > h2,
+.commercial-production-page .section-inner > h3 {
+  color: var(--text-dark);
+}
+
+.commercial-production-page .section-inner > p {
+  margin: 0 0 1rem;
+  line-height: 1.6;
+}
+
+.commercial-production-page .section-inner > h2 {
+  font-family: "Plus Jakarta Sans", system-ui, sans-serif;
+  font-weight: 700;
+  font-size: 1.35rem;
+  margin: 0 0 0.75rem;
+}
+
+.commercial-production-page .section-inner > h3 {
+  font-family: "Plus Jakarta Sans", system-ui, sans-serif;
+  font-weight: 600;
+  font-size: 1.15rem;
+  margin: 0 0 0.5rem;
+}
+
 /* Website service page */
 .section-website-hero {
   padding-bottom: 3rem;
