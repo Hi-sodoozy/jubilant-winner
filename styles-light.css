@@ -1022,11 +1022,11 @@ main {
 .website-intro-body p {
   margin: 0;
   line-height: 1.6;
-  color: var(--text-light-primary);
+  color: var(--text-dark);
 }
 
 .section-website-options {
-  background-color: var(--deep-teal);
+  background-color: var(--cream);
   padding-top: 3rem;
   padding-bottom: 3rem;
 }
@@ -1036,7 +1036,7 @@ main {
   font-weight: 600;
   font-size: 1.35rem;
   margin: 0 0 2rem;
-  color: var(--text-light-primary);
+  color: var(--text-dark);
   letter-spacing: 0.02em;
 }
 
@@ -1048,7 +1048,7 @@ main {
 
 .website-option {
   padding-bottom: 2rem;
-  border-bottom: 1px solid rgba(148, 163, 184, 0.2);
+  border-bottom: 1px solid rgba(15, 23, 42, 0.1);
 }
 
 .website-option:last-of-type {
@@ -1061,14 +1061,14 @@ main {
   font-weight: 600;
   font-size: 1.4rem;
   margin: 0 0 0.75rem;
-  color: var(--text-light-primary);
+  color: var(--text-dark);
 }
 
 .website-option-desc {
   margin: 0 0 1.75rem;
   max-width: 42rem;
   line-height: 1.6;
-  color: rgba(226, 232, 240, 0.95);
+  color: var(--text-dark);
 }
 
 .website-work {
@@ -1082,7 +1082,7 @@ main {
   margin: 0 0 1rem;
   text-transform: uppercase;
   letter-spacing: 0.06em;
-  color: var(--text-light-secondary);
+  color: var(--text-muted);
 }
 
 .website-case-header {
@@ -1098,7 +1098,7 @@ main {
   font-family: "Plus Jakarta Sans", system-ui, sans-serif;
   font-weight: 600;
   font-size: 1rem;
-  color: var(--text-light-primary);
+  color: var(--text-dark);
   text-underline-offset: 4px;
 }
 
@@ -1124,10 +1124,11 @@ a.website-case-client:hover {
 }
 
 .website-case {
-  background: rgba(15, 23, 42, 0.4);
+  background: #fff;
   border-radius: var(--radius-lg);
   padding: 1.25rem 1.25rem 1.5rem;
-  border: 1px solid rgba(148, 163, 184, 0.15);
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  box-shadow: var(--shadow-soft);
 }
 
 .website-case-logo-wrap {
@@ -1150,20 +1151,20 @@ a.website-case-client:hover {
   margin: 0;
   font-size: 0.95rem;
   line-height: 1.55;
-  color: rgba(226, 232, 240, 0.9);
+  color: var(--text-dark);
 }
 
 .section-website-cta {
   padding-top: 3rem;
   padding-bottom: 4rem;
-  background-color: var(--midnight);
+  background-color: var(--teal-pale);
   text-align: center;
 }
 
 .website-cta-text {
   margin: 0 0 1.25rem;
   font-size: 1.05rem;
-  color: var(--text-light-primary);
+  color: var(--text-dark);
 }
 
 .section-website-cta .btn-primary {
