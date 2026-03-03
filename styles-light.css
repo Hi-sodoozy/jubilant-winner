@@ -150,6 +150,7 @@ main {
   padding: 0.5rem 1.2rem;
   border-radius: var(--radius-pill);
   border: 1px solid var(--deep-teal);
+  border-bottom: 1px solid var(--deep-teal);
   background: transparent;
   color: var(--deep-teal);
   font-family: "Plus Jakarta Sans", system-ui, sans-serif;
@@ -160,6 +161,7 @@ main {
 
 .nav-cta:hover {
   border-color: var(--teal-soft);
+  border-bottom-color: var(--teal-soft);
   background: var(--teal-pale);
   color: var(--deep-teal);
 }
@@ -832,9 +834,10 @@ main {
 }
 
 .contact-form {
-  max-width: 28rem;
+  max-width: 48rem;
   margin-left: auto;
   margin-right: auto;
+  width: 100%;
 }
 
 .section-contact .section-inner {
