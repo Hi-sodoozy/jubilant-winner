@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Blog – Iain Duguid</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="keywords" content="Iain Duguid, Melbourne, Australia, Blog, Content, Communications" />
+  <meta name="description" content="Blog – Iain Duguid. Content &amp; Communications. Melbourne, Australia." />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles-light.css" />
+</head>
+<body>
+  <div class="shell">
+    <header class="site-header">
+      <div class="site-header-inner">
+        <a href="index.html#hero" class="brand">
+          <div class="brand-mark" aria-hidden="true"></div>
+          <div>
+            <div class="brand-text-primary">Iain Duguid</div>
+            <div class="brand-text-secondary">Content &amp; Communications</div>
+          </div>
+        </a>
+        <input type="checkbox" id="navToggle" class="nav-toggle-input" aria-label="Toggle navigation" />
+        <label for="navToggle" class="nav-toggle" aria-hidden="true"><span></span><span></span></label>
+        <nav class="nav" id="siteNav" aria-label="Main navigation">
+          <a href="business-assessment.html">Business Assessment</a>
+          <div class="nav-dropdown">
+            <a href="services.html" class="nav-dropdown-trigger">Services</a>
+            <div class="nav-dropdown-panel">
+              <a href="commercial-production.html">Commercial Production</a>
+              <a href="website.html">Website</a>
+              <a href="podcast.html">Podcast</a>
+              <a href="socials.html">Socials</a>
+              <a href="services.html#podcasts">Podcasts</a>
+              <a href="services.html#industry-updates">Industry Updates</a>
+              <a href="phone-messaging.html">Phone Messaging</a>
+              <a href="services.html#project-management">Project Management</a>
+            </div>
+          </div>
+          <a href="referrals.html">Referrals</a>
+          <a href="about.html">About</a>
+          <a href="blog.html">Blog</a>
+          <a href="index.html#contact" class="nav-cta">Contact</a>
+          <a href="dashboard.html" class="nav-dashboard-dot" aria-label="Dashboard" title="Dashboard"></a>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <section class="section section-page-hero section-website-hero">
+        <div class="section-inner">
+          <h1 class="page-title">Blog</h1>
+          <p class="page-subtitle">Posts from Iain</p>
+          <div class="blog-search-wrap">
+            <label for="blog-search" class="visually-hidden">Search posts</label>
+            <input type="search" id="blog-search" class="blog-search-input" placeholder="Search posts by heading or tags…" aria-label="Search posts" />
+          </div>
+        </div>
+      </section>
+
+      <section class="section section-blog-list">
+        <div class="section-inner">
+          <div id="blog-posts-list" class="blog-posts-list" aria-live="polite">
+            <!-- Posts rendered by JS from localStorage -->
+          </div>
+          <p id="blog-no-posts" class="blog-no-posts" hidden>No posts yet. Check back later.</p>
+          <p id="blog-no-results" class="blog-no-posts" hidden>No posts match your search.</p>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="site-footer-inner">
+        <div>© Iain Duguid. All rights reserved.</div>
+        <div>Connecting businesses with their customers</div>
+      </div>
+    </footer>
+  </div>
+
+  <script>
+  (function() {
+    var STORAGE_KEY = 'iainduguid_blog_posts';
+    var listEl = document.getElementById('blog-posts-list');
+    var noPostsEl = document.getElementById('blog-no-posts');
+    var noResultsEl = document.getElementById('blog-no-results');
+    var searchInput = document.getElementById('blog-search');
+
+    function getPosts() {
+      try {
+        var raw = localStorage.getItem(STORAGE_KEY);
+        return raw ? JSON.parse(raw) : [];
+      } catch (e) { return []; }
+    }
+
+    function renderPosts(posts) {
+      listEl.innerHTML = '';
+      noPostsEl.hidden = true;
+      noResultsEl.hidden = true;
+      if (posts.length === 0) return;
+      posts.forEach(function(p) {
+        var dateStr = p.createdAt ? new Date(parseInt(p.createdAt, 10)).toLocaleDateString('en-AU', { day: 'numeric', month: 'long', year: 'numeric' }) : '';
+        var tagsStr = Array.isArray(p.tags) ? p.tags.join(', ') : (p.tags || '');
+        var excerpt = (p.body || '').replace(/<[^>]+>/g, ' ').substring(0, 160);
+        if ((p.body || '').length > 160) excerpt += '…';
+        var article = document.createElement('article');
+        article.className = 'blog-post-card';
+        article.innerHTML =
+          '<h2 class="blog-post-card-title"><a href="blog-post.html?id=' + encodeURIComponent(p.id) + '">' + escapeHtml(p.title || 'Untitled') + '</a></h2>' +
+          (dateStr ? '<time class="blog-post-card-date" datetime="' + (p.createdAt ? new Date(parseInt(p.createdAt, 10)).toISOString() : '') + '">' + dateStr + '</time>' : '') +
+          (tagsStr ? '<p class="blog-post-card-tags">' + escapeHtml(tagsStr) + '</p>' : '') +
+          (excerpt ? '<p class="blog-post-card-excerpt">' + escapeHtml(excerpt) + '</p>' : '');
+        listEl.appendChild(article);
+      });
+    }
+
+    function escapeHtml(s) {
+      var div = document.createElement('div');
+      div.textContent = s;
+      return div.innerHTML;
+    }
+
+    function run() {
+      var posts = getPosts();
+      posts.sort(function(a, b) {
+        var ta = (a.createdAt && parseInt(a.createdAt, 10)) || 0;
+        var tb = (b.createdAt && parseInt(b.createdAt, 10)) || 0;
+        return tb - ta;
+      });
+      var q = (searchInput && searchInput.value.trim()) ? searchInput.value.trim().toLowerCase() : '';
+      if (q) {
+        posts = posts.filter(function(p) {
+          var title = (p.title || '').toLowerCase();
+          var tags = Array.isArray(p.tags) ? p.tags.join(' ').toLowerCase() : (p.tags || '').toLowerCase();
+          var body = (p.body || '').toLowerCase().replace(/<[^>]+>/g, ' ');
+          return title.indexOf(q) !== -1 || tags.indexOf(q) !== -1 || body.indexOf(q) !== -1;
+        });
+      }
+      if (posts.length === 0) {
+        listEl.innerHTML = '';
+        noPostsEl.hidden = q !== '' || getPosts().length !== 0;
+        noResultsEl.hidden = q === '' || getPosts().length === 0;
+      } else {
+        renderPosts(posts);
+      }
+    }
+
+    if (searchInput) searchInput.addEventListener('input', run);
+    if (searchInput) searchInput.addEventListener('change', run);
+    run();
+  })();
+  </script>
+</body>
+</html>

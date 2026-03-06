@@ -40,6 +40,9 @@
       <section class="section dashboard-content" id="dashboardContent" hidden>
         <div class="section-inner">
           <h1 class="dashboard-heading">Dashboard</h1>
+          <div class="dashboard-actions">
+            <a href="#write-blog" class="btn-primary" id="dashboardWriteBlogBtn">Write Blog Post</a>
+          </div>
           <div class="dashboard-metrics">
             <article class="dashboard-metric">
               <h2 class="dashboard-metric-label">Number of Clients</h2>
@@ -78,12 +81,40 @@
               </div>
             </article>
           </div>
+
+          <section class="dashboard-blog-section" id="write-blog" aria-labelledby="write-blog-heading">
+            <h2 class="dashboard-blog-heading" id="write-blog-heading">Write Blog Post</h2>
+            <form class="dashboard-blog-form" id="blogPostForm">
+              <div class="form-row">
+                <label for="blog-post-title">Heading <span class="required">*</span></label>
+                <input type="text" id="blog-post-title" name="title" required placeholder="Post title" />
+              </div>
+              <div class="form-row">
+                <label for="blog-post-tags">Tags</label>
+                <input type="text" id="blog-post-tags" name="tags" placeholder="e.g. podcast, marketing, tips (comma-separated)" />
+              </div>
+              <div class="form-row">
+                <label for="blog-post-body">Content <span class="required">*</span></label>
+                <textarea id="blog-post-body" name="body" required rows="12" placeholder="Write your post content here. You can use simple HTML (e.g. &lt;p&gt;, &lt;strong&gt;, &lt;a href=&quot;...&quot;&gt;)."></textarea>
+              </div>
+              <button type="submit" class="btn-primary">Publish</button>
+              <p class="dashboard-blog-message" id="blogPostMessage" aria-live="polite"></p>
+            </form>
+          </section>
+
           <p class="dashboard-logout">
             <button type="button" class="btn-secondary" id="logoutBtn">Log out</button>
           </p>
         </div>
       </section>
     </main>
+
+    <footer class="site-footer">
+      <div class="site-footer-inner">
+        <div>© Iain Duguid. All rights reserved.</div>
+        <div>Connecting businesses with their customers</div>
+      </div>
+    </footer>
   </div>
 
   <script>
@@ -172,6 +203,45 @@
       clientsMaxInput.addEventListener('keydown', function(e) { if (e.key === 'Enter') { e.preventDefault(); saveMax(CLIENTS_MAX_KEY, clientsMaxInput, clientsEditRow); } });
       assessmentMaxInput.addEventListener('keydown', function(e) { if (e.key === 'Enter') { e.preventDefault(); saveMax(ASSESSMENT_MAX_KEY, assessmentMaxInput, assessmentEditRow); } });
       render();
+    }
+
+    var BLOG_STORAGE_KEY = 'iainduguid_blog_posts';
+    var blogForm = document.getElementById('blogPostForm');
+    var blogMessage = document.getElementById('blogPostMessage');
+    var writeBlogBtn = document.getElementById('dashboardWriteBlogBtn');
+    if (writeBlogBtn) writeBlogBtn.addEventListener('click', function() { document.getElementById('write-blog').scrollIntoView({ behavior: 'smooth' }); });
+    if (blogForm) {
+      blogForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        var titleInput = document.getElementById('blog-post-title');
+        var tagsInput = document.getElementById('blog-post-tags');
+        var bodyInput = document.getElementById('blog-post-body');
+        if (!titleInput || !bodyInput) return;
+        var tagsVal = (tagsInput && tagsInput.value.trim()) ? tagsInput.value.trim() : '';
+        var tags = tagsVal ? tagsVal.split(',').map(function(t) { return t.trim(); }).filter(Boolean) : [];
+        var posts = [];
+        try {
+          var raw = localStorage.getItem(BLOG_STORAGE_KEY);
+          posts = raw ? JSON.parse(raw) : [];
+        } catch (err) {}
+        var post = {
+          id: 'post-' + Date.now(),
+          title: titleInput.value.trim(),
+          tags: tags,
+          body: bodyInput.value.trim(),
+          createdAt: String(Date.now())
+        };
+        posts.push(post);
+        try {
+          localStorage.setItem(BLOG_STORAGE_KEY, JSON.stringify(posts));
+          if (blogMessage) { blogMessage.textContent = 'Published! View on the Blog page.'; blogMessage.style.color = 'var(--deep-teal)'; }
+          titleInput.value = '';
+          if (tagsInput) tagsInput.value = '';
+          bodyInput.value = '';
+        } catch (err) {
+          if (blogMessage) { blogMessage.textContent = 'Could not save. Try again.'; blogMessage.style.color = '#f87171'; }
+        }
+      });
     }
   })();
   </script>

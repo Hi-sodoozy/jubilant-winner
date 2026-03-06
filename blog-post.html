@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Blog post – Iain Duguid</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles-light.css" />
+</head>
+<body>
+  <div class="shell">
+    <header class="site-header">
+      <div class="site-header-inner">
+        <a href="index.html#hero" class="brand">
+          <div class="brand-mark" aria-hidden="true"></div>
+          <div>
+            <div class="brand-text-primary">Iain Duguid</div>
+            <div class="brand-text-secondary">Content &amp; Communications</div>
+          </div>
+        </a>
+        <input type="checkbox" id="navToggle" class="nav-toggle-input" aria-label="Toggle navigation" />
+        <label for="navToggle" class="nav-toggle" aria-hidden="true"><span></span><span></span></label>
+        <nav class="nav" id="siteNav" aria-label="Main navigation">
+          <a href="business-assessment.html">Business Assessment</a>
+          <div class="nav-dropdown">
+            <a href="services.html" class="nav-dropdown-trigger">Services</a>
+            <div class="nav-dropdown-panel">
+              <a href="commercial-production.html">Commercial Production</a>
+              <a href="website.html">Website</a>
+              <a href="podcast.html">Podcast</a>
+              <a href="socials.html">Socials</a>
+              <a href="services.html#podcasts">Podcasts</a>
+              <a href="services.html#industry-updates">Industry Updates</a>
+              <a href="phone-messaging.html">Phone Messaging</a>
+              <a href="services.html#project-management">Project Management</a>
+            </div>
+          </div>
+          <a href="referrals.html">Referrals</a>
+          <a href="about.html">About</a>
+          <a href="blog.html">Blog</a>
+          <a href="index.html#contact" class="nav-cta">Contact</a>
+          <a href="dashboard.html" class="nav-dashboard-dot" aria-label="Dashboard" title="Dashboard"></a>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <section class="section page-intro section-blog-post">
+        <div class="section-inner">
+          <p class="blog-post-back"><a href="blog.html">← Back to blog</a></p>
+          <article id="blog-post-article">
+            <h1 class="page-intro-title" id="blog-post-title"></h1>
+            <p class="blog-post-meta" id="blog-post-meta"></p>
+            <div class="page-intro-body blog-post-body" id="blog-post-body"></div>
+          </article>
+          <p id="blog-post-not-found" class="blog-no-posts" hidden>Post not found.</p>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="site-footer-inner">
+        <div>© Iain Duguid. All rights reserved.</div>
+        <div>Connecting businesses with their customers</div>
+      </div>
+    </footer>
+  </div>
+
+  <script>
+  (function() {
+    var STORAGE_KEY = 'iainduguid_blog_posts';
+    var params = new URLSearchParams(window.location.search);
+    var id = params.get('id');
+    var titleEl = document.getElementById('blog-post-title');
+    var metaEl = document.getElementById('blog-post-meta');
+    var bodyEl = document.getElementById('blog-post-body');
+    var notFoundEl = document.getElementById('blog-post-not-found');
+    var articleEl = document.getElementById('blog-post-article');
+
+    if (!id) {
+      articleEl.hidden = true;
+      notFoundEl.hidden = false;
+      return;
+    }
+    try {
+      var raw = localStorage.getItem(STORAGE_KEY);
+      var posts = raw ? JSON.parse(raw) : [];
+      var post = posts.filter(function(p) { return p.id === id; })[0];
+      if (!post) {
+        articleEl.hidden = true;
+        notFoundEl.hidden = false;
+        return;
+      }
+      document.title = (post.title || 'Blog post') + ' – Iain Duguid';
+      titleEl.textContent = post.title || 'Untitled';
+      var dateStr = post.createdAt ? new Date(parseInt(post.createdAt, 10)).toLocaleDateString('en-AU', { day: 'numeric', month: 'long', year: 'numeric' }) : '';
+      var tagsStr = Array.isArray(post.tags) ? post.tags.join(', ') : (post.tags || '');
+      metaEl.innerHTML = (dateStr ? '<time datetime="' + (post.createdAt ? new Date(parseInt(post.createdAt, 10)).toISOString() : '') + '">' + dateStr + '</time>' : '') + (tagsStr ? ' · ' + tagsStr : '');
+      bodyEl.innerHTML = post.body || '';
+      notFoundEl.hidden = true;
+    } catch (e) {
+      articleEl.hidden = true;
+      notFoundEl.hidden = false;
+    }
+  })();
+  </script>
+</body>
+</html>

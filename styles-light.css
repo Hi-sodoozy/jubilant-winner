@@ -923,6 +923,14 @@ main {
   gap: 1rem;
 }
 
+.site-footer a {
+  color: rgba(255, 255, 255, 0.95);
+  text-underline-offset: 3px;
+}
+.site-footer a:hover {
+  text-decoration: underline;
+}
+
 /* Services page – aligned with home page light colouring */
 .section-page-hero {
   padding-top: 3rem;
@@ -1337,6 +1345,114 @@ a.website-case-client:hover {
   padding-bottom: 4rem;
 }
 
+/* Blog */
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+.blog-search-wrap {
+  margin-top: 1.25rem;
+  max-width: 28rem;
+}
+.blog-search-input {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border-radius: 12px;
+  border: 1px solid rgba(15, 23, 42, 0.15);
+  background: #fff;
+  color: var(--text-dark);
+  font-family: "IBM Plex Sans", system-ui, sans-serif;
+  font-size: 1rem;
+}
+.blog-search-input:focus {
+  outline: none;
+  border-color: var(--blue);
+}
+.section-blog-list {
+  padding-top: 1rem;
+  padding-bottom: 4rem;
+}
+.blog-posts-list {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+.blog-post-card {
+  padding-bottom: 2rem;
+  border-bottom: 1px solid rgba(15, 23, 42, 0.1);
+}
+.blog-post-card:last-child {
+  border-bottom: 0;
+  padding-bottom: 0;
+}
+.blog-post-card-title {
+  font-family: "Plus Jakarta Sans", system-ui, sans-serif;
+  font-weight: 600;
+  font-size: 1.35rem;
+  margin: 0 0 0.35rem;
+}
+.blog-post-card-title a {
+  color: var(--text-dark);
+  text-underline-offset: 4px;
+}
+.blog-post-card-title a:hover {
+  color: var(--deep-teal);
+  text-decoration: underline;
+}
+.blog-post-card-date {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  margin: 0 0 0.25rem;
+  display: block;
+}
+.blog-post-card-tags {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  margin: 0 0 0.5rem;
+}
+.blog-post-card-excerpt {
+  margin: 0;
+  font-size: 1rem;
+  line-height: 1.6;
+  color: var(--text-dark);
+}
+.blog-no-posts {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: 1.05rem;
+}
+.section-blog-post .blog-post-back {
+  margin: 0 0 1.5rem;
+}
+.section-blog-post .blog-post-back a {
+  color: var(--deep-teal);
+  font-weight: 500;
+}
+.section-blog-post .blog-post-back a:hover {
+  text-decoration: underline;
+}
+.blog-post-meta {
+  font-size: 0.95rem;
+  color: var(--text-muted);
+  margin: 0 0 1.5rem;
+}
+.blog-post-body {
+  margin-top: 0;
+}
+.blog-post-body p {
+  margin: 0 0 1rem;
+}
+.blog-post-body p:last-child {
+  margin-bottom: 0;
+}
+
 /* Business Assessment, Referrals, About – light theme */
 .page-intro {
   background: linear-gradient(180deg, var(--teal-pale) 0%, var(--cream) 100%);
@@ -1699,6 +1815,59 @@ a.website-case-client:hover {
 
 .dashboard-logout {
   margin: 0;
+}
+
+.dashboard-actions {
+  margin-bottom: 2rem;
+}
+
+.dashboard-blog-section {
+  margin-top: 2.5rem;
+  padding-top: 2.5rem;
+  border-top: 1px solid rgba(15, 23, 42, 0.1);
+}
+
+.dashboard-blog-heading {
+  font-family: "Plus Jakarta Sans", system-ui, sans-serif;
+  font-weight: 600;
+  font-size: 1.25rem;
+  margin: 0 0 1.25rem;
+  color: var(--text-dark);
+}
+
+.dashboard-blog-form .form-row {
+  margin-bottom: 1.2rem;
+}
+
+.dashboard-blog-form .form-row label {
+  display: block;
+  font-family: "Plus Jakarta Sans", system-ui, sans-serif;
+  font-weight: 500;
+  font-size: 0.9rem;
+  margin-bottom: 0.35rem;
+  color: var(--text-dark);
+}
+
+.dashboard-blog-form input,
+.dashboard-blog-form textarea {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border-radius: 12px;
+  border: 1px solid rgba(15, 23, 42, 0.15);
+  background: #fff;
+  color: var(--text-dark);
+  font-family: "IBM Plex Sans", system-ui, sans-serif;
+  font-size: 1rem;
+}
+
+.dashboard-blog-form textarea {
+  resize: vertical;
+  min-height: 200px;
+}
+
+.dashboard-blog-message {
+  margin: 1rem 0 0;
+  font-size: 0.95rem;
 }
 
 /* Responsive */
