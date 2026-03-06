@@ -1827,6 +1827,86 @@ a.website-case-client:hover {
   border-top: 1px solid rgba(15, 23, 42, 0.1);
 }
 
+.dashboard-posts-overview {
+  margin-top: 2rem;
+  padding-top: 2rem;
+}
+
+.dashboard-posts-empty {
+  margin: 0 0 1rem;
+  color: var(--text-muted);
+  font-size: 0.95rem;
+}
+
+.dashboard-posts-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.dashboard-post-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem 1.5rem;
+  padding: 0.75rem 1rem;
+  background: rgba(15, 23, 42, 0.04);
+  border-radius: 12px;
+  border: 1px solid rgba(15, 23, 42, 0.08);
+}
+
+.dashboard-post-row-title {
+  font-weight: 600;
+  color: var(--text-dark);
+  flex: 1;
+  min-width: 0;
+}
+
+.dashboard-post-row-date {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+}
+
+.dashboard-post-row-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.dashboard-post-btn {
+  padding: 0.4rem 0.75rem;
+  border-radius: 8px;
+  border: 1px solid rgba(15, 23, 42, 0.2);
+  background: #fff;
+  color: var(--text-dark);
+  font-size: 0.85rem;
+  font-family: "Plus Jakarta Sans", system-ui, sans-serif;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s ease, border-color 0.2s ease;
+}
+
+.dashboard-post-btn:hover {
+  background: rgba(15, 23, 42, 0.06);
+  border-color: var(--deep-teal);
+}
+
+.dashboard-post-delete:hover {
+  border-color: #f87171;
+  background: rgba(248, 113, 113, 0.08);
+}
+
+.dashboard-blog-form-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 0.5rem;
+}
+
+.dashboard-edit-cancel {
+  margin: 0;
+}
+
 .dashboard-blog-heading {
   font-family: "Plus Jakarta Sans", system-ui, sans-serif;
   font-weight: 600;

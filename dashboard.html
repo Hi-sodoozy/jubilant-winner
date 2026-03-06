@@ -82,6 +82,12 @@
             </article>
           </div>
 
+          <section class="dashboard-blog-section dashboard-posts-overview" id="blog-posts-overview" aria-labelledby="posts-overview-heading">
+            <h2 class="dashboard-blog-heading" id="posts-overview-heading">Live blog posts</h2>
+            <p class="dashboard-posts-empty" id="dashboardPostsEmpty" hidden>No posts yet. Publish one below.</p>
+            <div class="dashboard-posts-list" id="dashboardBlogList"></div>
+          </section>
+
           <section class="dashboard-blog-section" id="write-blog" aria-labelledby="write-blog-heading">
             <h2 class="dashboard-blog-heading" id="write-blog-heading">Write Blog Post</h2>
             <form class="dashboard-blog-form" id="blogPostForm">
@@ -97,7 +103,10 @@
                 <label for="blog-post-body">Content <span class="required">*</span></label>
                 <textarea id="blog-post-body" name="body" required rows="12" placeholder="Write your post content here. You can use simple HTML (e.g. &lt;p&gt;, &lt;strong&gt;, &lt;a href=&quot;...&quot;&gt;)."></textarea>
               </div>
-              <button type="submit" class="btn-primary">Publish</button>
+              <div class="dashboard-blog-form-actions">
+                <button type="submit" class="btn-primary" id="blogSubmitBtn">Publish</button>
+                <button type="button" class="btn-secondary dashboard-edit-cancel" id="blogEditCancel" hidden>Cancel edit</button>
+              </div>
               <p class="dashboard-blog-message" id="blogPostMessage" aria-live="polite"></p>
             </form>
           </section>
@@ -137,7 +146,7 @@
     function isAuthenticated() { return sessionStorage.getItem(AUTH_KEY) === '1'; }
     function setAuthenticated(ok) { if (ok) sessionStorage.setItem(AUTH_KEY, '1'); else sessionStorage.removeItem(AUTH_KEY); }
     function showGate() { gate.hidden = false; content.hidden = true; }
-    function showDashboard() { gate.hidden = true; content.hidden = false; errorEl.textContent = ''; input.value = ''; initMetrics(); }
+    function showDashboard() { gate.hidden = true; content.hidden = false; errorEl.textContent = ''; input.value = ''; initMetrics(); renderBlogList(); }
 
     if (isAuthenticated()) showDashboard(); else showGate();
 
@@ -209,6 +218,104 @@
     var blogForm = document.getElementById('blogPostForm');
     var blogMessage = document.getElementById('blogPostMessage');
     var writeBlogBtn = document.getElementById('dashboardWriteBlogBtn');
+    var blogSubmitBtn = document.getElementById('blogSubmitBtn');
+    var blogEditCancel = document.getElementById('blogEditCancel');
+    var currentEditId = null;
+
+    function getBlogPosts() {
+      try {
+        var raw = localStorage.getItem(BLOG_STORAGE_KEY);
+        return raw ? JSON.parse(raw) : [];
+      } catch (e) { return []; }
+    }
+
+    function saveBlogPosts(posts) {
+      try {
+        localStorage.setItem(BLOG_STORAGE_KEY, JSON.stringify(posts));
+        return true;
+      } catch (e) { return false; }
+    }
+
+    function renderBlogList() {
+      var listEl = document.getElementById('dashboardBlogList');
+      var emptyEl = document.getElementById('dashboardPostsEmpty');
+      if (!listEl) return;
+      var posts = getBlogPosts();
+      posts.sort(function(a, b) {
+        var ta = (a.createdAt && parseInt(a.createdAt, 10)) || 0;
+        var tb = (b.createdAt && parseInt(b.createdAt, 10)) || 0;
+        return tb - ta;
+      });
+      if (emptyEl) emptyEl.hidden = posts.length > 0;
+      listEl.innerHTML = '';
+      posts.forEach(function(p) {
+        var dateStr = p.createdAt ? new Date(parseInt(p.createdAt, 10)).toLocaleDateString('en-AU', { day: 'numeric', month: 'short', year: 'numeric' }) : '';
+        var row = document.createElement('div');
+        row.className = 'dashboard-post-row';
+        row.innerHTML =
+          '<span class="dashboard-post-row-title">' + escapeHtml(p.title || 'Untitled') + '</span>' +
+          '<span class="dashboard-post-row-date">' + escapeHtml(dateStr) + '</span>' +
+          '<span class="dashboard-post-row-actions">' +
+            '<button type="button" class="dashboard-post-btn dashboard-post-edit" data-id="' + escapeHtml(p.id) + '" aria-label="Edit post">Edit</button> ' +
+            '<button type="button" class="dashboard-post-btn dashboard-post-delete" data-id="' + escapeHtml(p.id) + '" aria-label="Delete post">Delete</button>' +
+          '</span>';
+        listEl.appendChild(row);
+      });
+      listEl.querySelectorAll('.dashboard-post-edit').forEach(function(btn) {
+        btn.addEventListener('click', function() { startEditPost(btn.getAttribute('data-id')); });
+      });
+      listEl.querySelectorAll('.dashboard-post-delete').forEach(function(btn) {
+        btn.addEventListener('click', function() { deletePost(btn.getAttribute('data-id')); });
+      });
+    }
+
+    function escapeHtml(s) {
+      var div = document.createElement('div');
+      div.textContent = s;
+      return div.innerHTML;
+    }
+
+    function deletePost(id) {
+      if (!id || !confirm('Delete this post? This cannot be undone.')) return;
+      var posts = getBlogPosts().filter(function(p) { return p.id !== id; });
+      if (saveBlogPosts(posts)) {
+        if (currentEditId === id) cancelEditPost();
+        renderBlogList();
+      }
+    }
+
+    function startEditPost(id) {
+      var posts = getBlogPosts();
+      var post = posts.filter(function(p) { return p.id === id; })[0];
+      if (!post) return;
+      currentEditId = id;
+      var titleInput = document.getElementById('blog-post-title');
+      var tagsInput = document.getElementById('blog-post-tags');
+      var bodyInput = document.getElementById('blog-post-body');
+      if (titleInput) titleInput.value = post.title || '';
+      if (tagsInput) tagsInput.value = Array.isArray(post.tags) ? post.tags.join(', ') : (post.tags || '');
+      if (bodyInput) bodyInput.value = post.body || '';
+      if (blogSubmitBtn) blogSubmitBtn.textContent = 'Update post';
+      if (blogEditCancel) blogEditCancel.hidden = false;
+      if (blogMessage) blogMessage.textContent = '';
+      document.getElementById('write-blog').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function cancelEditPost() {
+      currentEditId = null;
+      var titleInput = document.getElementById('blog-post-title');
+      var tagsInput = document.getElementById('blog-post-tags');
+      var bodyInput = document.getElementById('blog-post-body');
+      if (titleInput) titleInput.value = '';
+      if (tagsInput) tagsInput.value = '';
+      if (bodyInput) bodyInput.value = '';
+      if (blogSubmitBtn) blogSubmitBtn.textContent = 'Publish';
+      if (blogEditCancel) blogEditCancel.hidden = true;
+      if (blogMessage) blogMessage.textContent = '';
+    }
+
+    if (blogEditCancel) blogEditCancel.addEventListener('click', cancelEditPost);
+
     if (writeBlogBtn) writeBlogBtn.addEventListener('click', function() { document.getElementById('write-blog').scrollIntoView({ behavior: 'smooth' }); });
     if (blogForm) {
       blogForm.addEventListener('submit', function(e) {
@@ -219,27 +326,42 @@
         if (!titleInput || !bodyInput) return;
         var tagsVal = (tagsInput && tagsInput.value.trim()) ? tagsInput.value.trim() : '';
         var tags = tagsVal ? tagsVal.split(',').map(function(t) { return t.trim(); }).filter(Boolean) : [];
-        var posts = [];
-        try {
-          var raw = localStorage.getItem(BLOG_STORAGE_KEY);
-          posts = raw ? JSON.parse(raw) : [];
-        } catch (err) {}
-        var post = {
-          id: 'post-' + Date.now(),
-          title: titleInput.value.trim(),
-          tags: tags,
-          body: bodyInput.value.trim(),
-          createdAt: String(Date.now())
-        };
-        posts.push(post);
-        try {
-          localStorage.setItem(BLOG_STORAGE_KEY, JSON.stringify(posts));
-          if (blogMessage) { blogMessage.textContent = 'Published! View on the Blog page.'; blogMessage.style.color = 'var(--deep-teal)'; }
-          titleInput.value = '';
-          if (tagsInput) tagsInput.value = '';
-          bodyInput.value = '';
-        } catch (err) {
-          if (blogMessage) { blogMessage.textContent = 'Could not save. Try again.'; blogMessage.style.color = '#f87171'; }
+        var posts = getBlogPosts();
+        if (currentEditId) {
+          var idx = posts.findIndex(function(p) { return p.id === currentEditId; });
+          if (idx === -1) { cancelEditPost(); return; }
+          posts[idx] = {
+            id: posts[idx].id,
+            title: titleInput.value.trim(),
+            tags: tags,
+            body: bodyInput.value.trim(),
+            createdAt: posts[idx].createdAt
+          };
+          if (saveBlogPosts(posts)) {
+            if (blogMessage) { blogMessage.textContent = 'Post updated.'; blogMessage.style.color = 'var(--deep-teal)'; }
+            cancelEditPost();
+            renderBlogList();
+          } else {
+            if (blogMessage) { blogMessage.textContent = 'Could not save. Try again.'; blogMessage.style.color = '#f87171'; }
+          }
+        } else {
+          var post = {
+            id: 'post-' + Date.now(),
+            title: titleInput.value.trim(),
+            tags: tags,
+            body: bodyInput.value.trim(),
+            createdAt: String(Date.now())
+          };
+          posts.push(post);
+          if (saveBlogPosts(posts)) {
+            if (blogMessage) { blogMessage.textContent = 'Published! View on the Blog page.'; blogMessage.style.color = 'var(--deep-teal)'; }
+            titleInput.value = '';
+            if (tagsInput) tagsInput.value = '';
+            bodyInput.value = '';
+            renderBlogList();
+          } else {
+            if (blogMessage) { blogMessage.textContent = 'Could not save. Try again.'; blogMessage.style.color = '#f87171'; }
+          }
         }
       });
     }
