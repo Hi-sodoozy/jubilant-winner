@@ -1950,15 +1950,34 @@ a.website-case-client:hover {
   font-size: 0.95rem;
 }
 
-/* Responsive */
+/* Responsive – smaller screens: single-column, explicit scroll order */
 @media (max-width: 960px) {
   .hero-inner {
-    grid-template-columns: 1fr;
+    display: flex;
+    flex-direction: column;
     gap: 2rem;
+    grid-template-columns: unset;
   }
+  .hero-content {
+    order: 1;
+  }
+  .hero-right {
+    order: 2;
+  }
+
   .section-two-col .section-inner {
-    grid-template-columns: 1fr;
+    display: flex;
+    flex-direction: column;
+    gap: 2.5rem;
+    grid-template-columns: unset;
   }
+  .section-two-col .section-inner > div:first-child {
+    order: 1;
+  }
+  .section-two-col .section-inner > div:last-child {
+    order: 2;
+  }
+
   .cards-grid {
     grid-template-columns: 1fr;
   }
