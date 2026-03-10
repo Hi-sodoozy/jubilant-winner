@@ -9,7 +9,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="styles-light.css" />
 </head>
-<body>
+<body data-page-id="about">
   <div class="shell">
     <header class="site-header">
       <div class="site-header-inner">
@@ -49,9 +49,9 @@
     <main>
       <section class="section page-intro" id="top">
         <div class="section-inner">
-          <h1 class="page-intro-title">About</h1>
-          <p class="page-intro-subtitle">Content &amp; Communications</p>
-          <div class="page-intro-body">
+          <h1 class="page-intro-title" data-content-id="about.page-intro-title">About</h1>
+          <p class="page-intro-subtitle" data-content-id="about.page-intro-subtitle">Content &amp; Communications</p>
+          <div class="page-intro-body" data-content-id="about.page-intro-body" data-content-type="html">
             <p>Iain Duguid is based in Melbourne, Australia and offers media and communications services to businesses across Australia to better connect with their customers.</p>
             <p>Think of Iain as a full-service creative agency for small and medium sized businesses &mdash; a guy you can reach out to for a website, podcast, radio commercial and so much more.</p>
             <p>With close to 20 years in broadcast audio and media as a writer and producer, Iain brings experience across commercial production, content strategy and project management. He works as an extension of your team&mdash;in-house talent when you need it, and a network of skilled professionals when the project calls for it.</p>
@@ -65,10 +65,11 @@
 
     <footer class="site-footer">
       <div class="site-footer-inner">
-        <div>© Iain Duguid. All rights reserved.</div>
-        <div>Connecting businesses with their customers</div>
+        <div data-content-id="index.footer-line1">© Iain Duguid. All rights reserved.</div>
+        <div data-content-id="index.footer-line2">Connecting businesses with their customers</div>
       </div>
     </footer>
   </div>
+  <script src="apply-content.js"></script>
 </body>
 </html>

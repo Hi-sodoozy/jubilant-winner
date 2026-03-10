@@ -9,7 +9,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="styles-light.css" />
 </head>
-<body>
+<body data-page-id="blog">
   <div class="shell">
     <header class="site-header">
       <div class="site-header-inner">
@@ -71,12 +71,12 @@
 
     <footer class="site-footer">
       <div class="site-footer-inner">
-        <div>© Iain Duguid. All rights reserved.</div>
-        <div>Connecting businesses with their customers</div>
+        <div data-content-id="index.footer-line1">© Iain Duguid. All rights reserved.</div>
+        <div data-content-id="index.footer-line2">Connecting businesses with their customers</div>
       </div>
     </footer>
   </div>
-
+  <script src="apply-content.js"></script>
   <script>
   (function() {
     var STORAGE_KEY = 'iainduguid_blog_posts';

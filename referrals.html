@@ -9,7 +9,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="styles-light.css" />
 </head>
-<body>
+<body data-page-id="referrals">
   <div class="shell">
     <header class="site-header">
       <div class="site-header-inner">
@@ -49,8 +49,8 @@
     <main>
       <section class="section page-intro section-referrals-intro" id="top">
         <div class="section-inner">
-          <h1 class="page-intro-title">Referrals</h1>
-          <div class="page-intro-body">
+          <h1 class="page-intro-title" data-content-id="referrals.page-intro-title">Referrals</h1>
+          <div class="page-intro-body" data-content-id="referrals.page-intro-body" data-content-type="html">
             <p>You'll receive a referral rate for each business you recommend.</p>
             <p>What that discount is and when it applies is yet to be determined, so let's chat and work something out.</p>
           </div>
@@ -59,7 +59,7 @@
 
       <section class="section section-contact section-referrals-form">
         <div class="section-inner">
-          <h2 class="contact-title">Been sent here?</h2>
+          <h2 class="contact-title" data-content-id="referrals.contact-title">Been sent here?</h2>
           <form class="contact-form" action="https://formspree.io/f/xbdayyne" method="post">
             <div class="form-row">
               <label for="ref-name">Name <span class="required">*</span></label>
@@ -85,10 +85,11 @@
 
     <footer class="site-footer">
       <div class="site-footer-inner">
-        <div>© Iain Duguid. All rights reserved.</div>
-        <div>Connecting businesses with their customers</div>
+        <div data-content-id="index.footer-line1">© Iain Duguid. All rights reserved.</div>
+        <div data-content-id="index.footer-line2">Connecting businesses with their customers</div>
       </div>
     </footer>
   </div>
+  <script src="apply-content.js"></script>
 </body>
 </html>

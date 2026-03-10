@@ -9,7 +9,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="styles-light.css" />
 </head>
-<body>
+<body data-page-id="website">
   <div class="shell">
     <header class="site-header">
       <div class="site-header-inner">
@@ -61,8 +61,8 @@
         <div class="section-inner">
           <div class="website-options-grid">
             <article class="website-option" id="design">
-              <h3 class="website-option-title">Design</h3>
-              <p class="website-option-desc">He creates the look, structure and user experience of your site so it reflects your brand and makes it easy for visitors to find what they need. This includes layout, navigation, visual style and responsive behaviour across devices.</p>
+              <h3 class="website-option-title" data-content-id="website.option-design-title">Design</h3>
+              <p class="website-option-desc" data-content-id="website.option-design-desc">He creates the look, structure and user experience of your site so it reflects your brand and makes it easy for visitors to find what they need. This includes layout, navigation, visual style and responsive behaviour across devices.</p>
               <div class="website-work">
                 <div class="website-cases">
                   <div class="website-case">
@@ -77,8 +77,8 @@
             </article>
 
             <article class="website-option" id="content-creation">
-              <h3 class="website-option-title">Content creation</h3>
-              <p class="website-option-desc">He writes and organises the words, images and other assets that go on your site. That might mean new copy for key pages, blog posts, FAQs, event listings or product descriptions — all tuned to your audience and goals.</p>
+              <h3 class="website-option-title" data-content-id="website.option-content-title">Content creation</h3>
+              <p class="website-option-desc" data-content-id="website.option-content-desc">He writes and organises the words, images and other assets that go on your site. That might mean new copy for key pages, blog posts, FAQs, event listings or product descriptions — all tuned to your audience and goals.</p>
               <div class="website-work">
                 <div class="website-cases">
                   <div class="website-case">
@@ -93,8 +93,8 @@
             </article>
 
             <article class="website-option" id="maintenance">
-              <h3 class="website-option-title">Maintenance</h3>
-              <p class="website-option-desc">He keeps your site running smoothly and up to date. That includes technical updates, security and performance checks, plus content updates such as news, events, team changes or seasonal offers so your site stays current.</p>
+              <h3 class="website-option-title" data-content-id="website.option-maintenance-title">Maintenance</h3>
+              <p class="website-option-desc" data-content-id="website.option-maintenance-desc">He keeps your site running smoothly and up to date. That includes technical updates, security and performance checks, plus content updates such as news, events, team changes or seasonal offers so your site stays current.</p>
               <div class="website-work">
                 <div class="website-cases">
                   <div class="website-case">
@@ -113,7 +113,7 @@
 
       <section class="section section-website-cta">
         <div class="section-inner">
-          <p class="website-cta-text">Ready to improve your website? Get in touch and we’ll help you work out the next step.</p>
+          <p class="website-cta-text" data-content-id="website.cta-text">Ready to improve your website? Get in touch and we’ll help you work out the next step.</p>
           <a href="index.html#contact" class="btn-primary">Contact Iain about my website</a>
         </div>
       </section>
@@ -121,10 +121,11 @@
 
     <footer class="site-footer">
       <div class="site-footer-inner">
-        <div>© Iain Duguid. All rights reserved.</div>
-        <div>Connecting businesses with their customers</div>
+        <div data-content-id="index.footer-line1">© Iain Duguid. All rights reserved.</div>
+        <div data-content-id="index.footer-line2">Connecting businesses with their customers</div>
       </div>
     </footer>
   </div>
+  <script src="apply-content.js"></script>
 </body>
 </html>
