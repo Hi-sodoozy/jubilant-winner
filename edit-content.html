@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Edit website content – Iain Duguid</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="noindex, nofollow" />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles-light.css" />
+</head>
+<body>
+  <div class="shell">
+    <header class="site-header">
+      <div class="site-header-inner">
+        <a href="dashboard.html" class="brand">
+          <div class="brand-mark" aria-hidden="true"></div>
+          <div>
+            <div class="brand-text-primary">Iain Duguid</div>
+            <div class="brand-text-secondary">Edit content</div>
+          </div>
+        </a>
+        <a href="dashboard.html" class="dashboard-back">Back to dashboard</a>
+      </div>
+    </header>
+
+    <main>
+      <section class="section dashboard-content edit-content-section">
+        <div class="section-inner">
+          <h1 class="dashboard-heading">Edit website content</h1>
+          <p class="edit-content-intro">Change the copy below and press <strong>Publish</strong> to update the public homepage. This page is only visible when you are logged in to the dashboard.</p>
+
+          <form class="edit-content-form" id="editContentForm">
+            <fieldset class="edit-content-group">
+              <legend class="edit-content-legend">Hero</legend>
+              <div class="form-row">
+                <label for="hero-title-line1">Title line 1</label>
+                <input type="text" id="hero-title-line1" name="hero-title-line1" placeholder="Connect your business" />
+              </div>
+              <div class="form-row">
+                <label for="hero-title-line2">Title line 2</label>
+                <input type="text" id="hero-title-line2" name="hero-title-line2" placeholder="with your customers" />
+              </div>
+              <div class="form-row">
+                <label for="hero-panel-body">Panel (box on the right)</label>
+                <textarea id="hero-panel-body" name="hero-panel-body" rows="4" placeholder="Iain is an extension of your team..."></textarea>
+              </div>
+            </fieldset>
+
+            <fieldset class="edit-content-group">
+              <legend class="edit-content-legend">About block – “Connect with customers: Done!”</legend>
+              <div class="form-row">
+                <label for="two-col-right-content">Full content (heading, paragraphs and list). You can use HTML: &lt;h2&gt;, &lt;p&gt;, &lt;ul&gt;, &lt;li&gt;</label>
+                <textarea id="two-col-right-content" name="two-col-right-content" rows="12" placeholder="HTML content"></textarea>
+              </div>
+            </fieldset>
+
+            <fieldset class="edit-content-group">
+              <legend class="edit-content-legend">How can Iain help?</legend>
+              <div class="form-row">
+                <label for="section-help-title">Section heading</label>
+                <input type="text" id="section-help-title" name="section-help-title" placeholder="How can Iain help?" />
+              </div>
+              <div class="form-row">
+                <label for="card-assessment-body">Business Assessment card body (HTML)</label>
+                <textarea id="card-assessment-body" name="card-assessment-body" rows="6" placeholder="Paragraphs and list"></textarea>
+              </div>
+              <div class="form-row">
+                <label for="card-getitdone-body">Get It Done card body (HTML)</label>
+                <textarea id="card-getitdone-body" name="card-getitdone-body" rows="6" placeholder="Paragraphs and list"></textarea>
+              </div>
+              <div class="form-row">
+                <label for="card-bounce-body">Business Bounce card body (HTML)</label>
+                <textarea id="card-bounce-body" name="card-bounce-body" rows="4" placeholder="Paragraphs"></textarea>
+              </div>
+            </fieldset>
+
+            <fieldset class="edit-content-group">
+              <legend class="edit-content-legend">Referral strip</legend>
+              <div class="form-row">
+                <label for="referral-text">Referral text</label>
+                <input type="text" id="referral-text" name="referral-text" placeholder="Unlock a referral rate when you recommend." />
+              </div>
+            </fieldset>
+
+            <fieldset class="edit-content-group">
+              <legend class="edit-content-legend">What do I need?</legend>
+              <div class="form-row">
+                <label for="need-title">Section title</label>
+                <input type="text" id="need-title" name="need-title" placeholder="What Do I Need?" />
+              </div>
+              <div class="form-row">
+                <label for="need-subtitle">Subtitle</label>
+                <input type="text" id="need-subtitle" name="need-subtitle" placeholder="Every business is different..." />
+              </div>
+            </fieldset>
+
+            <fieldset class="edit-content-group">
+              <legend class="edit-content-legend">Contact &amp; footer</legend>
+              <div class="form-row">
+                <label for="contact-title">Contact section heading</label>
+                <input type="text" id="contact-title" name="contact-title" placeholder="Contact" />
+              </div>
+              <div class="form-row">
+                <label for="footer-line1">Footer line 1</label>
+                <input type="text" id="footer-line1" name="footer-line1" placeholder="© Iain Duguid. All rights reserved." />
+              </div>
+              <div class="form-row">
+                <label for="footer-line2">Footer line 2</label>
+                <input type="text" id="footer-line2" name="footer-line2" placeholder="Connecting businesses with their customers" />
+              </div>
+            </fieldset>
+
+            <div class="edit-content-actions">
+              <button type="submit" class="btn-primary">Publish</button>
+              <a href="index.html" class="btn-secondary" target="_blank" rel="noopener">Preview homepage</a>
+            </div>
+            <p class="dashboard-blog-message" id="editContentMessage" aria-live="polite"></p>
+          </form>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script>
+  (function() {
+    var AUTH_KEY = 'enabled_dashboard_auth';
+    var STORAGE_KEY = 'iainduguid_site_content';
+
+    if (sessionStorage.getItem(AUTH_KEY) !== '1') {
+      window.location.replace('dashboard.html');
+      return;
+    }
+
+    var DEFAULTS = {
+      'hero-title-line1': 'Connect your business',
+      'hero-title-line2': 'with your customers',
+      'hero-panel-body': "Iain is an extension of your team. He creates, produces and manages your media and communications while you stay focused on running your business.",
+      'two-col-right-content': '<h2 class="section-two-col-right-title">Connect with customers: Done!</h2><p class="section-two-col-right-body">With Iain Duguid acting as an extension of your business to create, produce and deliver high-quality media and communications material, you can stay focused without another thing taking up space on your to-do list.</p><p class="section-two-col-right-body">Tap into Iain\'s skills to create:</p><ul class="ul-clean"><li>Radio and podcast commercials</li><li>Podcasts</li><li>Phone on‑hold messaging &amp; IVRs</li><li>Websites – including regular updates, blogs and SEO</li><li>Communications packages</li><li>And more!</li></ul>',
+      'section-help-title': 'How can Iain help?',
+      'card-assessment-body': "<p>He'll look at what you're doing and provide suggestions in a statement of advice.</p><ul><li>Is everything aligned with your goal/customers?</li><li>Identify missed opportunities</li><li>Suggest improvements to what you're already doing</li></ul><p>Ready to improve? Iain will make it happen.</p>",
+      'card-getitdone-body': "<p>Project‑to‑project or ongoing, Iain makes everything happen whilst aligning with your current business strategy.</p><ul><li>Create new assets</li><li>Update existing material</li><li>Coordinate with your team or operate independently</li></ul><p>Don't have time or resources? Iain does.</p>",
+      'card-bounce-body': "<p>A service that allows you to bounce an idea off Iain without committing to core services.</p><p>For example: &ldquo;I've been thinking about XYZ, should I?&rdquo; or &ldquo;A radio station has made this ad for me, is it any good?&rdquo;</p>",
+      'referral-text': 'Unlock a referral rate when you recommend.',
+      'need-title': 'What Do I Need?',
+      'need-subtitle': 'Every business is different, but every business can benefit from…',
+      'contact-title': 'Contact',
+      'footer-line1': '© Iain Duguid. All rights reserved.',
+      'footer-line2': 'Connecting businesses with their customers'
+    };
+
+    function getStored() {
+      try {
+        var raw = localStorage.getItem(STORAGE_KEY);
+        return raw ? JSON.parse(raw) : {};
+      } catch (e) { return {}; }
+    }
+
+    function loadForm() {
+      var data = getStored();
+      Object.keys(DEFAULTS).forEach(function(key) {
+        var el = document.getElementById(key);
+        if (el) el.value = data[key] !== undefined ? data[key] : DEFAULTS[key];
+      });
+    }
+
+    document.getElementById('editContentForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      var form = e.target;
+      var data = {};
+      Object.keys(DEFAULTS).forEach(function(key) {
+        var el = document.getElementById(key);
+        if (el) data[key] = el.value.trim();
+      });
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+        var msg = document.getElementById('editContentMessage');
+        if (msg) { msg.textContent = 'Published! The homepage will show your changes.'; msg.style.color = 'var(--deep-teal)'; }
+      } catch (err) {
+        var msg = document.getElementById('editContentMessage');
+        if (msg) { msg.textContent = 'Could not save. Try again.'; msg.style.color = '#f87171'; }
+      }
+    });
+
+    loadForm();
+  })();
+  </script>
+</body>
+</html>
