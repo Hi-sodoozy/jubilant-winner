@@ -1,0 +1,276 @@
+/* Template 5 — Broadsheet editorial: newsprint, red rule, narrow measure */
+:root {
+  --paper: #f2efe6;
+  --ink: #111;
+  --rule: #c41221;
+  --faint: #6b6560;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: "Newsreader", Georgia, serif;
+  font-size: 1.125rem;
+  line-height: 1.55;
+  color: var(--ink);
+  background: var(--paper);
+}
+
+h1,
+h2,
+h3 {
+  font-family: "Oswald", Arial, sans-serif;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  line-height: 1.1;
+}
+
+a {
+  color: var(--ink);
+  text-decoration: underline;
+  text-decoration-color: var(--rule);
+  text-underline-offset: 3px;
+}
+
+a:hover {
+  background: #e8e4d9;
+}
+
+.page {
+  display: grid;
+  min-height: 100vh;
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 900px) {
+  .page {
+    grid-template-columns: 72px 1fr;
+  }
+}
+
+.rail {
+  background: var(--ink);
+  color: var(--paper);
+  padding: 1rem;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
+}
+
+@media (min-width: 900px) {
+  .rail {
+    flex-direction: column;
+    justify-content: flex-start;
+    padding-top: 2rem;
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    align-items: center;
+  }
+}
+
+.rail-title {
+  font-family: Oswald, sans-serif;
+  font-size: 0.75rem;
+  letter-spacing: 0.25em;
+  writing-mode: horizontal-tb;
+  text-transform: uppercase;
+}
+
+@media (min-width: 900px) {
+  .rail-title {
+    writing-mode: vertical-rl;
+    transform: rotate(180deg);
+    font-size: 0.7rem;
+  }
+}
+
+.rail nav ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+}
+
+@media (min-width: 900px) {
+  .rail nav ul {
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+}
+
+.rail a {
+  color: var(--paper);
+  text-decoration: none;
+  font-family: Oswald, sans-serif;
+  font-size: 0.85rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  display: block;
+  padding: 0.35rem 0;
+  border-bottom: 1px solid transparent;
+}
+
+.rail a:hover {
+  background: transparent;
+  border-bottom-color: var(--rule);
+}
+
+.rail a[aria-current="page"] {
+  color: #ffcc00;
+}
+
+.content {
+  padding: 2.5rem 1.5rem 4rem;
+  max-width: 720px;
+}
+
+.masthead {
+  border-top: 6px solid var(--ink);
+  border-bottom: 1px solid var(--ink);
+  padding: 1rem 0 1.25rem;
+  margin-bottom: 2rem;
+}
+
+.masthead .kicker {
+  font-family: Oswald, sans-serif;
+  font-size: 0.75rem;
+  letter-spacing: 0.2em;
+  color: var(--rule);
+  margin: 0 0 0.35rem;
+}
+
+.masthead h1 {
+  font-size: clamp(2.5rem, 8vw, 4rem);
+  margin: 0;
+  letter-spacing: 0.02em;
+}
+
+.masthead .sub {
+  margin: 0.5rem 0 0;
+  font-style: italic;
+  color: var(--faint);
+  font-size: 1.05rem;
+}
+
+.columns-2 {
+  column-count: 1;
+  column-gap: 2rem;
+}
+
+@media (min-width: 640px) {
+  .columns-2 {
+    column-count: 2;
+  }
+}
+
+.columns-2 p:first-of-type::first-letter {
+  float: left;
+  font-size: 3.5rem;
+  line-height: 0.85;
+  padding-right: 0.45rem;
+  font-family: Newsreader, serif;
+  font-weight: 600;
+}
+
+.pullquote {
+  border-left: 4px solid var(--rule);
+  padding-left: 1.25rem;
+  margin: 2rem 0;
+  font-style: italic;
+  color: var(--faint);
+  break-inside: avoid;
+}
+
+.byline {
+  font-family: Oswald, sans-serif;
+  font-size: 0.8rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  margin-top: 2rem;
+  padding-top: 1rem;
+  border-top: 1px solid #c9c3b8;
+}
+
+.footer-print {
+  font-size: 0.85rem;
+  color: var(--faint);
+  border-top: 1px dashed #c9c3b8;
+  margin-top: 3rem;
+  padding-top: 1rem;
+}
+
+.contact-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-variant-numeric: tabular-nums;
+}
+
+.contact-table th,
+.contact-table td {
+  text-align: left;
+  padding: 0.65rem 0;
+  border-bottom: 1px solid #c9c3b8;
+  vertical-align: top;
+}
+
+.contact-table th {
+  font-family: Oswald, sans-serif;
+  font-size: 0.75rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  width: 32%;
+  color: var(--faint);
+  font-weight: 500;
+}
+
+form label {
+  font-family: Oswald, sans-serif;
+  font-size: 0.75rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  display: block;
+  margin-bottom: 0.35rem;
+  color: var(--faint);
+}
+
+form input,
+form textarea {
+  width: 100%;
+  border: 1px solid var(--ink);
+  background: #fffef9;
+  padding: 0.5rem 0.65rem;
+  font-family: Newsreader, serif;
+  font-size: 1rem;
+  margin-bottom: 1rem;
+}
+
+form textarea {
+  min-height: 100px;
+  resize: vertical;
+}
+
+form button {
+  font-family: Oswald, sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  background: var(--ink);
+  color: var(--paper);
+  border: none;
+  padding: 0.65rem 1.5rem;
+  cursor: pointer;
+}
+
+form button:hover {
+  background: var(--rule);
+}

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact — Dr Sarah Whitmore</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="site-header-inner">
+      <a href="index.html" class="logo">Dr Sarah Whitmore <span>FRACGP · General Practice</span></a>
+      <nav aria-label="Primary">
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="about.html">About</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+  <main>
+    <h1 class="page-title">Contact</h1>
+    <dl class="contact-block">
+      <dt>Address</dt>
+      <dd>Level 4, 120 Collins Street, Melbourne VIC 3000</dd>
+      <dt>Phone</dt>
+      <dd><a href="tel:+61390000000">03 9000 0000</a> (placeholder)</dd>
+      <dt>Email</dt>
+      <dd><a href="mailto:reception@placeholder-clinic.au">reception@placeholder-clinic.au</a></dd>
+      <dt>Emergency</dt>
+      <dd>In an emergency, call <strong>000</strong> or attend your nearest hospital emergency department.</dd>
+    </dl>
+    <section class="card" style="max-width: 560px;">
+      <h2 style="margin-top:0;">Send a message</h2>
+      <p class="lead" style="font-size:1rem;">This form is for demonstration only and does not submit data.</p>
+      <form action="#" method="get" onsubmit="return false;">
+        <div class="row">
+          <label for="name">Full name</label>
+          <input id="name" name="name" type="text" autocomplete="name">
+        </div>
+        <div class="row">
+          <label for="email">Email</label>
+          <input id="email" name="email" type="email" autocomplete="email">
+        </div>
+        <div class="row">
+          <label for="msg">Message</label>
+          <textarea id="msg" name="msg"></textarea>
+        </div>
+        <button type="submit" class="btn">Submit (demo)</button>
+      </form>
+    </section>
+  </main>
+  <footer class="site-footer">
+    <div class="site-footer-inner">
+      <p>&copy; 2026 Placeholder Practice.</p>
+    </div>
+  </footer>
+</body>
+</html>

@@ -1,0 +1,205 @@
+/* Template 9 — Art deco clinic: midnight, gold, fan geometry */
+:root {
+  --mid: #14213d;
+  --mid2: #1b2a4a;
+  --gold: #d4a853;
+  --gold-soft: #e8c97a;
+  --cream: #fefae8;
+  --text: #e7e2d4;
+  --muted: #a8a29a;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: "Cormorant Garamond", Georgia, serif;
+  font-size: 1.2rem;
+  line-height: 1.55;
+  color: var(--text);
+  background: var(--mid);
+  background-image:
+    repeating-linear-gradient(-45deg, transparent, transparent 40px, rgba(212, 168, 83, 0.04) 40px, rgba(212, 168, 83, 0.04) 41px),
+    linear-gradient(180deg, var(--mid2), var(--mid));
+  min-height: 100vh;
+}
+
+a {
+  color: var(--gold-soft);
+}
+
+.frame {
+  max-width: 820px;
+  margin: 0 auto;
+  padding: 2.5rem 1.25rem 4rem;
+  border-left: 1px solid rgba(212, 168, 83, 0.35);
+  border-right: 1px solid rgba(212, 168, 83, 0.35);
+  min-height: 100vh;
+}
+
+.deco-top {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.deco-top::before,
+.deco-top::after {
+  content: "";
+  display: block;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  margin: 0.5rem auto;
+  max-width: 200px;
+}
+
+.deco-top h1 {
+  font-family: "Cinzel", serif;
+  font-size: clamp(1.75rem, 4vw, 2.5rem);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  margin: 0;
+  color: var(--gold);
+}
+
+.deco-top .sub {
+  font-style: italic;
+  color: var(--muted);
+  margin: 0.75rem 0 0;
+  letter-spacing: 0.04em;
+}
+
+nav ul {
+  list-style: none;
+  padding: 0;
+  margin: 1.5rem 0 0;
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  flex-wrap: wrap;
+}
+
+nav a {
+  font-family: Cinzel, serif;
+  font-size: 0.75rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: var(--text);
+}
+
+nav a:hover {
+  color: var(--gold);
+}
+
+nav a[aria-current="page"] {
+  color: var(--gold);
+  border-bottom: 1px solid var(--gold);
+}
+
+.block {
+  background: rgba(20, 33, 61, 0.6);
+  border: 1px solid rgba(212, 168, 83, 0.35);
+  padding: 2rem;
+  margin-bottom: 1.5rem;
+  position: relative;
+}
+
+.block::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60px;
+  height: 4px;
+  background: var(--gold);
+}
+
+.block h2 {
+  font-family: Cinzel, serif;
+  font-size: 1rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin: 1.25rem 0 1rem;
+}
+
+.block p {
+  margin: 0 0 1rem;
+  color: var(--muted);
+}
+
+.block p:last-child {
+  margin-bottom: 0;
+}
+
+.btn {
+  display: inline-block;
+  margin-top: 1rem;
+  padding: 0.6rem 1.75rem;
+  border: 1px solid var(--gold);
+  color: var(--gold) !important;
+  text-decoration: none !important;
+  font-family: Cinzel, serif;
+  font-size: 0.75rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+.btn:hover {
+  background: rgba(212, 168, 83, 0.15);
+}
+
+footer {
+  text-align: center;
+  font-size: 0.9rem;
+  color: var(--muted);
+  font-style: italic;
+}
+
+.contact-block p {
+  margin: 0.5rem 0;
+}
+
+form label {
+  font-family: Cinzel, serif;
+  font-size: 0.7rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--gold);
+  display: block;
+  margin-bottom: 0.35rem;
+}
+
+form input,
+form textarea {
+  width: 100%;
+  background: var(--cream);
+  color: var(--mid);
+  border: 1px solid var(--gold);
+  padding: 0.5rem 0.65rem;
+  font-family: "Cormorant Garamond", serif;
+  font-size: 1.1rem;
+  margin-bottom: 1rem;
+}
+
+form textarea {
+  min-height: 100px;
+  resize: vertical;
+}
+
+form button {
+  font-family: Cinzel, serif;
+  font-size: 0.7rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  background: var(--gold);
+  color: var(--mid);
+  border: none;
+  padding: 0.65rem 1.5rem;
+  cursor: pointer;
+}

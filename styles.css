@@ -1,28 +1,36 @@
-/* styles.css – Enabled (light / friendly theme) */
+/* styles.css – Enabled (fun / studio theme) */
 
-@import url("https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=DM+Sans:wght@400;500;600&display=swap");
 
 :root {
-  --midnight: #0f172a;
-  --deep-teal: #134e4a;
-  --teal-soft: #2d6a6a;
-  --teal-pale: #e8f5f4;
-  --sand: #e7e5df;
-  --cream: #faf9f6;
-  --text-light-primary: #f1f5f9;
-  --text-light-secondary: #64748b;
-  --text-dark: #1e293b;
-  --text-muted: #475569;
-  --lime: #a3e635;
-  --lime-hover: #84cc16;
-  --blue: #3b82f6;
-  --blue-hover: #2563eb;
-  --radius-lg: 20px;
+  --midnight: #0f0a05;
+  --warm-dark: #1c1510;
+  --amber: #f59e0b;
+  --amber-bright: #fbbf24;
+  --amber-dark: #d97706;
+  --deep-teal: #0d9488;
+  --teal-soft: #14b8a6;
+  --teal-pale: #ccfbf1;
+  --sand: #fef3c7;
+  --cream: #fffbeb;
+  --fuchsia: #c026d3;
+  --fuchsia-hover: #a21caf;
+  --text-light-primary: #fefce8;
+  --text-light-secondary: #fde68a;
+  --text-dark: #1c1917;
+  --text-muted: #57534e;
+  --lime: #fbbf24;
+  --lime-hover: #f59e0b;
+  --blue: #6366f1;
+  --blue-hover: #4f46e5;
+  --radius-lg: 24px;
   --radius-pill: 999px;
   --space-section-y: 5rem;
   --max-width: 1120px;
-  --shadow-soft: 0 4px 24px rgba(15, 23, 42, 0.06);
-  --shadow-card: 0 8px 32px rgba(15, 23, 42, 0.08);
+  --shadow-soft: 0 8px 30px rgba(28, 21, 16, 0.08);
+  --shadow-card: 0 12px 40px rgba(28, 21, 16, 0.12);
+  --font-head: "Syne", "Plus Jakarta Sans", system-ui, sans-serif;
+  --font-body: "DM Sans", "IBM Plex Sans", system-ui, sans-serif;
 }
 
 * {
@@ -33,9 +41,10 @@ html,
 body {
   margin: 0;
   padding: 0;
-  background-color: var(--cream);
+  background: linear-gradient(180deg, var(--cream) 0%, #fef9c3 50%, var(--cream) 100%);
+  background-attachment: fixed;
   color: var(--text-dark);
-  font-family: "IBM Plex Sans", system-ui, -apple-system, sans-serif;
+  font-family: var(--font-body);
   scroll-behavior: smooth;
 }
 
@@ -78,9 +87,9 @@ main {
   position: sticky;
   top: 0;
   z-index: 30;
-  background: rgba(250, 249, 246, 0.92);
-  backdrop-filter: blur(12px);
-  border-bottom: 1px solid rgba(15, 23, 42, 0.08);
+  background: rgba(255, 251, 235, 0.94);
+  backdrop-filter: blur(14px);
+  border-bottom: 3px solid var(--amber);
   box-shadow: var(--shadow-soft);
 }
 
@@ -98,14 +107,15 @@ main {
   display: flex;
   align-items: center;
   gap: 0.6rem;
-  font-family: "Plus Jakarta Sans", system-ui, sans-serif;
+  font-family: var(--font-head);
 }
 
 .brand-mark {
-  width: 32px;
-  height: 32px;
-  border-radius: 11px;
-  background: var(--lime);
+  width: 36px;
+  height: 36px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, var(--amber) 0%, var(--amber-dark) 100%);
+  box-shadow: 0 4px 14px rgba(245, 158, 11, 0.4);
 }
 
 .brand-text-primary {

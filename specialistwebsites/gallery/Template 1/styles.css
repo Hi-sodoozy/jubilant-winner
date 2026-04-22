@@ -1,0 +1,229 @@
+/* Template 1 — Classic Clinical: navy, crisp white, serif authority */
+:root {
+  --navy: #0c2340;
+  --navy-light: #1a3a5c;
+  --accent: #2e7d96;
+  --accent-hover: #256a80;
+  --bg: #f5f7fa;
+  --white: #ffffff;
+  --text: #1a1a1a;
+  --muted: #5c6670;
+  --border: #dce3ea;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: "Source Sans 3", system-ui, sans-serif;
+  font-size: 1.05rem;
+  line-height: 1.6;
+  color: var(--text);
+  background: var(--bg);
+}
+
+h1,
+h2,
+h3 {
+  font-family: Georgia, "Times New Roman", serif;
+  font-weight: 600;
+  color: var(--navy);
+  line-height: 1.25;
+}
+
+a {
+  color: var(--accent);
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+.site-header {
+  background: var(--navy);
+  color: var(--white);
+  padding: 1rem 1.5rem;
+  border-bottom: 4px solid var(--accent);
+}
+
+.site-header-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.logo {
+  font-family: Georgia, serif;
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: var(--white);
+  letter-spacing: 0.02em;
+}
+
+.logo span {
+  display: block;
+  font-size: 0.75rem;
+  font-weight: 400;
+  opacity: 0.85;
+  font-family: "Source Sans 3", sans-serif;
+}
+
+nav ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+
+nav a {
+  color: var(--white);
+  font-weight: 500;
+}
+
+nav a:hover {
+  color: #a8d4e6;
+  text-decoration: none;
+}
+
+main {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 2.5rem 1.5rem 4rem;
+}
+
+.hero {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-left: 5px solid var(--accent);
+  padding: 2.5rem;
+  margin-bottom: 2.5rem;
+}
+
+.hero h1 {
+  margin-top: 0;
+  font-size: 2.25rem;
+}
+
+.lead {
+  font-size: 1.15rem;
+  color: var(--muted);
+  max-width: 65ch;
+}
+
+.grid-2 {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+}
+
+.card {
+  background: var(--white);
+  border: 1px solid var(--border);
+  padding: 1.75rem;
+}
+
+.card h2 {
+  margin-top: 0;
+  font-size: 1.25rem;
+}
+
+.btn {
+  display: inline-block;
+  background: var(--accent);
+  color: var(--white) !important;
+  padding: 0.65rem 1.4rem;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  text-decoration: none !important;
+}
+
+.btn:hover {
+  background: var(--accent-hover);
+  text-decoration: none !important;
+}
+
+.site-footer {
+  background: var(--navy-light);
+  color: #c5d0dc;
+  padding: 2rem 1.5rem;
+  font-size: 0.9rem;
+}
+
+.site-footer-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.site-footer a {
+  color: #a8d4e6;
+}
+
+.page-title {
+  border-bottom: 2px solid var(--border);
+  padding-bottom: 0.75rem;
+  margin-bottom: 1.5rem;
+}
+
+.contact-block {
+  background: var(--white);
+  border: 1px solid var(--border);
+  padding: 2rem;
+  margin-bottom: 1.5rem;
+}
+
+.contact-block dt {
+  font-weight: 700;
+  color: var(--navy);
+  margin-top: 1rem;
+}
+
+.contact-block dt:first-child {
+  margin-top: 0;
+}
+
+.contact-block dd {
+  margin: 0.25rem 0 0;
+}
+
+form .row {
+  margin-bottom: 1rem;
+}
+
+form label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 0.35rem;
+  color: var(--navy);
+}
+
+form input,
+form textarea {
+  width: 100%;
+  max-width: 480px;
+  padding: 0.6rem 0.75rem;
+  border: 1px solid var(--border);
+  font-family: inherit;
+}
+
+form textarea {
+  min-height: 140px;
+  resize: vertical;
+}
+
+.notice {
+  font-size: 0.9rem;
+  color: var(--muted);
+  margin-top: 1.5rem;
+}

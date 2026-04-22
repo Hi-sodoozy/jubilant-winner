@@ -1,0 +1,212 @@
+/* Template 10 — Neubrutalist pitch: lime, hot pink, hard shadows */
+:root {
+  --bg: #f6ff8a;
+  --ink: #1a1a1a;
+  --pink: #ff4d9d;
+  --lime: #c4f542;
+  --card: #ffffff;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: "Sora", system-ui, sans-serif;
+  font-size: 1rem;
+  line-height: 1.5;
+  color: var(--ink);
+  background: var(--bg);
+  background-image: radial-gradient(circle at 20% 30%, #fff 0%, transparent 25%),
+    radial-gradient(circle at 80% 70%, var(--lime) 0%, transparent 20%);
+}
+
+a {
+  color: var(--ink);
+  font-weight: 800;
+}
+
+.wrap {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 2rem 1rem 4rem;
+}
+
+header.top {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.badge {
+  display: inline-block;
+  background: var(--pink);
+  color: #fff;
+  padding: 0.35rem 0.75rem;
+  font-weight: 800;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  border: 3px solid var(--ink);
+  box-shadow: 4px 4px 0 var(--ink);
+  margin-bottom: 0.5rem;
+}
+
+h1 {
+  margin: 0;
+  font-size: clamp(2rem, 5vw, 3.25rem);
+  font-weight: 900;
+  letter-spacing: -0.04em;
+  line-height: 0.95;
+  text-transform: uppercase;
+}
+
+.sub {
+  margin: 0.5rem 0 0;
+  font-weight: 700;
+  max-width: 20rem;
+}
+
+nav ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+nav li {
+  margin-bottom: 0.5rem;
+}
+
+nav a {
+  display: block;
+  padding: 0.5rem 1rem;
+  background: var(--card);
+  border: 3px solid var(--ink);
+  box-shadow: 4px 4px 0 var(--ink);
+  text-decoration: none;
+}
+
+nav a:hover {
+  transform: translate(2px, 2px);
+  box-shadow: 2px 2px 0 var(--ink);
+}
+
+nav a[aria-current="page"] {
+  background: var(--lime);
+}
+
+.hero-box {
+  background: var(--card);
+  border: 3px solid var(--ink);
+  box-shadow: 8px 8px 0 var(--ink);
+  padding: 2rem;
+  margin-bottom: 1.5rem;
+}
+
+.hero-box p {
+  margin: 0;
+  font-weight: 600;
+  max-width: 52ch;
+}
+
+.btn {
+  display: inline-block;
+  margin-top: 1.25rem;
+  padding: 0.85rem 1.5rem;
+  background: var(--ink);
+  color: #fff !important;
+  text-decoration: none !important;
+  font-weight: 800;
+  text-transform: uppercase;
+  font-size: 0.85rem;
+  border: 3px solid var(--ink);
+  box-shadow: 4px 4px 0 var(--pink);
+}
+
+.btn:hover {
+  transform: translate(2px, 2px);
+  box-shadow: 2px 2px 0 var(--pink);
+}
+
+.grid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+}
+
+.tile {
+  background: var(--lime);
+  border: 3px solid var(--ink);
+  padding: 1.25rem;
+  font-weight: 700;
+}
+
+.tile:nth-child(even) {
+  background: #fff;
+}
+
+.tile h2 {
+  margin: 0 0 0.5rem;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+}
+
+.tile p {
+  margin: 0;
+  font-size: 0.9rem;
+}
+
+footer {
+  margin-top: 2rem;
+  font-weight: 800;
+  font-size: 0.8rem;
+}
+
+.page-h1 {
+  font-size: 2.5rem;
+  margin: 0 0 1rem;
+}
+
+.card {
+  background: var(--card);
+  border: 3px solid var(--ink);
+  box-shadow: 6px 6px 0 var(--ink);
+  padding: 1.75rem;
+  margin-bottom: 1rem;
+}
+
+form label {
+  font-weight: 800;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  display: block;
+  margin-bottom: 0.35rem;
+}
+
+form input,
+form textarea {
+  width: 100%;
+  border: 3px solid var(--ink);
+  padding: 0.65rem;
+  font-family: inherit;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  box-shadow: 3px 3px 0 var(--ink);
+}
+
+form textarea {
+  min-height: 100px;
+  resize: vertical;
+}
+
+form button {
+  font-family: inherit;
+  font-weight: 900;
+  cursor: pointer;
+}

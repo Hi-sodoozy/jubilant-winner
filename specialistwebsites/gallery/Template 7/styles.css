@@ -1,0 +1,264 @@
+/* Template 7 — Swiss clinic: black, white, acid yellow bar */
+:root {
+  --bg: #fafafa;
+  --ink: #0a0a0a;
+  --yellow: #e8ff3d;
+  --grey: #737373;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: "Inter", system-ui, sans-serif;
+  font-size: 1rem;
+  line-height: 1.55;
+  color: var(--ink);
+  background: var(--bg);
+}
+
+a {
+  color: var(--ink);
+  font-weight: 600;
+}
+
+.wrap {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 0 1.25rem 4rem;
+}
+
+.bar {
+  height: 10px;
+  background: var(--yellow);
+  border-bottom: 2px solid var(--ink);
+}
+
+header.head {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 1rem;
+  align-items: end;
+  padding: 2rem 0 1.5rem;
+  border-bottom: 2px solid var(--ink);
+}
+
+.head h1 {
+  margin: 0;
+  font-size: clamp(1.5rem, 3vw, 2rem);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+}
+
+.head .meta {
+  margin: 0.35rem 0 0;
+  color: var(--grey);
+  font-size: 0.9rem;
+}
+
+nav ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  gap: 0;
+  border: 2px solid var(--ink);
+}
+
+nav a {
+  display: block;
+  padding: 0.6rem 1rem;
+  text-decoration: none;
+  border-right: 2px solid var(--ink);
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+nav li:last-child a {
+  border-right: none;
+}
+
+nav a:hover {
+  background: var(--yellow);
+}
+
+nav a[aria-current="page"] {
+  background: var(--ink);
+  color: #fff;
+}
+
+.hero {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
+  padding: 3rem 0;
+  border-bottom: 2px solid var(--ink);
+}
+
+@media (min-width: 720px) {
+  .hero {
+    grid-template-columns: 2fr 1fr;
+  }
+}
+
+.hero h2 {
+  margin: 0 0 1rem;
+  font-size: clamp(2rem, 4.5vw, 3rem);
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  line-height: 1.05;
+}
+
+.hero p {
+  margin: 0;
+  color: var(--grey);
+  max-width: 48ch;
+}
+
+.side-box {
+  border: 2px solid var(--ink);
+  padding: 1.25rem;
+  background: #fff;
+}
+
+.side-box strong {
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+.btn {
+  display: inline-block;
+  margin-top: 1.5rem;
+  padding: 0.75rem 1.25rem;
+  background: var(--ink);
+  color: #fff !important;
+  text-decoration: none !important;
+  text-transform: uppercase;
+  font-size: 0.8rem;
+  letter-spacing: 0.08em;
+  border: 2px solid var(--ink);
+}
+
+.btn:hover {
+  background: var(--yellow);
+  color: var(--ink) !important;
+}
+
+.row-2 {
+  display: grid;
+  gap: 0;
+  grid-template-columns: 1fr;
+  border: 2px solid var(--ink);
+  margin-top: 2rem;
+}
+
+@media (min-width: 640px) {
+  .row-2 {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.cell {
+  padding: 1.5rem;
+  border-bottom: 2px solid var(--ink);
+}
+
+@media (min-width: 640px) {
+  .cell {
+    border-bottom: none;
+  }
+
+  .cell:first-child {
+    border-right: 2px solid var(--ink);
+  }
+}
+
+.cell h3 {
+  margin: 0 0 0.5rem;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.cell p {
+  margin: 0;
+  color: var(--grey);
+}
+
+footer {
+  margin-top: 3rem;
+  font-size: 0.8rem;
+  color: var(--grey);
+}
+
+.page-h {
+  padding: 2rem 0 1rem;
+  border-bottom: 2px solid var(--ink);
+}
+
+.page-h h2 {
+  margin: 0;
+  font-size: 2rem;
+  font-weight: 800;
+}
+
+.prose p {
+  max-width: 62ch;
+  color: var(--grey);
+}
+
+.contact-lines {
+  border: 2px solid var(--ink);
+  margin-top: 2rem;
+}
+
+.contact-lines div {
+  padding: 1rem 1.25rem;
+  border-bottom: 2px solid var(--ink);
+}
+
+.contact-lines div:last-child {
+  border-bottom: none;
+}
+
+.contact-lines span {
+  display: block;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--grey);
+  margin-bottom: 0.25rem;
+}
+
+form label {
+  display: block;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 0.35rem;
+}
+
+form input,
+form textarea {
+  width: 100%;
+  max-width: 420px;
+  border: 2px solid var(--ink);
+  padding: 0.5rem 0.65rem;
+  font-family: inherit;
+  margin-bottom: 1rem;
+}
+
+form textarea {
+  min-height: 100px;
+  resize: vertical;
+}
+
+form button {
+  font-family: inherit;
+  cursor: pointer;
+}

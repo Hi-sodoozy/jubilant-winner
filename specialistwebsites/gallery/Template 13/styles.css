@@ -1,0 +1,180 @@
+/* Template 13 — Zen minimal: ink brush green, vast whitespace */
+:root {
+  --ink: #1c1b18;
+  --green: #2f4a3c;
+  --green-light: #5a7d6c;
+  --paper: #fafaf8;
+  --line: #e5e2dc;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: "Noto Serif JP", "Noto Serif", Georgia, serif;
+  font-size: 1.05rem;
+  line-height: 1.85;
+  color: var(--ink);
+  background: var(--paper);
+}
+
+a {
+  color: var(--green);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+}
+
+a:hover {
+  border-bottom-color: var(--green-light);
+}
+
+.layout {
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 4rem 1.5rem 5rem;
+}
+
+.vert-nav {
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+  position: fixed;
+  left: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 0.85rem;
+  letter-spacing: 0.35em;
+  display: none;
+}
+
+@media (min-width: 900px) {
+  .layout {
+    margin-left: 4rem;
+  }
+
+  .vert-nav {
+    display: block;
+  }
+}
+
+.vert-nav a {
+  display: block;
+  margin-left: 0.5rem;
+  padding: 0.25rem 0;
+  color: var(--green-light);
+}
+
+.vert-nav a[aria-current="page"] {
+  color: var(--green);
+  font-weight: 600;
+}
+
+h1 {
+  font-weight: 500;
+  font-size: clamp(1.75rem, 3vw, 2.25rem);
+  margin: 0 0 2rem;
+  letter-spacing: 0.02em;
+}
+
+.lead {
+  margin: 0 0 3rem;
+  color: #5c5a55;
+}
+
+.section {
+  padding-top: 2.5rem;
+  border-top: 1px solid var(--line);
+  margin-top: 2.5rem;
+}
+
+.section:first-of-type {
+  border-top: none;
+  margin-top: 0;
+  padding-top: 0;
+}
+
+.section h2 {
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--green-light);
+  margin: 0 0 1rem;
+}
+
+.section p {
+  margin: 0 0 1rem;
+  color: #4a4844;
+}
+
+.section p:last-child {
+  margin-bottom: 0;
+}
+
+.mobile-nav {
+  margin-bottom: 3rem;
+  font-family: system-ui, sans-serif;
+  font-size: 0.8rem;
+}
+
+.mobile-nav a {
+  margin-right: 1.25rem;
+}
+
+@media (min-width: 900px) {
+  .mobile-nav {
+    display: none;
+  }
+}
+
+footer {
+  margin-top: 4rem;
+  font-size: 0.8rem;
+  color: #8a8780;
+}
+
+form label {
+  font-size: 0.75rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--green-light);
+  display: block;
+  margin-bottom: 0.35rem;
+}
+
+form input,
+form textarea {
+  width: 100%;
+  border: none;
+  border-bottom: 1px solid var(--line);
+  background: transparent;
+  padding: 0.5rem 0;
+  font-family: inherit;
+  font-size: 1rem;
+  margin-bottom: 1.5rem;
+  border-radius: 0;
+}
+
+form textarea {
+  min-height: 100px;
+  resize: vertical;
+}
+
+form button {
+  font-family: system-ui, sans-serif;
+  font-size: 0.75rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  background: var(--green);
+  color: #fff;
+  border: none;
+  padding: 0.65rem 1.75rem;
+  cursor: pointer;
+}
+
+form button:hover {
+  background: var(--green-light);
+}

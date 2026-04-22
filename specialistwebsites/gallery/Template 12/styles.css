@@ -1,0 +1,172 @@
+/* Template 12 — Gentle ageing: mauve, rose gold hints, soft radius */
+:root {
+  --mauve: #7c6f8a;
+  --mauve-light: #e8e0f0;
+  --blush: #fdeef2;
+  --ink: #3a3245;
+  --muted: #6f6578;
+  --accent: #c4a574;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: "Literata", Georgia, serif;
+  font-size: 1.08rem;
+  line-height: 1.65;
+  color: var(--ink);
+  background: linear-gradient(145deg, var(--blush), var(--mauve-light));
+  min-height: 100vh;
+}
+
+a {
+  color: var(--mauve);
+  font-weight: 600;
+}
+
+.page {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 2.5rem 1.25rem 4rem;
+}
+
+.banner {
+  background: #fff;
+  border-radius: 32px;
+  padding: 2rem 2.25rem;
+  box-shadow: 0 16px 50px rgba(60, 50, 70, 0.08);
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+.banner h1 {
+  font-family: "Outfit", system-ui, sans-serif;
+  font-weight: 600;
+  font-size: clamp(1.5rem, 3.5vw, 2rem);
+  margin: 0 0 0.35rem;
+  color: var(--mauve);
+}
+
+.banner .tag {
+  font-family: Outfit, sans-serif;
+  font-size: 0.8rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 1rem;
+}
+
+nav ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+
+nav a {
+  font-family: Outfit, sans-serif;
+  font-size: 0.9rem;
+  text-decoration: none;
+  color: var(--ink);
+}
+
+nav a[aria-current="page"] {
+  border-bottom: 2px solid var(--accent);
+}
+
+.content {
+  background: rgba(255, 255, 255, 0.75);
+  border-radius: 28px;
+  padding: 2rem 2.25rem;
+  box-shadow: 0 8px 40px rgba(60, 50, 70, 0.06);
+}
+
+.content h2 {
+  font-family: Outfit, sans-serif;
+  font-size: 1.05rem;
+  color: var(--mauve);
+  margin: 0 0 0.75rem;
+}
+
+.content p {
+  margin: 0 0 1rem;
+  color: var(--muted);
+}
+
+.content p:last-child {
+  margin-bottom: 0;
+}
+
+.btn {
+  display: inline-block;
+  margin-top: 1rem;
+  font-family: Outfit, sans-serif;
+  font-weight: 600;
+  background: var(--mauve);
+  color: #fff !important;
+  padding: 0.65rem 1.4rem;
+  border-radius: 999px;
+  text-decoration: none !important;
+}
+
+footer {
+  text-align: center;
+  margin-top: 2rem;
+  font-size: 0.88rem;
+  color: var(--muted);
+  font-family: Outfit, sans-serif;
+}
+
+.two {
+  display: grid;
+  gap: 1.5rem;
+}
+
+@media (min-width: 640px) {
+  .two {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+form label {
+  font-family: Outfit, sans-serif;
+  font-size: 0.85rem;
+  font-weight: 600;
+  display: block;
+  margin-bottom: 0.35rem;
+}
+
+form input,
+form textarea {
+  width: 100%;
+  border-radius: 14px;
+  border: 1px solid #d4c8e0;
+  padding: 0.6rem 0.85rem;
+  font-family: inherit;
+  margin-bottom: 1rem;
+  background: #fff;
+}
+
+form textarea {
+  min-height: 110px;
+  resize: vertical;
+}
+
+form button {
+  font-family: Outfit, sans-serif;
+  font-weight: 600;
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  padding: 0.65rem 1.5rem;
+  border-radius: 999px;
+  cursor: pointer;
+}

@@ -1,0 +1,221 @@
+/* Template 4 — Sunny wellness: coral, butter yellow, soft blobs */
+:root {
+  --coral: #ff6b6b;
+  --coral-soft: #ff9a8b;
+  --butter: #fff3bf;
+  --mint: #96f2d7;
+  --ink: #2d3436;
+  --lavender: #dfe6ff;
+  --white: #ffffff;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: "Nunito", system-ui, sans-serif;
+  font-size: 1.0625rem;
+  line-height: 1.65;
+  color: var(--ink);
+  background: linear-gradient(165deg, var(--butter) 0%, #ffe8e0 35%, var(--lavender) 100%);
+  min-height: 100vh;
+}
+
+a {
+  color: #d63031;
+  font-weight: 700;
+}
+
+.wrap {
+  max-width: 920px;
+  margin: 0 auto;
+  padding: 2rem 1.25rem 4rem;
+}
+
+.blob-header {
+  position: relative;
+  text-align: center;
+  padding: 2.5rem 1.5rem 3rem;
+}
+
+.blob-header::before {
+  content: "";
+  position: absolute;
+  inset: 10% 5% auto;
+  height: 120%;
+  background: radial-gradient(circle at 30% 30%, var(--mint), transparent 45%),
+    radial-gradient(circle at 70% 60%, var(--coral-soft), transparent 40%);
+  opacity: 0.5;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.blob-header > * {
+  position: relative;
+  z-index: 1;
+}
+
+.emoji-badge {
+  font-size: 2.5rem;
+  line-height: 1;
+  margin-bottom: 0.5rem;
+}
+
+h1 {
+  font-size: clamp(1.85rem, 5vw, 2.75rem);
+  font-weight: 900;
+  margin: 0 0 0.5rem;
+  letter-spacing: -0.02em;
+}
+
+.tagline {
+  font-weight: 700;
+  color: #636e72;
+  max-width: 28rem;
+  margin: 0 auto 1.5rem;
+}
+
+.pill-nav {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  justify-content: center;
+  background: var(--white);
+  padding: 0.4rem;
+  border-radius: 999px;
+  box-shadow: 0 8px 30px rgba(45, 52, 54, 0.12);
+}
+
+.pill-nav a {
+  padding: 0.55rem 1.25rem;
+  border-radius: 999px;
+  text-decoration: none;
+  color: var(--ink);
+  font-weight: 800;
+}
+
+.pill-nav a:hover {
+  background: var(--butter);
+}
+
+.pill-nav a[aria-current="page"] {
+  background: var(--coral);
+  color: var(--white);
+}
+
+.card-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.bubble-card {
+  background: var(--white);
+  border-radius: 28px;
+  padding: 1.75rem 2rem;
+  box-shadow: 0 4px 0 rgba(255, 107, 107, 0.35);
+  border: 3px solid var(--ink);
+}
+
+.bubble-card h2 {
+  margin: 0 0 0.75rem;
+  font-size: 1.35rem;
+}
+
+.big-btn {
+  display: inline-block;
+  margin-top: 1rem;
+  background: var(--ink);
+  color: var(--white) !important;
+  padding: 0.85rem 2rem;
+  border-radius: 16px;
+  text-decoration: none !important;
+  font-weight: 900;
+  border: 3px solid var(--ink);
+  box-shadow: 4px 4px 0 var(--coral);
+}
+
+.big-btn:hover {
+  transform: translate(2px, 2px);
+  box-shadow: 2px 2px 0 var(--coral);
+}
+
+.footnote {
+  text-align: center;
+  font-size: 0.85rem;
+  color: #636e72;
+  margin-top: 2rem;
+  font-weight: 600;
+}
+
+.page-head {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.page-head h1 {
+  margin-bottom: 0.25rem;
+}
+
+.simple-card {
+  background: var(--white);
+  border-radius: 24px;
+  padding: 2rem;
+  border: 3px solid var(--ink);
+  margin-bottom: 1.25rem;
+}
+
+.contact-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin: 1rem 0;
+}
+
+.chip {
+  background: var(--butter);
+  padding: 0.6rem 1rem;
+  border-radius: 14px;
+  font-weight: 700;
+  border: 2px solid var(--ink);
+}
+
+form label {
+  display: block;
+  font-weight: 800;
+  margin-bottom: 0.35rem;
+}
+
+form input,
+form textarea {
+  width: 100%;
+  border: 3px solid var(--ink);
+  border-radius: 14px;
+  padding: 0.75rem 1rem;
+  font-family: inherit;
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+
+form textarea {
+  min-height: 130px;
+  resize: vertical;
+}
+
+form button {
+  font-family: inherit;
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.site-foot {
+  text-align: center;
+  padding: 1.5rem;
+  font-weight: 700;
+  color: #636e72;
+  font-size: 0.9rem;
+}
