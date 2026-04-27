@@ -639,3 +639,159 @@ form textarea {
   font-size: 1rem;
   background: var(--surface);
 }
+
+/* Mobile polish */
+
+@media (max-width: 760px) {
+  .shell {
+    padding: 0 1rem;
+  }
+
+  .header-inner {
+    padding: 0.75rem 1rem;
+    align-items: stretch;
+  }
+
+  .logo {
+    width: 100%;
+  }
+
+  nav.primary {
+    width: 100%;
+  }
+
+  nav.primary ul {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.45rem;
+    width: 100%;
+  }
+
+  nav.primary a {
+    text-align: center;
+    background: var(--bg);
+    border: 1px solid var(--line);
+    padding: 0.55rem 0.6rem;
+  }
+
+  .hero {
+    padding: 2.2rem 0 2.4rem;
+  }
+
+  .hero h1 {
+    max-width: 100%;
+    margin-bottom: 0.8rem;
+  }
+
+  .hero .lead {
+    max-width: 100%;
+    font-size: 1rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .hero-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .hero-actions .btn {
+    width: 100%;
+  }
+
+  .section {
+    padding: 2rem 0;
+  }
+
+  .section h2 {
+    font-size: 1.4rem;
+  }
+
+  .section-intro {
+    max-width: 100%;
+    margin-bottom: 1.25rem;
+  }
+
+  .card {
+    padding: 1.15rem 1rem 1.2rem;
+  }
+
+  .compare-list li {
+    line-height: 1.5;
+  }
+
+  .site-footer {
+    padding: 2rem 0 1.5rem;
+    margin-top: 1.5rem;
+  }
+
+  .footer-grid {
+    gap: 1.25rem;
+  }
+}
+
+@media (max-width: 375px) {
+  .shell {
+    padding: 0 0.85rem;
+  }
+
+  .header-inner {
+    padding: 0.65rem 0.85rem;
+  }
+
+  nav.primary ul {
+    grid-template-columns: 1fr;
+  }
+
+  nav.primary a {
+    padding: 0.5rem 0.55rem;
+    font-size: 0.9rem;
+  }
+
+  .logo-text strong {
+    font-size: 0.98rem;
+  }
+
+  .logo-text span {
+    font-size: 0.72rem;
+  }
+
+  .hero {
+    padding: 1.9rem 0 2.1rem;
+  }
+
+  .hero h1 {
+    font-size: clamp(1.7rem, 8.5vw, 2rem);
+    line-height: 1.2;
+  }
+
+  .hero .lead {
+    font-size: 0.96rem;
+    margin-bottom: 1rem;
+  }
+
+  .hero-actions {
+    gap: 0.55rem;
+  }
+
+  .btn {
+    padding: 0.64rem 0.9rem;
+    font-size: 0.92rem;
+  }
+
+  .section {
+    padding: 1.7rem 0;
+  }
+
+  .section h2 {
+    font-size: 1.25rem;
+  }
+
+  .card {
+    padding: 1rem 0.9rem 1.05rem;
+  }
+
+  .card p,
+  .compare-list {
+    font-size: 0.94rem;
+  }
+}
