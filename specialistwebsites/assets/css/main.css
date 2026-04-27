@@ -418,7 +418,123 @@ nav.primary a[aria-current="page"] {
   margin-bottom: 0;
 }
 
+.compare-footnote {
+  margin: 1rem 0 0.35rem;
+  font-size: 0.88rem;
+  line-height: 1.45;
+  color: var(--ink-soft);
+}
+
+.compare-footnote-hint {
+  margin: 0;
+  font-size: 0.78rem;
+  line-height: 1.45;
+  color: var(--muted);
+  font-style: italic;
+}
+
+.compare-pricing-callout {
+  margin: 1rem 0 0.35rem;
+  font-size: 0.95rem;
+  color: var(--ink-soft);
+}
+
+.compare-pricing-callout strong {
+  color: var(--accent-hover);
+  font-weight: 700;
+}
+
+.pricing-section-title {
+  margin: 2.25rem 0 1rem;
+  font-family: var(--font-serif);
+  font-size: 1.65rem;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.pricing-grid {
+  display: grid;
+  gap: 1.25rem;
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 900px) {
+  .pricing-grid {
+    grid-template-columns: repeat(3, 1fr);
+    align-items: stretch;
+  }
+}
+
+.pricing-card {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.pricing-card-featured {
+  border-color: #b8d9d9;
+  box-shadow: 0 6px 28px rgba(45, 106, 106, 0.12);
+}
+
+.pricing-tier-name {
+  margin: 0 0 0.35rem;
+  font-size: 1.15rem;
+  color: var(--ink);
+}
+
+.pricing-tier-tagline {
+  margin: 0 0 1rem;
+  font-size: 0.92rem;
+  font-weight: 600;
+  color: var(--ink-soft);
+}
+
+.pricing-features {
+  margin: 0 0 1.25rem;
+  padding-left: 1.1rem;
+  color: var(--muted);
+  font-size: 0.95rem;
+  flex: 1;
+}
+
+.pricing-features li {
+  margin-bottom: 0.45rem;
+}
+
+.pricing-features li:last-child {
+  margin-bottom: 0;
+}
+
+.pricing-amount {
+  margin: auto 0 0;
+  font-family: var(--font-serif);
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--accent-hover);
+}
+
+.pricing-period {
+  font-family: var(--font-sans);
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--muted);
+}
+
 /* Contact */
+
+.contact-page-main .contact-form-card {
+  max-width: 38rem;
+  margin: 0 auto 3rem;
+}
+
+.contact-page-main form .btn {
+  margin-top: 0.25rem;
+}
+
+.required {
+  color: #b45309;
+  font-weight: 700;
+}
 
 .contact-layout {
   display: grid;
@@ -775,8 +891,9 @@ form textarea {
   .hero-home .hero-actions .btn {
     width: auto;
     min-width: 0;
-    padding: 0.6rem 0.95rem;
-    font-size: 0.9rem;
+    max-width: 9.5rem;
+    padding: 0.52rem 0.75rem;
+    font-size: 0.85rem;
   }
 }
 
@@ -827,11 +944,16 @@ form textarea {
 
   .hero-home .hero-actions {
     flex-direction: column;
-    align-items: stretch;
+    align-items: center;
+    gap: 0.5rem;
   }
 
   .hero-home .hero-actions .btn {
-    width: 100%;
+    width: auto;
+    max-width: 8.75rem;
+    align-self: center;
+    padding: 0.48rem 0.68rem;
+    font-size: 0.82rem;
   }
 
   .section {

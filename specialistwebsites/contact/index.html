@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Contact — Specialist Websites</title>
-  <meta name="description" content="Get in touch with Specialist Websites about your practice website.">
+  <meta name="description" content="Contact Specialist Websites about your practice website.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;600;700&family=Lexend:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -17,7 +17,6 @@
         <span class="logo-mark" aria-hidden="true">S</span>
         <span class="logo-text">
           <strong>Specialist Websites</strong>
-          <span>Clear websites for Australian clinicians</span>
         </span>
       </a>
       <input type="checkbox" id="nav-toggle" class="nav-toggle-input" aria-label="Toggle navigation">
@@ -33,33 +32,29 @@
     </div>
   </header>
 
-  <main class="shell">
+  <main class="shell contact-page-main">
     <header class="page-header">
       <h1>Contact</h1>
-      <p>Tell us a little about your practice and what you need. This form is a demonstration and does not send messages yet.</p>
+      <p>Tell us a little about your practice and what you need.</p>
     </header>
-    <div class="contact-layout">
-      <div>
-        <div class="card">
-          <h3 style="margin-top:0;">Direct details (placeholder)</h3>
-          <p style="margin:0 0 0.75rem;color:var(--muted);">Email <a href="mailto:hello@specialistwebsites.example">hello@specialistwebsites.example</a></p>
-          <p style="margin:0;color:var(--muted);">Phone <a href="tel:+61200000000">02 0000 0000</a> — replace with production numbers.</p>
-        </div>
-        <p class="hint">If you are an existing patient trying to reach a doctor, this is a design demo only—use your clinic’s real contact details from your referral or letter.</p>
-      </div>
-      <div class="card">
-        <form action="#" method="get" onsubmit="return false;">
-          <label for="name">Name</label>
-          <input id="name" name="name" type="text" autocomplete="name">
-          <label for="email">Email</label>
-          <input id="email" name="email" type="email" autocomplete="email">
-          <label for="practice">Practice or clinic name</label>
-          <input id="practice" name="practice" type="text">
-          <label for="msg">How can we help?</label>
-          <textarea id="msg" name="msg"></textarea>
-          <button type="submit" class="btn btn-primary">Send (demo)</button>
-        </form>
-      </div>
+    <div class="card contact-form-card">
+      <form action="https://formspree.io/f/xbdayyne" method="post">
+        <label for="sw-name">Name <span class="required">*</span></label>
+        <input id="sw-name" name="name" type="text" autocomplete="name" required placeholder="Your name">
+
+        <label for="sw-email">Email <span class="required">*</span></label>
+        <input id="sw-email" name="email" type="email" autocomplete="email" required placeholder="your@email.com">
+
+        <label for="sw-preferred-url">Preferred website URL (e.g. DrFirstnameLastname.com.au)</label>
+        <input id="sw-preferred-url" name="preferred_website_url" type="text" placeholder="DrFirstnameLastname.com.au">
+
+        <label for="sw-msg">Message <span class="required">*</span></label>
+        <textarea id="sw-msg" name="message" required rows="5" placeholder="Your message"></textarea>
+
+        <input type="hidden" name="_subject" value="Specialist Websites enquiry">
+
+        <button type="submit" class="btn btn-primary">Send message</button>
+      </form>
     </div>
   </main>
 
