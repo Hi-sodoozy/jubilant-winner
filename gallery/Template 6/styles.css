@@ -1,0 +1,232 @@
+/* Template 6 — Glass lavender: frosted panels, violet gradient */
+:root {
+  --violet: #5b4dff;
+  --violet-dark: #3d2fa8;
+  --glass: rgba(255, 255, 255, 0.55);
+  --glass-border: rgba(255, 255, 255, 0.35);
+  --text: #1c1535;
+  --muted: #5c5478;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: "Plus Jakarta Sans", system-ui, sans-serif;
+  font-size: 1.05rem;
+  line-height: 1.6;
+  color: var(--text);
+  min-height: 100vh;
+  background:
+    radial-gradient(1200px 600px at 10% -10%, #c4b5fd, transparent),
+    radial-gradient(900px 500px at 100% 20%, #fbcfe8, transparent),
+    linear-gradient(160deg, #ede9fe 0%, #cffafe 50%, #e0e7ff 100%);
+  background-attachment: fixed;
+}
+
+a {
+  color: var(--violet-dark);
+  font-weight: 600;
+}
+
+.shell {
+  max-width: 1040px;
+  margin: 0 auto;
+  padding: 2rem 1.25rem 4rem;
+}
+
+.top {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.brand {
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  background: var(--glass);
+  border: 1px solid var(--glass-border);
+  border-radius: 20px;
+  padding: 1rem 1.25rem;
+  box-shadow: 0 8px 32px rgba(91, 77, 255, 0.08);
+}
+
+.brand strong {
+  display: block;
+  font-size: 1.15rem;
+}
+
+.brand span {
+  font-size: 0.8rem;
+  color: var(--muted);
+}
+
+nav ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  gap: 0.35rem;
+  flex-wrap: wrap;
+}
+
+nav a {
+  display: block;
+  padding: 0.55rem 1rem;
+  border-radius: 12px;
+  text-decoration: none;
+  color: var(--text);
+  font-weight: 600;
+}
+
+nav a:hover {
+  background: rgba(255, 255, 255, 0.5);
+}
+
+nav a[aria-current="page"] {
+  background: var(--violet);
+  color: #fff;
+}
+
+.hero-glass {
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  background: var(--glass);
+  border: 1px solid var(--glass-border);
+  border-radius: 28px;
+  padding: 2.5rem 2rem;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 20px 60px rgba(28, 21, 53, 0.08);
+}
+
+.hero-glass h1 {
+  margin: 0 0 1rem;
+  font-size: clamp(1.85rem, 4vw, 2.6rem);
+  letter-spacing: -0.02em;
+}
+
+.lead {
+  color: var(--muted);
+  max-width: 54ch;
+  margin: 0 0 1.5rem;
+}
+
+.btn {
+  display: inline-block;
+  background: linear-gradient(135deg, var(--violet), #8b5cf6);
+  color: #fff !important;
+  padding: 0.75rem 1.5rem;
+  border-radius: 14px;
+  text-decoration: none !important;
+  font-weight: 700;
+  box-shadow: 0 8px 24px rgba(91, 77, 255, 0.35);
+}
+
+.grid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+}
+
+.tile {
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  background: rgba(255, 255, 255, 0.45);
+  border: 1px solid var(--glass-border);
+  border-radius: 20px;
+  padding: 1.5rem;
+}
+
+.tile h2 {
+  margin: 0 0 0.5rem;
+  font-size: 1.1rem;
+}
+
+.tile p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.95rem;
+}
+
+footer {
+  margin-top: 2.5rem;
+  text-align: center;
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+.page-title {
+  margin: 0 0 1rem;
+  font-size: 2rem;
+}
+
+.prose p {
+  color: var(--muted);
+}
+
+.card-prose {
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  background: var(--glass);
+  border: 1px solid var(--glass-border);
+  border-radius: 24px;
+  padding: 2rem;
+  margin-bottom: 1rem;
+}
+
+dl.glass-dl {
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  background: var(--glass);
+  border: 1px solid var(--glass-border);
+  border-radius: 24px;
+  padding: 1.5rem 2rem;
+  margin: 0 0 1.5rem;
+}
+
+dl.glass-dl dt {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--muted);
+  margin-top: 1rem;
+}
+
+dl.glass-dl dt:first-child {
+  margin-top: 0;
+}
+
+dl.glass-dl dd {
+  margin: 0.25rem 0 0;
+}
+
+form label {
+  display: block;
+  font-weight: 600;
+  font-size: 0.9rem;
+  margin-bottom: 0.35rem;
+}
+
+form input,
+form textarea {
+  width: 100%;
+  max-width: 480px;
+  border: 1px solid var(--glass-border);
+  border-radius: 12px;
+  padding: 0.65rem 0.85rem;
+  font-family: inherit;
+  margin-bottom: 1rem;
+  background: rgba(255, 255, 255, 0.7);
+}
+
+form textarea {
+  min-height: 120px;
+  resize: vertical;
+}

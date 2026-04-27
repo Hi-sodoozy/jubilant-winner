@@ -1,0 +1,196 @@
+/* Template 8 — Coastal clarity: aqua, wave shapes, airy */
+:root {
+  --sea: #0c7c93;
+  --sea-light: #3bacbf;
+  --foam: #f0fbfd;
+  --sand: #fff8f0;
+  --deep: #0a3d4a;
+  --muted: #4a6b73;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: "Manrope", system-ui, sans-serif;
+  font-size: 1.05rem;
+  line-height: 1.6;
+  color: var(--deep);
+  background: linear-gradient(180deg, var(--foam) 0%, var(--sand) 100%);
+}
+
+a {
+  color: var(--sea);
+  font-weight: 700;
+}
+
+.waves {
+  background: linear-gradient(135deg, var(--sea) 0%, var(--sea-light) 100%);
+  color: #fff;
+  padding: 2.5rem 1.5rem 4rem;
+  clip-path: polygon(0 0, 100% 0, 100% 88%, 70% 100%, 0 92%);
+}
+
+.inner {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.waves h1 {
+  margin: 0 0 0.5rem;
+  font-size: clamp(1.75rem, 4vw, 2.5rem);
+  font-weight: 800;
+}
+
+.waves p {
+  margin: 0;
+  opacity: 0.95;
+  max-width: 40rem;
+}
+
+.waves nav {
+  margin-top: 1.5rem;
+}
+
+.waves nav ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.waves a {
+  color: #fff;
+  text-decoration: none;
+  font-weight: 700;
+  border-bottom: 2px solid transparent;
+}
+
+.waves nav a:hover,
+.waves nav a[aria-current="page"] {
+  border-bottom-color: #b8f2ff;
+}
+
+main {
+  max-width: 900px;
+  margin: -1.5rem auto 0;
+  padding: 0 1.25rem 3rem;
+  position: relative;
+  z-index: 1;
+}
+
+.panel {
+  background: #fff;
+  border-radius: 20px;
+  box-shadow: 0 20px 50px rgba(12, 124, 147, 0.12);
+  padding: 2rem;
+  margin-bottom: 1.25rem;
+}
+
+.panel h2 {
+  margin: 0 0 0.75rem;
+  color: var(--sea);
+  font-size: 1.2rem;
+}
+
+.split {
+  display: grid;
+  gap: 1.25rem;
+}
+
+@media (min-width: 640px) {
+  .split {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.cta {
+  display: inline-block;
+  background: var(--sea);
+  color: #fff !important;
+  padding: 0.75rem 1.5rem;
+  border-radius: 999px;
+  text-decoration: none !important;
+  font-weight: 800;
+  margin-top: 0.5rem;
+}
+
+.cta:hover {
+  background: var(--deep);
+}
+
+footer {
+  text-align: center;
+  color: var(--muted);
+  font-size: 0.9rem;
+  padding: 1rem;
+}
+
+.page-intro {
+  padding: 2rem 0 0;
+}
+
+.page-intro h1 {
+  color: var(--sea);
+  margin: 0 0 0.5rem;
+}
+
+.contact-grid {
+  display: grid;
+  gap: 1rem;
+}
+
+@media (min-width: 600px) {
+  .contact-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.mini {
+  background: #fff;
+  border-radius: 16px;
+  padding: 1.25rem;
+  box-shadow: 0 8px 24px rgba(12, 124, 147, 0.08);
+}
+
+.mini h3 {
+  margin: 0 0 0.5rem;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--muted);
+}
+
+form label {
+  font-weight: 700;
+  display: block;
+  margin-bottom: 0.35rem;
+  font-size: 0.9rem;
+}
+
+form input,
+form textarea {
+  width: 100%;
+  border: 2px solid #c5e8ef;
+  border-radius: 12px;
+  padding: 0.65rem 0.85rem;
+  font-family: inherit;
+  margin-bottom: 1rem;
+}
+
+form textarea {
+  min-height: 110px;
+  resize: vertical;
+}
+
+form button {
+  font-family: inherit;
+  font-weight: 800;
+  cursor: pointer;
+}
