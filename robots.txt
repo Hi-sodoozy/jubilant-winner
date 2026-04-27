@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
-
-Sitemap: https://iainduguid.com/sitemap.xml
+Disallow: /dashboard/
+Sitemap: https://enerval.com/sitemap.xml
