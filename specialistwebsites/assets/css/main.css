@@ -371,6 +371,48 @@ nav.primary a[aria-current="page"] {
   margin: 0 0 1rem;
 }
 
+/* About compare section */
+
+.compare-section {
+  padding-top: 0;
+}
+
+.compare-grid {
+  display: grid;
+  gap: 1.25rem;
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 900px) {
+  .compare-grid {
+    grid-template-columns: 1fr 1fr;
+    align-items: start;
+  }
+}
+
+.compare-card h3 {
+  margin-bottom: 0.85rem;
+}
+
+.compare-card-highlight {
+  border-color: #b8d9d9;
+  background: var(--accent-soft);
+}
+
+.compare-list {
+  margin: 0;
+  padding-left: 1.1rem;
+  color: var(--muted);
+}
+
+.compare-list li {
+  margin-bottom: 0.65rem;
+}
+
+.compare-list li:last-child {
+  margin-bottom: 0;
+}
+
 /* Contact */
 
 .contact-layout {
