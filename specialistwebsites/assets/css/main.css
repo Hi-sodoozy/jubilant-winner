@@ -148,6 +148,11 @@ nav.primary a[aria-current="page"] {
   color: var(--accent-hover);
 }
 
+.nav-toggle-input,
+.nav-toggle-btn {
+  display: none;
+}
+
 /* Buttons */
 
 .btn {
@@ -656,22 +661,44 @@ form textarea {
     width: 100%;
   }
 
+  .nav-toggle-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: auto;
+    padding: 0.45rem 0.8rem;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    background: var(--surface);
+    color: var(--ink);
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    line-height: 1;
+  }
+
   nav.primary {
     width: 100%;
+    display: none;
+  }
+
+  .nav-toggle-input:checked ~ nav.primary {
+    display: block;
   }
 
   nav.primary ul {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr;
     gap: 0.45rem;
     width: 100%;
+    margin-top: 0.55rem;
   }
 
   nav.primary a {
     text-align: center;
     background: var(--bg);
     border: 1px solid var(--line);
-    padding: 0.55rem 0.6rem;
+    padding: 0.52rem 0.6rem;
   }
 
   .hero {
@@ -727,6 +754,30 @@ form textarea {
   .footer-grid {
     gap: 1.25rem;
   }
+
+  .hero-home {
+    text-align: center;
+  }
+
+  .hero-home h1,
+  .hero-home .lead {
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .hero-home .hero-actions {
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 0.6rem;
+  }
+
+  .hero-home .hero-actions .btn {
+    width: auto;
+    min-width: 0;
+    padding: 0.6rem 0.95rem;
+    font-size: 0.9rem;
+  }
 }
 
 @media (max-width: 375px) {
@@ -738,13 +789,9 @@ form textarea {
     padding: 0.65rem 0.85rem;
   }
 
-  nav.primary ul {
-    grid-template-columns: 1fr;
-  }
-
-  nav.primary a {
-    padding: 0.5rem 0.55rem;
-    font-size: 0.9rem;
+  .nav-toggle-btn {
+    padding: 0.4rem 0.72rem;
+    font-size: 0.86rem;
   }
 
   .logo-text strong {
@@ -776,6 +823,15 @@ form textarea {
   .btn {
     padding: 0.64rem 0.9rem;
     font-size: 0.92rem;
+  }
+
+  .hero-home .hero-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .hero-home .hero-actions .btn {
+    width: 100%;
   }
 
   .section {
