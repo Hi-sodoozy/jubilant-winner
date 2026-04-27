@@ -208,7 +208,7 @@ nav.primary a[aria-current="page"] {
   margin: 0 0 1.75rem;
   font-size: 1.15rem;
   color: var(--muted);
-  max-width: 38rem;
+  max-width: 48rem;
 }
 
 .hero-actions {
@@ -240,7 +240,7 @@ nav.primary a[aria-current="page"] {
 .section-intro {
   margin: 0 0 2rem;
   color: var(--muted);
-  max-width: 48ch;
+  max-width: 64ch;
 }
 
 .grid-3 {
