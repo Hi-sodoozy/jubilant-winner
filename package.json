@@ -1,0 +1,8 @@
+{
+  "name": "specialist-websites",
+  "private": true,
+  "description": "Marketing site for Specialist Websites — templates live in /gallery; run a local server for clean URLs and iframe previews.",
+  "scripts": {
+    "dev": "npx --yes serve . -l 5173"
+  }
+}
