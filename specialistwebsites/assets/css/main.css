@@ -419,14 +419,14 @@ nav.primary a[aria-current="page"] {
 }
 
 .compare-footnote {
-  margin: 1rem 0 0.35rem;
+  margin: 1.65rem 0 0;
   font-size: 0.88rem;
   line-height: 1.45;
   color: var(--ink-soft);
 }
 
 .compare-footnote-hint {
-  margin: 0;
+  margin: 0.65rem 0 0;
   font-size: 0.78rem;
   line-height: 1.45;
   color: var(--muted);
@@ -434,9 +434,17 @@ nav.primary a[aria-current="page"] {
 }
 
 .compare-pricing-callout {
-  margin: 1rem 0 0.35rem;
+  margin: 1rem 0 0;
   font-size: 0.95rem;
   color: var(--ink-soft);
+}
+
+.compare-pricing-setup {
+  margin-top: 1.8rem;
+}
+
+.compare-pricing-online {
+  margin-top: 0.75rem;
 }
 
 .compare-pricing-callout strong {
@@ -445,11 +453,15 @@ nav.primary a[aria-current="page"] {
 }
 
 .pricing-section-title {
-  margin: 2.25rem 0 1rem;
+  margin: 3.3rem 0 1rem;
   font-family: var(--font-serif);
   font-size: 1.65rem;
   font-weight: 600;
   color: var(--ink);
+}
+
+.optional-extras-title {
+  margin-top: 2.4rem;
 }
 
 .pricing-grid {
@@ -471,6 +483,21 @@ nav.primary a[aria-current="page"] {
   height: 100%;
 }
 
+.pricing-shared {
+  margin-bottom: 1.25rem;
+}
+
+.pricing-features-inline {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+  gap: 0.4rem 1rem;
+  padding-left: 1.1rem;
+}
+
+.pricing-grid-plans .pricing-card {
+  border-top: 5px solid #d8e7e7;
+}
+
 .pricing-card-featured {
   border-color: #b8d9d9;
   box-shadow: 0 6px 28px rgba(45, 106, 106, 0.12);
@@ -487,6 +514,12 @@ nav.primary a[aria-current="page"] {
   font-size: 0.92rem;
   font-weight: 600;
   color: var(--ink-soft);
+}
+
+.pricing-tier-inclusion {
+  margin: 0 0 0.85rem;
+  font-size: 0.92rem;
+  color: var(--muted);
 }
 
 .pricing-features {
@@ -518,6 +551,16 @@ nav.primary a[aria-current="page"] {
   font-size: 0.95rem;
   font-weight: 600;
   color: var(--muted);
+}
+
+.optional-extras-grid {
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 900px) {
+  .optional-extras-grid {
+    grid-template-columns: 1fr 1fr;
+  }
 }
 
 /* Contact */
@@ -606,6 +649,19 @@ form textarea {
   max-height: min(70vh, 640px);
   display: flex;
   flex-direction: column;
+}
+
+.templates-next-section {
+  padding-top: 0.25rem;
+}
+
+.templates-next-section p {
+  max-width: 66ch;
+}
+
+.templates-contact-form-card {
+  max-width: 38rem;
+  margin-top: 1.25rem;
 }
 
 .template-picker h2 {
