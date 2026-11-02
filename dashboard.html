@@ -190,11 +190,12 @@ PLANT | a living thing</pre>
             <section class="game-admin-panel" data-game-panel="sudoku" hidden>
               <button type="button" class="game-admin-back" data-game-back>All games</button>
               <h2>Sudoku</h2>
-              <p>Start each puzzle with easy, medium, or hard. Then nine clue rows and nine solved rows. Use 0 for an empty square.</p>
+              <p>Start each puzzle with easy, medium, or hard. Add a question grid, then an answer grid. Use 0 or a dot for an empty square.</p>
               <p class="game-admin-stat" data-stat="sudoku"></p>
               <details class="game-admin-format">
                 <summary>Show the format</summary>
                 <pre class="trivia-format">easy
+Question
 530070000
 600195000
 098000060
@@ -204,6 +205,7 @@ PLANT | a living thing</pre>
 060000280
 000419005
 000080079
+Answer
 534678912
 672195348
 198342567
@@ -218,7 +220,7 @@ PLANT | a living thing</pre>
               <form id="game-sudoku-form">
                 <div class="form-row">
                   <label for="game-sudoku-paste">Sudoku puzzles</label>
-                  <textarea id="game-sudoku-paste" rows="8" spellcheck="false" placeholder="Paste sudoku puzzles here."></textarea>
+                  <textarea id="game-sudoku-paste" rows="8" spellcheck="false" placeholder="Paste a question grid, then an answer grid."></textarea>
                 </div>
                 <div class="trivia-file-row">
                   <button type="submit" class="btn-primary">Add sudoku</button>

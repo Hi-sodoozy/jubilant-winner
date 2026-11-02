@@ -249,38 +249,88 @@
     return match ? match[1].toLowerCase() : '';
   }
 
+  function sudokuSection(line) {
+    var word = String(line || '').replace(/^\d+\s*[\.\)]\s*/, '').replace(/:$/, '').trim().toLowerCase();
+    if (/^(question|questions|clue|clues|puzzle|givens)$/.test(word)) return 'question';
+    if (/^(answer|answers|solution|solved)$/.test(word)) return 'answer';
+    return '';
+  }
+
+  function sudokuRows(line) {
+    var body = String(line || '').replace(/^\d+[\.\)]\s*/, '');
+    var digits = body.replace(/[.\-_xX*]/g, '0').replace(/[^0-9]/g, '');
+    if (digits.length === 81) {
+      var rows = [];
+      var i;
+      for (i = 0; i < 81; i += 9) rows.push(digits.slice(i, i + 9));
+      return rows;
+    }
+    if (digits.length === 9) return [digits];
+    return null;
+  }
+
   function parseSudoku(text) {
     var lines = String(text || '').replace(/\r\n/g, '\n').replace(/\r/g, '\n').split('\n');
     var puzzles = [];
     var errors = [];
-    var rows = [];
+    var question = [];
+    var answer = [];
+    var plain = [];
+    var section = '';
     var level = '';
     var number = 1;
 
-    function close(force) {
-      if (!rows.length) return;
+    function reset() {
+      question = [];
+      answer = [];
+      plain = [];
+      section = '';
+      level = '';
+    }
+
+    function finish(givens, solved) {
       if (!level) {
         errors.push('Puzzle ' + number + ' needs a level: easy, medium, or hard.');
-      } else if (rows.length === 18) {
-        var givens = rows.slice(0, 9).join('');
-        var solved = rows.slice(9).join('');
-        var issue = sudokuIssue(givens, solved);
-        if (issue) errors.push('Puzzle ' + number + ' ' + issue + '.');
-        else puzzles.push({ givens: givens, solved: solved, difficulty: level });
+        return;
+      }
+      var issue = sudokuIssue(givens, solved);
+      if (issue) errors.push('Puzzle ' + number + ' ' + issue + '.');
+      else puzzles.push({ givens: givens, solved: solved, difficulty: level });
+    }
+
+    function close(force) {
+      var labeled = question.length || answer.length || section;
+      if (!labeled && !plain.length) return;
+      if (labeled) {
+        if (question.length === 9 && answer.length === 9) finish(question.join(''), answer.join(''));
+        else if (force) errors.push('Puzzle ' + number + ' needs a question of 9 rows and an answer of 9 rows.');
+        else return;
+      } else if (plain.length === 18) {
+        finish(plain.slice(0, 9).join(''), plain.slice(9).join(''));
       } else if (force) {
-        errors.push('Puzzle ' + number + ' needs 9 clue rows and 9 answer rows.');
+        errors.push('Puzzle ' + number + ' needs a question of 9 rows and an answer of 9 rows.');
       } else {
         return;
       }
       number += 1;
-      rows = [];
-      level = '';
+      reset();
+    }
+
+    function addRows(rows) {
+      var bucket = section === 'answer' ? answer : section === 'question' ? question : plain;
+      rows.forEach(function (row) { bucket.push(row); });
+      if (question.length === 9 && answer.length === 9) close(false);
+      else if (!section && plain.length === 18) close(false);
     }
 
     lines.forEach(function (raw, index) {
       var line = raw.trim();
       if (!line) {
-        close(true);
+        if (section || question.length || answer.length) {
+          if (question.length === 9 && answer.length === 9) close(true);
+        } else if (plain.length) {
+          close(true);
+        }
         return;
       }
       var nextLevel = sudokuLevel(line);
@@ -289,17 +339,22 @@
         level = nextLevel;
         return;
       }
-      if (/^\d+\s*[\.\)]\s*$/.test(line)) {
-        close(true);
+      var nextSection = sudokuSection(line);
+      if (nextSection) {
+        if (nextSection === 'answer' && !question.length && plain.length) {
+          question = plain.slice();
+          plain = [];
+        }
+        section = nextSection;
         return;
       }
-      var digits = line.replace(/\s+/g, '');
-      if (!/^[0-9]{9}$/.test(digits)) {
-        errors.push('Line ' + (index + 1) + ' needs 9 digits.');
+      if (/^\d+\s*[\.\)]\s*$/.test(line)) return;
+      var rows = sudokuRows(line);
+      if (!rows) {
+        errors.push('Line ' + (index + 1) + ' needs 9 digits. Use 0 or a dot for an empty square.');
         return;
       }
-      rows.push(digits);
-      if (rows.length === 18) close(false);
+      addRows(rows);
     });
     close(true);
     return { puzzles: puzzles, errors: errors };

@@ -3124,6 +3124,133 @@ h1, h2, h3,
   }
 }
 
+.sudoku-board {
+  max-width: 32rem;
+}
+
+.sudoku-levels,
+.sudoku-pad {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+}
+
+.sudoku-levels {
+  margin-bottom: 0.9rem;
+}
+
+.sudoku-level,
+.sudoku-key {
+  border: 2.5px solid var(--ink);
+  background: #fff;
+  color: var(--ink);
+  font-family: var(--font-ui);
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.sudoku-level {
+  padding: 0.4rem 0.9rem;
+  border-radius: 999px;
+  box-shadow: 3px 3px 0 var(--ink);
+}
+
+.sudoku-level.is-on,
+.sudoku-key:hover,
+.sudoku-level:hover {
+  background: var(--sun);
+}
+
+.sudoku-grid {
+  display: grid;
+  grid-template-columns: repeat(9, minmax(0, 1fr));
+  width: min(100%, 26rem);
+  border: 2.5px solid var(--ink);
+  background: #fff;
+  box-shadow: 4px 4px 0 var(--ink);
+}
+
+.sudoku-cell {
+  aspect-ratio: 1;
+  border: 1px solid #e4d7ea;
+  background: #fff;
+  color: var(--blue);
+  font-family: var(--font-ui);
+  font-weight: 800;
+  font-size: clamp(0.95rem, 4.2vw, 1.3rem);
+  padding: 0;
+  cursor: pointer;
+}
+
+.sudoku-cell.is-given {
+  color: var(--ink);
+  background: var(--cream);
+}
+
+.sudoku-cell.is-peer {
+  background: #fff6cc;
+}
+
+.sudoku-cell.is-same {
+  background: #ffe8a3;
+}
+
+.sudoku-cell.is-selected {
+  background: var(--sun);
+  color: var(--ink);
+}
+
+.sudoku-cell.is-conflict {
+  color: var(--pop);
+  background: #ffd0ea;
+}
+
+.sudoku-cell.is-selected.is-conflict {
+  background: var(--sun);
+  color: var(--pop);
+}
+
+.sudoku-cell:nth-child(9n + 3),
+.sudoku-cell:nth-child(9n + 6) {
+  border-right: 2.5px solid var(--ink);
+}
+
+.sudoku-cell:nth-child(n + 19):nth-child(-n + 27),
+.sudoku-cell:nth-child(n + 46):nth-child(-n + 54) {
+  border-bottom: 2.5px solid var(--ink);
+}
+
+.sudoku-feedback {
+  min-height: 1.4em;
+  margin: 0.85rem 0;
+  font-weight: 800;
+}
+
+.sudoku-feedback.is-wrong {
+  color: var(--pop);
+}
+
+.sudoku-pad {
+  margin-top: 0.85rem;
+}
+
+.sudoku-key {
+  min-width: 2.6rem;
+  min-height: 2.6rem;
+  padding: 0.35rem 0.7rem;
+  border-radius: 12px;
+  box-shadow: 3px 3px 0 var(--ink);
+}
+
+.sudoku-board .btn-primary {
+  margin-top: 0.9rem;
+}
+
+.sudoku-key:disabled,
+.sudoku-cell:disabled {
+  cursor: default;
+}
+
 .dashboard-back {
   font-family: var(--font-ui);
   font-weight: 800;
