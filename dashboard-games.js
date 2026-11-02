@@ -26,6 +26,41 @@
     el.classList.toggle('is-wrong', !!isError);
   }
 
+  function setStat(name, text, compact) {
+    document.querySelectorAll('[data-stat="' + name + '"]').forEach(function (el) {
+      el.textContent = el.hasAttribute('data-stat-compact') ? (compact || text) : text;
+    });
+  }
+
+  function showGame(name) {
+    var home = document.getElementById('gameAdminHome');
+    if (!home) return;
+    var previous = home.getAttribute('data-open-game') || '';
+    home.hidden = !!name;
+    home.setAttribute('data-open-game', name || '');
+    document.querySelectorAll('[data-game-panel]').forEach(function (panel) {
+      panel.hidden = panel.getAttribute('data-game-panel') !== name;
+    });
+    var focusTarget = name
+      ? document.querySelector('[data-game-panel="' + name + '"] .game-admin-back')
+      : document.querySelector('[data-open="' + previous + '"]');
+    if (focusTarget) focusTarget.focus();
+  }
+
+  function bindGameNav() {
+    if (!document.getElementById('gameAdminHome')) return;
+    document.querySelectorAll('[data-open]').forEach(function (button) {
+      button.addEventListener('click', function () {
+        showGame(button.getAttribute('data-open'));
+      });
+    });
+    document.querySelectorAll('[data-game-back]').forEach(function (button) {
+      button.addEventListener('click', function () {
+        showGame('');
+      });
+    });
+  }
+
   function norm(value) {
     return String(value || '').trim().replace(/\s+/g, ' ').toLowerCase();
   }
@@ -209,32 +244,49 @@
     return '';
   }
 
+  function sudokuLevel(line) {
+    var match = String(line || '').match(/^(?:\d+\s*[\.\)]\s*)?(easy|medium|hard)$/i);
+    return match ? match[1].toLowerCase() : '';
+  }
+
   function parseSudoku(text) {
     var lines = String(text || '').replace(/\r\n/g, '\n').replace(/\r/g, '\n').split('\n');
     var puzzles = [];
     var errors = [];
     var rows = [];
+    var level = '';
     var number = 1;
 
     function close(force) {
       if (!rows.length) return;
-      if (rows.length === 18) {
+      if (!level) {
+        errors.push('Puzzle ' + number + ' needs a level: easy, medium, or hard.');
+      } else if (rows.length === 18) {
         var givens = rows.slice(0, 9).join('');
         var solved = rows.slice(9).join('');
         var issue = sudokuIssue(givens, solved);
         if (issue) errors.push('Puzzle ' + number + ' ' + issue + '.');
-        else puzzles.push({ givens: givens, solved: solved });
+        else puzzles.push({ givens: givens, solved: solved, difficulty: level });
       } else if (force) {
         errors.push('Puzzle ' + number + ' needs 9 clue rows and 9 answer rows.');
+      } else {
+        return;
       }
       number += 1;
       rows = [];
+      level = '';
     }
 
     lines.forEach(function (raw, index) {
       var line = raw.trim();
       if (!line) {
         close(true);
+        return;
+      }
+      var nextLevel = sudokuLevel(line);
+      if (nextLevel) {
+        close(true);
+        level = nextLevel;
         return;
       }
       if (/^\d+\s*[\.\)]\s*$/.test(line)) {
@@ -451,39 +503,46 @@
     }
     var trivia = await db.rpc('trivia_bank_stats', { gate: gate() });
     var connections = await db.rpc('connections_bank_stats', { gate: gate() });
-    var triviaStats = document.getElementById('game-trivia-stats');
-    var connectionStats = document.getElementById('game-conn-stats');
     if (trivia.error) {
-      if (triviaStats) triviaStats.textContent = '';
+      setStat('trivia', '');
       setStatus('game-trivia-status', explain(trivia.error), true);
-    } else if (triviaStats) {
+    } else {
       var data = trivia.data || {};
-      triviaStats.textContent = (data.total || 0) + ' trivia questions in the bank. ' + (data.ready || 0) + ' ready for a draw.';
+      setStat('trivia', (data.total || 0) + ' total · ' + (data.ready || 0) + ' ready');
     }
     if (connections.error) {
-      if (connectionStats) connectionStats.textContent = '';
+      setStat('connections', '');
       setStatus('game-conn-status', explain(connections.error, 'connections_bank_stats'), true);
-    } else if (connectionStats) {
-      connectionStats.textContent = ((connections.data && connections.data.total) || 0) + ' Connections puzzles in the bank.';
+    } else {
+      setStat('connections', ((connections.data && connections.data.total) || 0) + ' puzzles');
     }
-    await showBank('word_bank_stats', 'game-word-stats', 'game-word-status', 'words');
-    await showBank('sudoku_bank_stats', 'game-sudoku-stats', 'game-sudoku-status', 'sudoku puzzles');
-    await showBank('crossword_bank_stats', 'game-cross-stats', 'game-cross-status', 'crosswords');
+    await showBank('word_bank_stats', 'word', 'game-word-status');
+    await showBank('sudoku_bank_stats', 'sudoku', 'game-sudoku-status');
+    await showBank('crossword_bank_stats', 'crossword', 'game-cross-status');
   }
 
-  async function showBank(rpcName, statsId, statusId, label) {
+  async function showBank(rpcName, name, statusId) {
     var db = client();
     if (!db) return;
     var result = await db.rpc(rpcName, { gate: gate() });
-    var stats = document.getElementById(statsId);
-    if (!stats) return;
     if (result.error) {
-      stats.textContent = '';
+      setStat(name, '');
       setStatus(statusId, explain(result.error, rpcName), true);
       return;
     }
     var data = result.data || {};
-    stats.textContent = (data.total || 0) + ' ' + label + ' in the bank. ' + (data.ready || 0) + ' ready for a draw.';
+    if (data.easy && data.medium && data.hard) {
+      var full = ['easy', 'medium', 'hard'].map(function (level) {
+        var part = data[level] || {};
+        return level.charAt(0).toUpperCase() + level.slice(1) + ': ' + (part.total || 0) + ' in the bank, ' + (part.ready || 0) + ' ready';
+      }).join('. ') + '.';
+      var compact = ['easy', 'medium', 'hard'].map(function (level) {
+        return level.charAt(0).toUpperCase() + level.slice(1) + ' ' + ((data[level] && data[level].total) || 0);
+      }).join(' · ');
+      setStat(name, full, compact);
+      return;
+    }
+    setStat(name, (data.total || 0) + ' total · ' + (data.ready || 0) + ' ready');
   }
 
   async function upload(name, rows, rpcName, statusId, clearId) {
@@ -495,6 +554,7 @@
     if (busy) return;
     busy = true;
     var added = 0;
+    var updated = 0;
     var skipped = 0;
     var i;
     for (i = 0; i < rows.length; i += CHUNK) {
@@ -509,11 +569,13 @@
         return;
       }
       added += (result.data && result.data.added) || 0;
+      updated += (result.data && result.data.updated) || 0;
       skipped += (result.data && result.data.skipped) || 0;
     }
     busy = false;
     if (clearId) document.getElementById(clearId).value = '';
     var note = 'Added ' + added + ' ' + name + '.';
+    if (updated) note += ' Moved ' + updated + ' to a new level.';
     if (skipped) note += ' Skipped ' + skipped + ' already saved or incomplete.';
     setStatus(statusId, note);
     refreshStats();
@@ -592,7 +654,14 @@
       setStatus('game-sudoku-status', errorNote(parsed.errors) || 'No sudoku puzzles found.', true);
       return;
     }
-    await upload('sudoku puzzles', parsed.puzzles, 'add_sudoku', 'game-sudoku-status', clear ? 'game-sudoku-paste' : '');
+    var byGrid = {};
+    var order = [];
+    parsed.puzzles.forEach(function (puzzle) {
+      if (!byGrid[puzzle.givens]) order.push(puzzle.givens);
+      byGrid[puzzle.givens] = puzzle;
+    });
+    var unique = order.map(function (givens) { return byGrid[givens]; });
+    await upload('sudoku puzzles', unique, 'add_sudoku', 'game-sudoku-status', clear ? 'game-sudoku-paste' : '');
     if (parsed.errors.length) setStatus('game-sudoku-status', document.getElementById('game-sudoku-status').textContent + ' ' + errorNote(parsed.errors), false);
   }
 
@@ -644,6 +713,7 @@
       return;
     }
     started = true;
+    bindGameNav();
     document.getElementById('game-trivia-form').addEventListener('submit', function (event) {
       event.preventDefault();
       ingestTrivia(document.getElementById('game-trivia-paste').value, true);

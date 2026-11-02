@@ -78,69 +78,123 @@
           </div>
 
           <div class="dashboard-games">
-            <h2 class="dashboard-blog-heading">Trivia</h2>
-            <p>Paste a batch or choose a text file. Same shape as below. Thousands at once is fine.</p>
-            <pre class="trivia-format">1. Which country has the most time zones when its overseas territories are included?
+            <div class="game-admin-home" id="gameAdminHome">
+              <h2 class="game-admin-title">Puzzle banks</h2>
+              <div class="game-admin-list">
+                <button type="button" class="game-admin-card" data-open="trivia">
+                  <span class="game-admin-name">Trivia</span>
+                  <span class="game-admin-hint">10 questions a day</span>
+                  <span class="game-admin-stat" data-stat="trivia"></span>
+                </button>
+                <button type="button" class="game-admin-card" data-open="connections">
+                  <span class="game-admin-name">Connections</span>
+                  <span class="game-admin-hint">Four groups</span>
+                  <span class="game-admin-stat" data-stat="connections"></span>
+                </button>
+                <button type="button" class="game-admin-card" data-open="word">
+                  <span class="game-admin-name">Word</span>
+                  <span class="game-admin-hint">4 to 8 letters</span>
+                  <span class="game-admin-stat" data-stat="word"></span>
+                </button>
+                <button type="button" class="game-admin-card" data-open="sudoku">
+                  <span class="game-admin-name">Sudoku</span>
+                  <span class="game-admin-hint">Easy, medium, hard</span>
+                  <span class="game-admin-stat" data-stat="sudoku" data-stat-compact></span>
+                </button>
+                <button type="button" class="game-admin-card" data-open="crossword">
+                  <span class="game-admin-name">Crossword</span>
+                  <span class="game-admin-hint">A daily grid</span>
+                  <span class="game-admin-stat" data-stat="crossword"></span>
+                </button>
+              </div>
+            </div>
+
+            <section class="game-admin-panel" data-game-panel="trivia" hidden>
+              <button type="button" class="game-admin-back" data-game-back>All games</button>
+              <h2>Trivia</h2>
+              <p>Paste a batch, or choose a text file. Thousands at once is fine.</p>
+              <p class="game-admin-stat" data-stat="trivia"></p>
+              <details class="game-admin-format">
+                <summary>Show the format</summary>
+                <pre class="trivia-format">1. Which country has the most time zones when its overseas territories are included?
 A) Russia
 B) United States
 C) France
 D) United Kingdom
 Answer: C</pre>
-            <p id="game-trivia-stats" class="trivia-bank-stats"></p>
-            <p id="game-trivia-status" class="trivia-status" role="status"></p>
-            <form id="game-trivia-form">
-              <div class="form-row">
-                <label for="game-trivia-paste">Trivia questions</label>
-                <textarea id="game-trivia-paste" rows="12" spellcheck="false" placeholder="Paste trivia questions here."></textarea>
-              </div>
-              <div class="trivia-file-row">
-                <button type="submit" class="btn-primary">Add trivia</button>
-                <label for="game-trivia-file" class="btn-secondary">Choose a text file</label>
-                <input type="file" id="game-trivia-file" class="trivia-file-input" accept=".txt,.text,text/plain" />
-              </div>
-            </form>
+              </details>
+              <p id="game-trivia-status" class="trivia-status" role="status"></p>
+              <form id="game-trivia-form">
+                <div class="form-row">
+                  <label for="game-trivia-paste">Trivia questions</label>
+                  <textarea id="game-trivia-paste" rows="10" spellcheck="false" placeholder="Paste trivia questions here."></textarea>
+                </div>
+                <div class="trivia-file-row">
+                  <button type="submit" class="btn-primary">Add trivia</button>
+                  <label for="game-trivia-file" class="btn-secondary">Choose a text file</label>
+                  <input type="file" id="game-trivia-file" class="trivia-file-input" accept=".txt,.text,text/plain" />
+                </div>
+              </form>
+            </section>
 
-            <h2 class="dashboard-blog-heading">Connections</h2>
-            <p>Each puzzle is four lines. A theme, then a bar, then four words. A blank line between puzzles is fine.</p>
-            <pre class="trivia-format">1. Types of pasta | spaghetti, penne, rigatoni, fusilli
+            <section class="game-admin-panel" data-game-panel="connections" hidden>
+              <button type="button" class="game-admin-back" data-game-back>All games</button>
+              <h2>Connections</h2>
+              <p>Each puzzle is four lines. A theme, then a bar, then four words.</p>
+              <p class="game-admin-stat" data-stat="connections"></p>
+              <details class="game-admin-format">
+                <summary>Show the format</summary>
+                <pre class="trivia-format">1. Types of pasta | spaghetti, penne, rigatoni, fusilli
 Australian capitals | Sydney, Melbourne, Brisbane, Perth
 Words that follow fire | engine, drill, place, fly
 Famous painters | Dali, Monet, Kahlo, O'Keeffe</pre>
-            <p id="game-conn-stats" class="trivia-bank-stats"></p>
-            <p id="game-conn-status" class="trivia-status" role="status"></p>
-            <form id="game-conn-form">
-              <div class="form-row">
-                <label for="game-conn-paste">Connections puzzles</label>
-                <textarea id="game-conn-paste" rows="12" spellcheck="false" placeholder="Paste Connections puzzles here."></textarea>
-              </div>
-              <div class="trivia-file-row">
-                <button type="submit" class="btn-primary">Add Connections</button>
-                <label for="game-conn-file" class="btn-secondary">Choose a text file</label>
-                <input type="file" id="game-conn-file" class="trivia-file-input" accept=".txt,.text,text/plain" />
-              </div>
-            </form>
+              </details>
+              <p id="game-conn-status" class="trivia-status" role="status"></p>
+              <form id="game-conn-form">
+                <div class="form-row">
+                  <label for="game-conn-paste">Connections puzzles</label>
+                  <textarea id="game-conn-paste" rows="10" spellcheck="false" placeholder="Paste Connections puzzles here."></textarea>
+                </div>
+                <div class="trivia-file-row">
+                  <button type="submit" class="btn-primary">Add Connections</button>
+                  <label for="game-conn-file" class="btn-secondary">Choose a text file</label>
+                  <input type="file" id="game-conn-file" class="trivia-file-input" accept=".txt,.text,text/plain" />
+                </div>
+              </form>
+            </section>
 
-            <h2 class="dashboard-blog-heading">Word</h2>
-            <p>One word per line, 4 to 8 letters. A hint after the bar is optional. The answer stays hidden when the day is drawn.</p>
-            <pre class="trivia-format">CRANE
+            <section class="game-admin-panel" data-game-panel="word" hidden>
+              <button type="button" class="game-admin-back" data-game-back>All games</button>
+              <h2>Word</h2>
+              <p>One word per line, 4 to 8 letters. A hint after the bar is optional.</p>
+              <p class="game-admin-stat" data-stat="word"></p>
+              <details class="game-admin-format">
+                <summary>Show the format</summary>
+                <pre class="trivia-format">CRANE
 PLANT | a living thing</pre>
-            <p id="game-word-stats" class="trivia-bank-stats"></p>
-            <p id="game-word-status" class="trivia-status" role="status"></p>
-            <form id="game-word-form">
-              <div class="form-row">
-                <label for="game-word-paste">Words</label>
-                <textarea id="game-word-paste" rows="8" spellcheck="false" placeholder="Paste words here."></textarea>
-              </div>
-              <div class="trivia-file-row">
-                <button type="submit" class="btn-primary">Add words</button>
-                <label for="game-word-file" class="btn-secondary">Choose a text file</label>
-                <input type="file" id="game-word-file" class="trivia-file-input" accept=".txt,.text,text/plain" />
-              </div>
-            </form>
+              </details>
+              <p id="game-word-status" class="trivia-status" role="status"></p>
+              <form id="game-word-form">
+                <div class="form-row">
+                  <label for="game-word-paste">Words</label>
+                  <textarea id="game-word-paste" rows="8" spellcheck="false" placeholder="Paste words here."></textarea>
+                </div>
+                <div class="trivia-file-row">
+                  <button type="submit" class="btn-primary">Add words</button>
+                  <label for="game-word-file" class="btn-secondary">Choose a text file</label>
+                  <input type="file" id="game-word-file" class="trivia-file-input" accept=".txt,.text,text/plain" />
+                </div>
+              </form>
+            </section>
 
-            <h2 class="dashboard-blog-heading">Sudoku</h2>
-            <p>Nine clue rows, then nine solved rows. Use 0 for an empty square. A numbered line can separate puzzles.</p>
-            <pre class="trivia-format">1.
+            <section class="game-admin-panel" data-game-panel="sudoku" hidden>
+              <button type="button" class="game-admin-back" data-game-back>All games</button>
+              <h2>Sudoku</h2>
+              <p>Start each puzzle with easy, medium, or hard. Then nine clue rows and nine solved rows. Use 0 for an empty square.</p>
+              <p class="game-admin-stat" data-stat="sudoku"></p>
+              <details class="game-admin-format">
+                <summary>Show the format</summary>
+                <pre class="trivia-format">easy
 530070000
 600195000
 098000060
@@ -159,23 +213,29 @@ PLANT | a living thing</pre>
 961537284
 287419635
 345286179</pre>
-            <p id="game-sudoku-stats" class="trivia-bank-stats"></p>
-            <p id="game-sudoku-status" class="trivia-status" role="status"></p>
-            <form id="game-sudoku-form">
-              <div class="form-row">
-                <label for="game-sudoku-paste">Sudoku puzzles</label>
-                <textarea id="game-sudoku-paste" rows="10" spellcheck="false" placeholder="Paste sudoku puzzles here."></textarea>
-              </div>
-              <div class="trivia-file-row">
-                <button type="submit" class="btn-primary">Add sudoku</button>
-                <label for="game-sudoku-file" class="btn-secondary">Choose a text file</label>
-                <input type="file" id="game-sudoku-file" class="trivia-file-input" accept=".txt,.text,text/plain" />
-              </div>
-            </form>
+              </details>
+              <p id="game-sudoku-status" class="trivia-status" role="status"></p>
+              <form id="game-sudoku-form">
+                <div class="form-row">
+                  <label for="game-sudoku-paste">Sudoku puzzles</label>
+                  <textarea id="game-sudoku-paste" rows="8" spellcheck="false" placeholder="Paste sudoku puzzles here."></textarea>
+                </div>
+                <div class="trivia-file-row">
+                  <button type="submit" class="btn-primary">Add sudoku</button>
+                  <label for="game-sudoku-file" class="btn-secondary">Choose a text file</label>
+                  <input type="file" id="game-sudoku-file" class="trivia-file-input" accept=".txt,.text,text/plain" />
+                </div>
+              </form>
+            </section>
 
-            <h2 class="dashboard-blog-heading">Crossword</h2>
-            <p>A grid of letters and # for blocks, then ACROSS and DOWN. Each clue is a number, the clue, a bar, and the answer.</p>
-            <pre class="trivia-format">1.
+            <section class="game-admin-panel" data-game-panel="crossword" hidden>
+              <button type="button" class="game-admin-back" data-game-back>All games</button>
+              <h2>Crossword</h2>
+              <p>A grid of letters and # for blocks, then ACROSS and DOWN.</p>
+              <p class="game-admin-stat" data-stat="crossword"></p>
+              <details class="game-admin-format">
+                <summary>Show the format</summary>
+                <pre class="trivia-format">1.
 CAT##
 A#O##
 R#W##
@@ -186,19 +246,20 @@ ACROSS
 DOWN
 1. A vehicle | CAR
 2. To pull | TOW</pre>
-            <p id="game-cross-stats" class="trivia-bank-stats"></p>
-            <p id="game-cross-status" class="trivia-status" role="status"></p>
-            <form id="game-cross-form">
-              <div class="form-row">
-                <label for="game-cross-paste">Crosswords</label>
-                <textarea id="game-cross-paste" rows="12" spellcheck="false" placeholder="Paste crosswords here."></textarea>
-              </div>
-              <div class="trivia-file-row">
-                <button type="submit" class="btn-primary">Add crosswords</button>
-                <label for="game-cross-file" class="btn-secondary">Choose a text file</label>
-                <input type="file" id="game-cross-file" class="trivia-file-input" accept=".txt,.text,text/plain" />
-              </div>
-            </form>
+              </details>
+              <p id="game-cross-status" class="trivia-status" role="status"></p>
+              <form id="game-cross-form">
+                <div class="form-row">
+                  <label for="game-cross-paste">Crosswords</label>
+                  <textarea id="game-cross-paste" rows="10" spellcheck="false" placeholder="Paste crosswords here."></textarea>
+                </div>
+                <div class="trivia-file-row">
+                  <button type="submit" class="btn-primary">Add crosswords</button>
+                  <label for="game-cross-file" class="btn-secondary">Choose a text file</label>
+                  <input type="file" id="game-cross-file" class="trivia-file-input" accept=".txt,.text,text/plain" />
+                </div>
+              </form>
+            </section>
           </div>
 
           <p class="dashboard-logout">
