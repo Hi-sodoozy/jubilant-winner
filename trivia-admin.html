@@ -2,10 +2,9 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Trivia admin – Iain Duguid</title>
+  <title>Trivia bank – Iain Duguid</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="robots" content="noindex" />
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="styles-iain.css" />
 </head>
 <body>
@@ -16,7 +15,7 @@
           <div class="brand-mark" aria-hidden="true"></div>
           <div>
             <div class="brand-text-primary">Iain Duguid</div>
-            <div class="brand-text-secondary">Trivia questions</div>
+            <div class="brand-text-secondary">Trivia bank</div>
           </div>
         </a>
         <a href="games.html" class="dashboard-back">Back to games</a>
@@ -26,13 +25,21 @@
     <main>
       <section class="section page-intro">
         <div class="section-inner">
-          <h1 class="page-intro-title">Trivia admin</h1>
-          <p class="page-intro-subtitle">Ten questions for one date. Four answers each.</p>
+          <h1 class="page-intro-title">Trivia bank</h1>
+          <p class="page-intro-subtitle">Paste a batch or choose a text file. Thousands at once is fine. Each day draws 10 at random, and a question sits out for 12 months after it is used.</p>
         </div>
       </section>
 
       <section class="section">
         <div class="section-inner trivia-admin">
+          <p>Use this shape. A blank line between questions is fine.</p>
+          <pre class="trivia-format">1. Which country has the most time zones when its overseas territories are included?
+A) Russia
+B) United States
+C) France
+D) United Kingdom
+Answer: C</pre>
+
           <p id="trivia-admin-status" class="trivia-status" role="status"></p>
 
           <form id="trivia-login" class="contact-form trivia-login" hidden>
@@ -47,17 +54,31 @@
             <button type="submit" class="btn-primary">Sign in</button>
           </form>
 
-          <form id="trivia-editor" class="trivia-editor" hidden>
+          <div id="trivia-editor" class="trivia-editor" hidden>
             <div class="trivia-editor-bar">
-              <div class="form-row">
-                <label for="trivia-play-date">Date</label>
-                <input type="date" id="trivia-play-date" name="play_date" required />
-              </div>
+              <p id="trivia-bank-stats" class="trivia-bank-stats"></p>
               <button type="button" id="trivia-sign-out" class="btn-secondary">Sign out</button>
             </div>
-            <div id="trivia-questions"></div>
-            <button type="submit" class="btn-primary">Save this day</button>
-          </form>
+
+            <form id="trivia-paste-form">
+              <div class="form-row">
+                <label for="trivia-paste">Paste questions</label>
+                <textarea id="trivia-paste" name="paste" rows="16" spellcheck="false" placeholder="Paste one question or a whole file’s worth."></textarea>
+              </div>
+              <div class="trivia-file-row">
+                <button type="submit" class="btn-primary" id="trivia-add">Add to the bank</button>
+                <label for="trivia-file" class="btn-secondary">Choose a text file</label>
+                <input type="file" id="trivia-file" class="trivia-file-input" accept=".txt,.text,text/plain" />
+              </div>
+            </form>
+
+            <h2 class="trivia-bank-heading">In the bank</h2>
+            <div class="form-row">
+              <label for="trivia-search">Search</label>
+              <input type="search" id="trivia-search" placeholder="Find a question" autocomplete="off" />
+            </div>
+            <div id="trivia-bank-list"></div>
+          </div>
         </div>
       </section>
     </main>

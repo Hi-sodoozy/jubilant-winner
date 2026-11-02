@@ -51,12 +51,12 @@
     return n;
   }
 
-  function normalise(set) {
-    var questions = (set.trivia_questions || []).slice().sort(function (a, b) {
-      return a.position - b.position;
+  function asQuiz(data) {
+    var questions = (data.questions || []).slice().sort(function (a, b) {
+      return (a.position || 0) - (b.position || 0);
     });
     return {
-      id: set.id,
+      id: String(data.id || data.play_date || ''),
       questions: questions.map(function (q) {
         return {
           prompt: q.prompt || '',
@@ -75,8 +75,7 @@
     root.appendChild(p);
   }
 
-  function mount(root, set, date) {
-    var quiz = normalise(set);
+  function mount(root, quiz, date) {
     if (quiz.questions.length !== 10) {
       status(root, 'Today’s trivia is not ready. It needs 10 questions.');
       return;
@@ -194,22 +193,18 @@
       return;
     }
 
-    var result = await sb
-      .from('trivia_sets')
-      .select('id, play_date, title, published, trivia_questions(position, prompt, choices, correct_index)')
-      .eq('play_date', date)
-      .eq('published', true)
-      .maybeSingle();
-
+    var result = await sb.rpc('draw_trivia_today');
     if (result.error) {
-      status(root, 'The quiz could not be loaded. If this project is new, run supabase/trivia.sql in Supabase.');
+      status(root, 'The quiz could not be loaded. Run supabase/trivia.sql in the Supabase SQL editor.');
       return;
     }
-    if (!result.data) {
-      status(root, 'No trivia for today. Check back when a set is published for this date.');
+    var data = result.data || {};
+    if (data.ok !== true) {
+      var ready = typeof data.eligible === 'number' ? data.eligible : 0;
+      status(root, 'Not enough fresh questions for today. ' + ready + ' ready, and the day needs 10 that have not been used in the last 12 months.');
       return;
     }
-    mount(root, result.data, date);
+    mount(root, asQuiz(data), date);
   }
 
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);

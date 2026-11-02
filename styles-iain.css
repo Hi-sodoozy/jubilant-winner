@@ -2709,6 +2709,95 @@ h1, h2, h3,
   flex: 0 0 auto;
 }
 
+.trivia-admin {
+  max-width: 46rem;
+}
+
+.trivia-format,
+.trivia-paste {
+  white-space: pre-wrap;
+  width: 100%;
+  margin: 0.75rem 0 1.25rem;
+  padding: 0.9rem 1rem;
+  border: 2.5px solid var(--ink);
+  border-radius: 14px;
+  background: #fff;
+  box-shadow: 4px 4px 0 var(--sun);
+  font-family: var(--font-ui);
+  font-weight: 700;
+  line-height: 1.45;
+}
+
+.trivia-paste {
+  min-height: 18rem;
+  box-shadow: 3px 3px 0 #ffd0ea;
+  font-weight: 600;
+}
+
+.trivia-bank-stats {
+  margin: 0;
+  font-weight: 800;
+  max-width: 34rem;
+}
+
+.trivia-bank-heading {
+  margin: 2rem 0 0.75rem;
+  font-family: var(--font-display);
+}
+
+.trivia-file-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.trivia-file-input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
+}
+
+.trivia-bank-note {
+  margin: 0 0 0.75rem;
+  font-weight: 800;
+}
+
+.trivia-bank-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  max-height: 32rem;
+  overflow: auto;
+}
+
+.trivia-bank-item {
+  margin: 0 0 0.75rem;
+  padding: 0.9rem 1rem;
+  border: 2.5px solid var(--ink);
+  border-radius: 16px;
+  background: #fff;
+  box-shadow: 4px 4px 0 var(--ink);
+}
+
+.trivia-bank-prompt,
+.trivia-bank-meta {
+  margin: 0.15rem 0;
+}
+
+.trivia-bank-meta {
+  font-weight: 800;
+}
+
+.trivia-bank-remove {
+  margin-top: 0.55rem;
+}
+
 .dashboard-back {
   font-family: var(--font-ui);
   font-weight: 800;
