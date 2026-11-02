@@ -285,9 +285,11 @@
         busy = false;
         progress.found.push(hit.index);
         selected = [];
-        if (progress.found.length === 4) progress.done = true;
+        var won = progress.found.length === 4;
+        if (won) progress.done = true;
         persist();
         render();
+        if (won && window.puzzleCelebrate) window.puzzleCelebrate(root);
         return;
       }
       if (progress.tried.indexOf(key) !== -1) {

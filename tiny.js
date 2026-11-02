@@ -269,6 +269,7 @@
         feedback.textContent = formatTime(state.elapsed) + '. That’s today’s Tiny Crossword.';
         feedback.className = 'tiny-feedback is-right';
         render();
+        if (window.puzzleCelebrate) window.puzzleCelebrate(grid);
         return;
       }
       if (data.complete) {

@@ -53,6 +53,7 @@
       entries: chars.join(''),
       notes: cleanNotes(same ? saved.notes : null, chars.join(''), puzzle.givens),
       manual: hand,
+      checked: same && typeof saved.checked === 'string' && saved.checked.length === 81 ? saved.checked : '',
       done: !!(same && saved.done)
     };
   }
@@ -69,7 +70,7 @@
     var source = Array.isArray(raw) ? raw : [];
     var i;
     for (i = 0; i < 81; i += 1) {
-      if (givens.charAt(i) !== '0' || entries.charAt(i) !== '0') continue;
+      if (givens.charAt(i) !== '0') continue;
       var seen = {};
       String(source[i] || '').replace(/[^1-9]/g, '').split('').forEach(function (mark) {
         seen[mark] = true;
@@ -220,44 +221,25 @@
           : (marks + digit).split('').sort().join('');
         current.manual[selected] = current.notes[selected];
       } else if (digit === '0') {
-        if (usePencil || (!autoOn && current.entries.charAt(selected) === '0')) {
-          current.notes[selected] = '';
-          current.manual[selected] = '';
-        }
-        if (!usePencil) {
+        if (current.entries.charAt(selected) !== '0') {
           var cleared = current.entries.split('');
           cleared[selected] = '0';
           current.entries = cleared.join('');
+        } else {
+          current.notes[selected] = '';
+          current.manual[selected] = '';
         }
       } else {
         var chars = current.entries.split('');
         chars[selected] = digit;
         current.entries = chars.join('');
-        current.notes[selected] = '';
-        current.manual[selected] = '';
-        clearSeenNotes(current.notes, selected, digit);
-        clearSeenNotes(current.manual, selected, digit);
       }
       if (autoOn) fillAuto(current);
+      current.checked = '';
       current.done = false;
       persist();
       focusCell = true;
       render();
-    }
-
-    function clearSeenNotes(list, index, digit) {
-      if (!list) return;
-      var row = Math.floor(index / 9);
-      var col = index % 9;
-      var boxRow = Math.floor(row / 3) * 3;
-      var boxCol = Math.floor(col / 3) * 3;
-      var i;
-      for (i = 0; i < 81; i += 1) {
-        var r = Math.floor(i / 9);
-        var c = i % 9;
-        var sameBox = r >= boxRow && r < boxRow + 3 && c >= boxCol && c < boxCol + 3;
-        if ((r === row || c === col || sameBox) && list[i]) list[i] = list[i].replace(digit, '');
-      }
     }
 
     function move(rowStep, colStep) {
@@ -344,12 +326,12 @@
       render();
     });
     tools.appendChild(auto);
-    var erase = document.createElement('button');
-    erase.type = 'button';
-    erase.className = 'sudoku-key';
-    erase.textContent = 'Erase';
-    erase.addEventListener('click', function () { place('0', pencilOn); });
-    tools.appendChild(erase);
+    var clear = document.createElement('button');
+    clear.type = 'button';
+    clear.className = 'sudoku-key is-clear';
+    clear.textContent = 'Clear';
+    clear.addEventListener('click', function () { place('0', false); });
+    pad.appendChild(clear);
 
     grid.addEventListener('keydown', function (event) {
       var key = event.key;
@@ -376,7 +358,14 @@
 
     check.addEventListener('click', async function () {
       var current = board();
-      if (current.done || checking || current.entries.indexOf('0') !== -1) return;
+      if (current.done || checking) return;
+      var givenNow = puzzle().givens;
+      var hasEntry = false;
+      var n;
+      for (n = 0; n < 81; n += 1) {
+        if (givenNow.charAt(n) === '0' && current.entries.charAt(n) !== '0') hasEntry = true;
+      }
+      if (!hasEntry) return;
       checking = true;
       check.disabled = true;
       feedback.textContent = 'Checking…';
@@ -395,16 +384,29 @@
         render();
         return;
       }
+      var progress = typeof data.marks === 'string' && data.marks.length === 81 ? data.marks : '';
+      current.checked = progress;
+      var finished = false;
       if (data.correct === true) {
         current.done = true;
+        finished = true;
         persist();
         feedback.textContent = 'That’s today’s Sudoku.';
         feedback.className = 'sudoku-feedback is-right';
+      } else if (progress.indexOf('W') >= 0) {
+        feedback.textContent = 'Those highlighted numbers don’t fit.';
+        feedback.className = 'sudoku-feedback is-wrong';
+        persist();
+      } else if (progress.indexOf('C') >= 0) {
+        feedback.textContent = 'Those are in the right place.';
+        feedback.className = 'sudoku-feedback is-right';
+        persist();
       } else {
-        feedback.textContent = 'Not quite.';
+        feedback.textContent = 'That grid could not be checked.';
         feedback.className = 'sudoku-feedback is-wrong';
       }
       render();
+      if (finished && window.puzzleCelebrate) window.puzzleCelebrate(grid);
     });
 
     function render() {
@@ -430,7 +432,6 @@
       var current = board();
       var given = puzzle().givens;
       var bad = conflicts(current.entries);
-      var full = current.entries.indexOf('0') === -1;
       persist();
 
       grid.innerHTML = '';
@@ -448,7 +449,10 @@
         var digit = current.entries.charAt(i);
         var isGiven = given.charAt(i) !== '0';
         if (isGiven) button.classList.add('is-given');
-        if (bad[i]) button.classList.add('is-conflict');
+        var mark = current.checked ? current.checked.charAt(i) : '';
+        if (mark === 'W') button.classList.add('is-wrong');
+        else if (mark === 'C' && !isGiven) button.classList.add('is-correct');
+        else if (bad[i]) button.classList.add('is-conflict');
         if (i === selected) button.classList.add('is-selected');
         else if (selected >= 0 && (row === selectedRow || col === selectedCol || (Math.floor(row / 3) === Math.floor(selectedRow / 3) && Math.floor(col / 3) === Math.floor(selectedCol / 3)))) {
           button.classList.add('is-peer');
@@ -461,6 +465,8 @@
         if (digit !== '0') label += ', ' + digit;
         else if (marks) label += ', notes ' + marks.split('').join(', ');
         else label += ', empty';
+        if (mark === 'W') label += ', incorrect';
+        else if (mark === 'C' && !isGiven) label += ', correct';
         button.setAttribute('aria-label', label);
         button.tabIndex = i === selected ? 0 : -1;
         button.disabled = current.done;
@@ -477,7 +483,12 @@
       pad.hidden = current.done;
       tools.hidden = current.done;
       check.hidden = current.done;
-      check.disabled = checking || !full;
+      var started = false;
+      var cell;
+      for (cell = 0; cell < 81; cell += 1) {
+        if (given.charAt(cell) === '0' && current.entries.charAt(cell) !== '0') started = true;
+      }
+      check.disabled = checking || !started;
       pencil.disabled = autoOn || current.done;
       pencil.classList.toggle('is-on', pencilOn && !autoOn);
       pencil.setAttribute('aria-pressed', pencilOn && !autoOn ? 'true' : 'false');
@@ -486,11 +497,16 @@
       var selectedMarks = selected >= 0 && current.notes ? (current.notes[selected] || '') : '';
       Array.prototype.forEach.call(pad.children, function (button) {
         var value = button.textContent;
-        button.disabled = current.done || selected < 0 || given.charAt(selected) !== '0';
+        var locked = current.done || selected < 0 || given.charAt(selected) !== '0';
+        button.disabled = locked;
+        if (button === clear) {
+          button.classList.remove('is-on');
+          button.setAttribute('aria-label', 'Clear');
+          return;
+        }
         button.classList.toggle('is-on', pencilOn && selectedMarks.indexOf(value) >= 0);
         button.setAttribute('aria-label', (pencilOn ? 'Pencil ' : 'Enter ') + value);
       });
-      erase.disabled = current.done || selected < 0 || given.charAt(selected) !== '0';
 
       if (current.done) {
         feedback.textContent = 'That’s today’s Sudoku.';
