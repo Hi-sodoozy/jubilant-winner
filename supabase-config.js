@@ -1,7 +1,7 @@
 // Iain Duguid site — Supabase.
 // 1. Create a new Supabase project (separate from other sites in this folder).
 // 2. Project Settings → API: paste the project URL and the anon public key below.
-// 3. Run supabase/trivia.sql in the SQL editor.
+// 3. Run supabase/trivia.sql, then supabase/games.sql, in the SQL editor.
 // 4. Authentication → Providers → Email: turn off public sign-ups.
 // 5. Authentication → Users: create one login for yourself.
 window.ID_SUPABASE_URL = 'https://edeluwnifzqfjaodxkhs.supabase.co';

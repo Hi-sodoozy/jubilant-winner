@@ -150,6 +150,281 @@
     return { puzzles: puzzles, errors: errors };
   }
 
+  function parseWords(text) {
+    var lines = String(text || '').replace(/\r\n/g, '\n').replace(/\r/g, '\n').split('\n');
+    var words = [];
+    var errors = [];
+    lines.forEach(function (raw, index) {
+      var line = raw.trim();
+      if (!line) return;
+      var parts = line.split('|');
+      var left = parts.shift().replace(/^\d+\s*[\.\)]\s*/, '').trim();
+      if (!/^[A-Za-z]{4,8}$/.test(left)) {
+        errors.push('Line ' + (index + 1) + ' needs a word of 4 to 8 letters.');
+        return;
+      }
+      words.push({ answer: left.toUpperCase(), hint: parts.join('|').trim() });
+    });
+    return { words: words, errors: errors };
+  }
+
+  function sudokuIssue(givens, solved) {
+    if (!/^[0-9]{81}$/.test(givens) || !/^[1-9]{81}$/.test(solved)) return 'is not 81 digits';
+    if (givens.indexOf('0') < 0) return 'has no empty squares';
+    var i;
+    var r;
+    var c;
+    var b;
+    for (i = 0; i < 81; i += 1) {
+      if (givens.charAt(i) !== '0' && givens.charAt(i) !== solved.charAt(i)) return 'does not match its clues';
+    }
+    function unique(cells) {
+      var seen = {};
+      var n;
+      for (n = 0; n < cells.length; n += 1) {
+        if (seen[cells[n]]) return false;
+        seen[cells[n]] = true;
+      }
+      return true;
+    }
+    for (r = 0; r < 9; r += 1) {
+      var row = [];
+      for (c = 0; c < 9; c += 1) row.push(solved.charAt(r * 9 + c));
+      if (!unique(row)) return 'repeats a digit in a row';
+    }
+    for (c = 0; c < 9; c += 1) {
+      var col = [];
+      for (r = 0; r < 9; r += 1) col.push(solved.charAt(r * 9 + c));
+      if (!unique(col)) return 'repeats a digit in a column';
+    }
+    for (b = 0; b < 9; b += 1) {
+      var box = [];
+      for (r = 0; r < 3; r += 1) {
+        for (c = 0; c < 3; c += 1) {
+          box.push(solved.charAt((Math.floor(b / 3) * 3 + r) * 9 + ((b % 3) * 3 + c)));
+        }
+      }
+      if (!unique(box)) return 'repeats a digit in a box';
+    }
+    return '';
+  }
+
+  function parseSudoku(text) {
+    var lines = String(text || '').replace(/\r\n/g, '\n').replace(/\r/g, '\n').split('\n');
+    var puzzles = [];
+    var errors = [];
+    var rows = [];
+    var number = 1;
+
+    function close(force) {
+      if (!rows.length) return;
+      if (rows.length === 18) {
+        var givens = rows.slice(0, 9).join('');
+        var solved = rows.slice(9).join('');
+        var issue = sudokuIssue(givens, solved);
+        if (issue) errors.push('Puzzle ' + number + ' ' + issue + '.');
+        else puzzles.push({ givens: givens, solved: solved });
+      } else if (force) {
+        errors.push('Puzzle ' + number + ' needs 9 clue rows and 9 answer rows.');
+      }
+      number += 1;
+      rows = [];
+    }
+
+    lines.forEach(function (raw, index) {
+      var line = raw.trim();
+      if (!line) {
+        close(true);
+        return;
+      }
+      if (/^\d+\s*[\.\)]\s*$/.test(line)) {
+        close(true);
+        return;
+      }
+      var digits = line.replace(/\s+/g, '');
+      if (!/^[0-9]{9}$/.test(digits)) {
+        errors.push('Line ' + (index + 1) + ' needs 9 digits.');
+        return;
+      }
+      rows.push(digits);
+      if (rows.length === 18) close(false);
+    });
+    close(true);
+    return { puzzles: puzzles, errors: errors };
+  }
+
+  function cellAt(grid, row, col) {
+    if (row < 0 || col < 0 || row >= grid.length || col >= grid[0].length) return '#';
+    return grid[row].charAt(col);
+  }
+
+  function readWord(grid, row, col, stepRow, stepCol) {
+    var letters = '';
+    while (cellAt(grid, row, col) !== '#') {
+      letters += cellAt(grid, row, col);
+      row += stepRow;
+      col += stepCol;
+    }
+    return letters;
+  }
+
+  function crosswordSlots(grid) {
+    var slots = [];
+    var next = 1;
+    var row;
+    var col;
+    for (row = 0; row < grid.length; row += 1) {
+      for (col = 0; col < grid[0].length; col += 1) {
+        if (cellAt(grid, row, col) === '#') continue;
+        var across = cellAt(grid, row, col - 1) === '#' && readWord(grid, row, col, 0, 1).length >= 2;
+        var down = cellAt(grid, row - 1, col) === '#' && readWord(grid, row, col, 1, 0).length >= 2;
+        if (!across && !down) continue;
+        var clueNumber = next;
+        next += 1;
+        if (across) slots.push({ direction: 'across', number: clueNumber, row: row, col: col, answer: readWord(grid, row, col, 0, 1) });
+        if (down) slots.push({ direction: 'down', number: clueNumber, row: row, col: col, answer: readWord(grid, row, col, 1, 0) });
+      }
+    }
+    return slots;
+  }
+
+  function parseClue(line) {
+    var match = line.match(/^(\d+)\s*[\.\)]\s*(.*)$/);
+    if (!match) return null;
+    var rest = match[2];
+    var bar = rest.lastIndexOf('|');
+    if (bar < 0) return { number: parseInt(match[1], 10), clue: '', answer: '' };
+    return {
+      number: parseInt(match[1], 10),
+      clue: rest.slice(0, bar).trim().replace(/\s+/g, ' '),
+      answer: rest.slice(bar + 1).replace(/[^A-Za-z]/g, '').toUpperCase()
+    };
+  }
+
+  function crosswordProblem(grid, clues) {
+    if (grid.length < 3) return 'needs at least 3 rows';
+    var width = grid[0].length;
+    var row;
+    if (width < 3 || width > 21 || grid.length > 21) return 'must be between 3 and 21 squares on each side';
+    for (row = 0; row < grid.length; row += 1) {
+      if (grid[row].length !== width) return 'has uneven rows';
+    }
+    var slots = crosswordSlots(grid);
+    if (!slots.length) return 'has no words';
+    var given = clues.across.concat(clues.down);
+    var used = {};
+    var i;
+    for (i = 0; i < given.length; i += 1) {
+      var key = given[i].direction + ':' + given[i].number;
+      if (used[key]) return 'repeats ' + given[i].direction + ' ' + given[i].number;
+      used[key] = given[i];
+    }
+    for (i = 0; i < slots.length; i += 1) {
+      var slot = slots[i];
+      var clue = used[slot.direction + ':' + slot.number];
+      if (!clue) return 'is missing ' + slot.direction + ' ' + slot.number;
+      if (!clue.clue) return 'is missing the text for ' + slot.direction + ' ' + slot.number;
+      if (clue.answer !== slot.answer) return 'has ' + slot.direction + ' ' + slot.number + ' as ' + (clue.answer || 'blank') + ' but the grid says ' + slot.answer;
+      delete used[slot.direction + ':' + slot.number];
+    }
+    var extra = Object.keys(used);
+    if (extra.length) return 'has a clue that does not match a word';
+    return '';
+  }
+
+  function crosswordPayload(grid, clues) {
+    var byKey = {};
+    clues.across.concat(clues.down).forEach(function (clue) {
+      byKey[clue.direction + ':' + clue.number] = clue;
+    });
+    return {
+      width: grid[0].length,
+      height: grid.length,
+      grid: grid.join(''),
+      clues: crosswordSlots(grid).map(function (slot) {
+        var clue = byKey[slot.direction + ':' + slot.number];
+        return {
+          direction: slot.direction,
+          number: slot.number,
+          clue: clue.clue,
+          answer: slot.answer,
+          row: slot.row,
+          col: slot.col
+        };
+      })
+    };
+  }
+
+  function parseCrosswords(text) {
+    var lines = String(text || '').replace(/\r\n/g, '\n').replace(/\r/g, '\n').split('\n');
+    var puzzles = [];
+    var errors = [];
+    var grid = [];
+    var section = '';
+    var clues = { across: [], down: [] };
+    var active = false;
+    var number = 1;
+
+    function reset() {
+      grid = [];
+      section = '';
+      clues = { across: [], down: [] };
+      active = false;
+    }
+
+    function finish() {
+      if (!active) return;
+      var problem = crosswordProblem(grid, clues);
+      if (problem) errors.push('Crossword ' + number + ' ' + problem + '.');
+      else puzzles.push(crosswordPayload(grid, clues));
+      number += 1;
+      reset();
+    }
+
+    lines.forEach(function (raw, index) {
+      var line = raw.trim();
+      if (!line) {
+        finish();
+        return;
+      }
+      if (/^\d+\s*[\.\)]\s*$/.test(line)) {
+        finish();
+        active = true;
+        return;
+      }
+      if (/^across$/i.test(line)) {
+        active = true;
+        section = 'across';
+        return;
+      }
+      if (/^down$/i.test(line)) {
+        active = true;
+        section = 'down';
+        return;
+      }
+      if (!section && /^[A-Za-z#]+$/.test(line)) {
+        if (grid.length && line.length !== grid[0].length) {
+          errors.push('Line ' + (index + 1) + ' is a different width from the row above.');
+        } else {
+          grid.push(line.toUpperCase());
+        }
+        active = true;
+        return;
+      }
+      var clue = parseClue(line);
+      if (clue && (section === 'across' || section === 'down')) {
+        clue.direction = section;
+        clues[section].push(clue);
+        active = true;
+        return;
+      }
+      errors.push('Line ' + (index + 1) + ' was not understood.');
+      active = true;
+    });
+    finish();
+    return { puzzles: puzzles, errors: errors };
+  }
+
   function errorNote(errors) {
     if (!errors.length) return '';
     var shown = errors.slice(0, 3).join(' ');
@@ -157,9 +432,12 @@
     return shown;
   }
 
-  function explain(error) {
+  function explain(error, rpcName) {
     var message = error && error.message ? error.message : 'Could not reach the bank.';
-    if (/could not find the function/i.test(message) || /schema cache/i.test(message) || /connections_bank/i.test(message) || /prompt_key/i.test(message)) {
+    var missing = /could not find the function/i.test(message) || /schema cache/i.test(message);
+    var games = /word|sudoku|crossword/i.test(rpcName || '') || /word_|sudoku_|crossword_/i.test(message);
+    if (missing && games) return 'Run supabase/games.sql in the Supabase SQL editor, then try again.';
+    if (missing || /connections_bank/i.test(message) || /prompt_key/i.test(message)) {
       return 'Run the updated supabase/trivia.sql in the Supabase SQL editor, then try again.';
     }
     return message;
@@ -184,10 +462,28 @@
     }
     if (connections.error) {
       if (connectionStats) connectionStats.textContent = '';
-      setStatus('game-conn-status', explain(connections.error), true);
+      setStatus('game-conn-status', explain(connections.error, 'connections_bank_stats'), true);
     } else if (connectionStats) {
       connectionStats.textContent = ((connections.data && connections.data.total) || 0) + ' Connections puzzles in the bank.';
     }
+    await showBank('word_bank_stats', 'game-word-stats', 'game-word-status', 'words');
+    await showBank('sudoku_bank_stats', 'game-sudoku-stats', 'game-sudoku-status', 'sudoku puzzles');
+    await showBank('crossword_bank_stats', 'game-cross-stats', 'game-cross-status', 'crosswords');
+  }
+
+  async function showBank(rpcName, statsId, statusId, label) {
+    var db = client();
+    if (!db) return;
+    var result = await db.rpc(rpcName, { gate: gate() });
+    var stats = document.getElementById(statsId);
+    if (!stats) return;
+    if (result.error) {
+      stats.textContent = '';
+      setStatus(statusId, explain(result.error, rpcName), true);
+      return;
+    }
+    var data = result.data || {};
+    stats.textContent = (data.total || 0) + ' ' + label + ' in the bank. ' + (data.ready || 0) + ' ready for a draw.';
   }
 
   async function upload(name, rows, rpcName, statusId, clearId) {
@@ -208,7 +504,7 @@
       if (result.error) {
         busy = false;
         var soFar = added ? 'Added ' + added + ' before stopping. ' : '';
-        setStatus(statusId, soFar + explain(result.error), true);
+        setStatus(statusId, soFar + explain(result.error, rpcName), true);
         refreshStats();
         return;
       }
@@ -259,8 +555,73 @@
     if (parsed.errors.length) setStatus('game-conn-status', document.getElementById('game-conn-status').textContent + ' ' + errorNote(parsed.errors), false);
   }
 
+  function uniqueRows(rows, keyOf) {
+    var seen = {};
+    var unique = [];
+    rows.forEach(function (row) {
+      var key = keyOf(row);
+      if (seen[key]) return;
+      seen[key] = true;
+      unique.push(row);
+    });
+    return unique;
+  }
+
+  async function ingestWords(text, clear) {
+    if (!String(text || '').trim()) {
+      setStatus('game-word-status', 'Paste words, or choose a text file.', true);
+      return;
+    }
+    var parsed = parseWords(text);
+    if (!parsed.words.length) {
+      setStatus('game-word-status', errorNote(parsed.errors) || 'No words found.', true);
+      return;
+    }
+    var unique = uniqueRows(parsed.words, function (word) { return word.answer; });
+    await upload('words', unique, 'add_words', 'game-word-status', clear ? 'game-word-paste' : '');
+    if (parsed.errors.length) setStatus('game-word-status', document.getElementById('game-word-status').textContent + ' ' + errorNote(parsed.errors), false);
+  }
+
+  async function ingestSudoku(text, clear) {
+    if (!String(text || '').trim()) {
+      setStatus('game-sudoku-status', 'Paste sudoku puzzles, or choose a text file.', true);
+      return;
+    }
+    var parsed = parseSudoku(text);
+    if (!parsed.puzzles.length) {
+      setStatus('game-sudoku-status', errorNote(parsed.errors) || 'No sudoku puzzles found.', true);
+      return;
+    }
+    await upload('sudoku puzzles', parsed.puzzles, 'add_sudoku', 'game-sudoku-status', clear ? 'game-sudoku-paste' : '');
+    if (parsed.errors.length) setStatus('game-sudoku-status', document.getElementById('game-sudoku-status').textContent + ' ' + errorNote(parsed.errors), false);
+  }
+
+  async function ingestCrosswords(text, clear) {
+    if (!String(text || '').trim()) {
+      setStatus('game-cross-status', 'Paste crosswords, or choose a text file.', true);
+      return;
+    }
+    var parsed = parseCrosswords(text);
+    if (!parsed.puzzles.length) {
+      setStatus('game-cross-status', errorNote(parsed.errors) || 'No crosswords found.', true);
+      return;
+    }
+    var unique = uniqueRows(parsed.puzzles, function (puzzle) { return puzzle.grid; });
+    await upload('crosswords', unique, 'add_crosswords', 'game-cross-status', clear ? 'game-cross-paste' : '');
+    if (parsed.errors.length) setStatus('game-cross-status', document.getElementById('game-cross-status').textContent + ' ' + errorNote(parsed.errors), false);
+  }
+
+  var FILE_STATUS = {
+    'game-trivia-file': 'game-trivia-status',
+    'game-conn-file': 'game-conn-status',
+    'game-word-file': 'game-word-status',
+    'game-sudoku-file': 'game-sudoku-status',
+    'game-cross-file': 'game-cross-status'
+  };
+
   function bindFile(inputId, handler) {
     var input = document.getElementById(inputId);
+    if (!input) return;
     input.addEventListener('change', function () {
       var file = input.files && input.files[0];
       if (!file) return;
@@ -271,7 +632,7 @@
       };
       reader.onerror = function () {
         input.value = '';
-        setStatus(inputId === 'game-trivia-file' ? 'game-trivia-status' : 'game-conn-status', 'Could not read that file.', true);
+        setStatus(FILE_STATUS[inputId] || 'game-trivia-status', 'Could not read that file.', true);
       };
       reader.readAsText(file);
     });
@@ -291,8 +652,23 @@
       event.preventDefault();
       ingestConnections(document.getElementById('game-conn-paste').value, true);
     });
+    document.getElementById('game-word-form').addEventListener('submit', function (event) {
+      event.preventDefault();
+      ingestWords(document.getElementById('game-word-paste').value, true);
+    });
+    document.getElementById('game-sudoku-form').addEventListener('submit', function (event) {
+      event.preventDefault();
+      ingestSudoku(document.getElementById('game-sudoku-paste').value, true);
+    });
+    document.getElementById('game-cross-form').addEventListener('submit', function (event) {
+      event.preventDefault();
+      ingestCrosswords(document.getElementById('game-cross-paste').value, true);
+    });
     bindFile('game-trivia-file', ingestTrivia);
     bindFile('game-conn-file', ingestConnections);
+    bindFile('game-word-file', ingestWords);
+    bindFile('game-sudoku-file', ingestSudoku);
+    bindFile('game-cross-file', ingestCrosswords);
     refreshStats();
   }
 

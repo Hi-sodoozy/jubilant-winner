@@ -119,6 +119,86 @@ Famous painters | Dali, Monet, Kahlo, O'Keeffe</pre>
                 <input type="file" id="game-conn-file" class="trivia-file-input" accept=".txt,.text,text/plain" />
               </div>
             </form>
+
+            <h2 class="dashboard-blog-heading">Word</h2>
+            <p>One word per line, 4 to 8 letters. A hint after the bar is optional. The answer stays hidden when the day is drawn.</p>
+            <pre class="trivia-format">CRANE
+PLANT | a living thing</pre>
+            <p id="game-word-stats" class="trivia-bank-stats"></p>
+            <p id="game-word-status" class="trivia-status" role="status"></p>
+            <form id="game-word-form">
+              <div class="form-row">
+                <label for="game-word-paste">Words</label>
+                <textarea id="game-word-paste" rows="8" spellcheck="false" placeholder="Paste words here."></textarea>
+              </div>
+              <div class="trivia-file-row">
+                <button type="submit" class="btn-primary">Add words</button>
+                <label for="game-word-file" class="btn-secondary">Choose a text file</label>
+                <input type="file" id="game-word-file" class="trivia-file-input" accept=".txt,.text,text/plain" />
+              </div>
+            </form>
+
+            <h2 class="dashboard-blog-heading">Sudoku</h2>
+            <p>Nine clue rows, then nine solved rows. Use 0 for an empty square. A numbered line can separate puzzles.</p>
+            <pre class="trivia-format">1.
+530070000
+600195000
+098000060
+800060003
+400803001
+700020006
+060000280
+000419005
+000080079
+534678912
+672195348
+198342567
+859761423
+426853791
+713924856
+961537284
+287419635
+345286179</pre>
+            <p id="game-sudoku-stats" class="trivia-bank-stats"></p>
+            <p id="game-sudoku-status" class="trivia-status" role="status"></p>
+            <form id="game-sudoku-form">
+              <div class="form-row">
+                <label for="game-sudoku-paste">Sudoku puzzles</label>
+                <textarea id="game-sudoku-paste" rows="10" spellcheck="false" placeholder="Paste sudoku puzzles here."></textarea>
+              </div>
+              <div class="trivia-file-row">
+                <button type="submit" class="btn-primary">Add sudoku</button>
+                <label for="game-sudoku-file" class="btn-secondary">Choose a text file</label>
+                <input type="file" id="game-sudoku-file" class="trivia-file-input" accept=".txt,.text,text/plain" />
+              </div>
+            </form>
+
+            <h2 class="dashboard-blog-heading">Crossword</h2>
+            <p>A grid of letters and # for blocks, then ACROSS and DOWN. Each clue is a number, the clue, a bar, and the answer.</p>
+            <pre class="trivia-format">1.
+CAT##
+A#O##
+R#W##
+#####
+#####
+ACROSS
+1. A pet | CAT
+DOWN
+1. A vehicle | CAR
+2. To pull | TOW</pre>
+            <p id="game-cross-stats" class="trivia-bank-stats"></p>
+            <p id="game-cross-status" class="trivia-status" role="status"></p>
+            <form id="game-cross-form">
+              <div class="form-row">
+                <label for="game-cross-paste">Crosswords</label>
+                <textarea id="game-cross-paste" rows="12" spellcheck="false" placeholder="Paste crosswords here."></textarea>
+              </div>
+              <div class="trivia-file-row">
+                <button type="submit" class="btn-primary">Add crosswords</button>
+                <label for="game-cross-file" class="btn-secondary">Choose a text file</label>
+                <input type="file" id="game-cross-file" class="trivia-file-input" accept=".txt,.text,text/plain" />
+              </div>
+            </form>
           </div>
 
           <p class="dashboard-logout">
