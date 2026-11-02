@@ -532,6 +532,19 @@
     return { puzzles: puzzles, errors: errors };
   }
 
+  function parseTiny(text) {
+    var parsed = parseCrosswords(text);
+    var puzzles = [];
+    parsed.puzzles.forEach(function (puzzle) {
+      if (puzzle.width !== 5 || puzzle.height !== 5) {
+        parsed.errors.push('A tiny crossword must be 5 by 5.');
+      } else {
+        puzzles.push(puzzle);
+      }
+    });
+    return { puzzles: puzzles, errors: parsed.errors };
+  }
+
   function errorNote(errors) {
     if (!errors.length) return '';
     var shown = errors.slice(0, 3).join(' ');
@@ -542,7 +555,7 @@
   function explain(error, rpcName) {
     var message = error && error.message ? error.message : 'Could not reach the bank.';
     var missing = /could not find the function/i.test(message) || /schema cache/i.test(message);
-    var games = /word|sudoku|crossword/i.test(rpcName || '') || /word_|sudoku_|crossword_/i.test(message);
+    var games = /word|sudoku|crossword|tiny/i.test(rpcName || '') || /word_|sudoku_|crossword_|tiny_/i.test(message);
     if (missing && games) return 'Run supabase/games.sql in the Supabase SQL editor, then try again.';
     if (missing || /connections_bank/i.test(message) || /prompt_key/i.test(message)) {
       return 'Run the updated supabase/trivia.sql in the Supabase SQL editor, then try again.';
@@ -574,6 +587,7 @@
     await showBank('word_bank_stats', 'word', 'game-word-status');
     await showBank('sudoku_bank_stats', 'sudoku', 'game-sudoku-status');
     await showBank('crossword_bank_stats', 'crossword', 'game-cross-status');
+    await showBank('tiny_crossword_bank_stats', 'tiny', 'game-tiny-status');
   }
 
   async function showBank(rpcName, name, statusId) {
@@ -684,6 +698,21 @@
     return unique;
   }
 
+  async function ingestTiny(text, clear) {
+    if (!String(text || '').trim()) {
+      setStatus('game-tiny-status', 'Paste tiny crosswords, or choose a text file.', true);
+      return;
+    }
+    var parsed = parseTiny(text);
+    if (!parsed.puzzles.length) {
+      setStatus('game-tiny-status', errorNote(parsed.errors) || 'No tiny crosswords found.', true);
+      return;
+    }
+    var unique = uniqueRows(parsed.puzzles, function (puzzle) { return puzzle.grid; });
+    await upload('tiny crosswords', unique, 'add_tiny_crosswords', 'game-tiny-status', clear ? 'game-tiny-paste' : '');
+    if (parsed.errors.length) setStatus('game-tiny-status', document.getElementById('game-tiny-status').textContent + ' ' + errorNote(parsed.errors), false);
+  }
+
   async function ingestWords(text, clear) {
     if (!String(text || '').trim()) {
       setStatus('game-word-status', 'Paste words, or choose a text file.', true);
@@ -740,7 +769,8 @@
     'game-conn-file': 'game-conn-status',
     'game-word-file': 'game-word-status',
     'game-sudoku-file': 'game-sudoku-status',
-    'game-cross-file': 'game-cross-status'
+    'game-cross-file': 'game-cross-status',
+    'game-tiny-file': 'game-tiny-status'
   };
 
   function bindFile(inputId, handler) {
@@ -789,11 +819,16 @@
       event.preventDefault();
       ingestCrosswords(document.getElementById('game-cross-paste').value, true);
     });
+    document.getElementById('game-tiny-form').addEventListener('submit', function (event) {
+      event.preventDefault();
+      ingestTiny(document.getElementById('game-tiny-paste').value, true);
+    });
     bindFile('game-trivia-file', ingestTrivia);
     bindFile('game-conn-file', ingestConnections);
     bindFile('game-word-file', ingestWords);
     bindFile('game-sudoku-file', ingestSudoku);
     bindFile('game-cross-file', ingestCrosswords);
+    bindFile('game-tiny-file', ingestTiny);
     refreshStats();
   }
 

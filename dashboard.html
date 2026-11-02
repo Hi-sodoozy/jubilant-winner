@@ -101,6 +101,11 @@
                   <span class="game-admin-hint">Easy, medium, hard</span>
                   <span class="game-admin-stat" data-stat="sudoku" data-stat-compact></span>
                 </button>
+                <button type="button" class="game-admin-card" data-open="tiny">
+                  <span class="game-admin-name">Tiny Crossword</span>
+                  <span class="game-admin-hint">5 by 5, timed</span>
+                  <span class="game-admin-stat" data-stat="tiny"></span>
+                </button>
                 <button type="button" class="game-admin-card" data-open="crossword">
                   <span class="game-admin-name">Crossword</span>
                   <span class="game-admin-hint">A daily grid</span>
@@ -226,6 +231,46 @@ Answer
                   <button type="submit" class="btn-primary">Add sudoku</button>
                   <label for="game-sudoku-file" class="btn-secondary">Choose a text file</label>
                   <input type="file" id="game-sudoku-file" class="trivia-file-input" accept=".txt,.text,text/plain" />
+                </div>
+              </form>
+            </section>
+
+            <section class="game-admin-panel" data-game-panel="tiny" hidden>
+              <button type="button" class="game-admin-back" data-game-back>All games</button>
+              <h2>Tiny Crossword</h2>
+              <p>A 5 by 5 grid. Use # for a block, then ACROSS and DOWN. Each clue ends with a bar and the answer.</p>
+              <p class="game-admin-stat" data-stat="tiny"></p>
+              <details class="game-admin-format">
+                <summary>Show the format</summary>
+                <pre class="trivia-format">1.
+HEART
+EMBER
+ABUSE
+RESIN
+TREND
+ACROSS
+1. The organ that beats | HEART
+6. A glowing coal | EMBER
+7. Cruel treatment | ABUSE
+8. Sticky tree sap | RESIN
+9. A current style | TREND
+DOWN
+1. Warmth from a fire | HEART
+2. What a glowing coal becomes | EMBER
+3. To mistreat | ABUSE
+4. What a pine tree oozes | RESIN
+5. The way things are going | TREND</pre>
+              </details>
+              <p id="game-tiny-status" class="trivia-status" role="status"></p>
+              <form id="game-tiny-form">
+                <div class="form-row">
+                  <label for="game-tiny-paste">Tiny crosswords</label>
+                  <textarea id="game-tiny-paste" rows="10" spellcheck="false" placeholder="Paste 5 by 5 grids here."></textarea>
+                </div>
+                <div class="trivia-file-row">
+                  <button type="submit" class="btn-primary">Add tiny crosswords</button>
+                  <label for="game-tiny-file" class="btn-secondary">Choose a text file</label>
+                  <input type="file" id="game-tiny-file" class="trivia-file-input" accept=".txt,.text,text/plain" />
                 </div>
               </form>
             </section>
