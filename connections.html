@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Connections – Iain Duguid</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Today’s Connections from Iain Duguid. Four groups of four." />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles-iain.css" />
+</head>
+<body data-page-id="connections">
+  <div class="shell">
+    <header class="site-header">
+      <div class="site-header-inner">
+        <a href="index.html#hero" class="brand">
+          <div class="brand-mark" aria-hidden="true"></div>
+          <div>
+            <div class="brand-text-primary">Iain Duguid</div>
+            <div class="brand-text-secondary">Content &amp; Communications</div>
+          </div>
+        </a>
+        <input type="checkbox" id="navToggle" class="nav-toggle-input" aria-label="Toggle navigation" />
+        <label for="navToggle" class="nav-toggle" aria-hidden="true"><span></span><span></span></label>
+        <nav class="nav" id="siteNav" aria-label="Main navigation">
+          <a href="business-assessment.html">Business Assessment</a>
+          <div class="nav-dropdown">
+            <a href="services.html" class="nav-dropdown-trigger">Services</a>
+            <div class="nav-dropdown-panel">
+              <a href="commercial-production.html">Commercial Production</a>
+              <a href="website.html">Website</a>
+              <a href="podcast.html">Podcast</a>
+              <a href="socials.html">Socials</a>
+              <a href="services.html#podcasts">Podcasts</a>
+              <a href="services.html#industry-updates">Industry Updates</a>
+              <a href="phone-messaging.html">Phone Messaging</a>
+              <a href="services.html#project-management">Project Management</a>
+            </div>
+          </div>
+          <a href="referrals.html">Referrals</a>
+          <a href="about.html">About</a>
+          <a href="blog.html">Blog</a>
+          <a href="games.html" aria-current="page">Games</a>
+          <a href="index.html#contact" class="nav-cta">Contact</a>
+          <a href="dashboard.html" class="nav-dashboard-dot" aria-label="Dashboard" title="Dashboard"></a>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <section class="section page-intro" id="top">
+        <div class="section-inner">
+          <h1 class="page-intro-title">Connections</h1>
+          <p class="page-intro-subtitle">Four groups of four. One puzzle for the day.</p>
+          <p class="trivia-today">Today <span id="connections-date"></span></p>
+        </div>
+      </section>
+
+      <section class="section section-need">
+        <div class="section-inner">
+          <div id="connections-root" class="connections-board" aria-live="polite"></div>
+          <p class="trivia-back"><a href="games.html">Back to games</a></p>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="site-footer-inner">
+        <div>© Iain Duguid. All rights reserved.</div>
+        <div>Connecting businesses with their customers</div>
+      </div>
+    </footer>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="supabase-config.js"></script>
+  <script src="connections.js"></script>
+</body>
+</html>
