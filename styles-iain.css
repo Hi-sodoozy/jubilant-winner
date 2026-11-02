@@ -3163,6 +3163,15 @@ h1, h2, h3,
   background: var(--sun);
 }
 
+.sudoku-level:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+
+.sudoku-level:disabled:hover {
+  background: #fff;
+}
+
 .sudoku-grid {
   display: grid;
   grid-template-columns: repeat(9, minmax(0, 1fr));

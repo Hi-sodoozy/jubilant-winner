@@ -46,11 +46,14 @@
       if (puzzle.givens.charAt(i) !== '0') chars[i] = puzzle.givens.charAt(i);
       else if (!/^[1-9]$/.test(chars[i])) chars[i] = '0';
     }
+    var same = saved && saved.id === puzzle.id;
+    var hand = cleanNotes(same ? (saved.manual || saved.notes) : null, chars.join(''), puzzle.givens);
     return {
       id: puzzle.id,
       entries: chars.join(''),
-      notes: cleanNotes(saved && saved.id === puzzle.id ? saved.notes : null, chars.join(''), puzzle.givens),
-      done: !!(saved && saved.id === puzzle.id && saved.done)
+      notes: cleanNotes(same ? saved.notes : null, chars.join(''), puzzle.givens),
+      manual: hand,
+      done: !!(same && saved.done)
     };
   }
 
@@ -116,14 +119,17 @@
     return bad;
   }
 
-  function mount(root, puzzles, date) {
+  function mount(root, sb, date) {
     var state = loadState(date);
-    var level = puzzles[state.level] ? state.level : LEVELS.filter(function (name) { return puzzles[name]; })[0];
-    var selected = puzzles[level].givens.indexOf('0');
-    if (selected < 0) selected = 0;
+    var puzzles = {};
+    var level = '';
+    var savedLevel = LEVELS.indexOf(state.level) >= 0 ? state.level : '';
+    var selected = 0;
     var focusCell = false;
     var checking = false;
     var pencilOn = false;
+    var autoOn = state.autoPencil === true;
+    var request = 0;
 
     var levels = document.createElement('div');
     levels.className = 'sudoku-levels';
@@ -139,6 +145,10 @@
     pencil.type = 'button';
     pencil.className = 'sudoku-level sudoku-pencil';
     pencil.textContent = 'Pencil';
+    var auto = document.createElement('button');
+    auto.type = 'button';
+    auto.className = 'sudoku-level sudoku-auto';
+    auto.textContent = 'Auto pencil';
     var feedback = document.createElement('p');
     feedback.className = 'sudoku-feedback';
     feedback.setAttribute('role', 'status');
@@ -149,27 +159,71 @@
 
     function puzzle() { return puzzles[level]; }
     function board() {
-      state.boards[level] = boardFor(state, level, puzzle());
-      return state.boards[level];
+      var current = boardFor(state, level, puzzle());
+      state.boards[level] = current;
+      if (autoOn) fillAuto(current);
+      return current;
     }
     function persist() {
       state.level = level;
+      state.autoPencil = autoOn;
       localStorage.setItem(STORAGE_PREFIX + date, JSON.stringify(state));
+    }
+
+    function fillAuto(current) {
+      var entries = current.entries;
+      var givens = puzzle().givens;
+      if (!current.notes) current.notes = blankNotes();
+      var i;
+      var n;
+      for (i = 0; i < 81; i += 1) {
+        if (givens.charAt(i) !== '0' || entries.charAt(i) !== '0') {
+          current.notes[i] = '';
+          continue;
+        }
+        var marks = '';
+        for (n = 1; n <= 9; n += 1) {
+          if (!taken(entries, i, String(n))) marks += String(n);
+        }
+        current.notes[i] = marks;
+      }
+    }
+
+    function taken(entries, index, digit) {
+      var row = Math.floor(index / 9);
+      var col = index % 9;
+      var r;
+      var c;
+      for (c = 0; c < 9; c += 1) if (entries.charAt(row * 9 + c) === digit) return true;
+      for (r = 0; r < 9; r += 1) if (entries.charAt(r * 9 + col) === digit) return true;
+      var boxRow = Math.floor(row / 3) * 3;
+      var boxCol = Math.floor(col / 3) * 3;
+      for (r = boxRow; r < boxRow + 3; r += 1) {
+        for (c = boxCol; c < boxCol + 3; c += 1) {
+          if (entries.charAt(r * 9 + c) === digit) return true;
+        }
+      }
+      return false;
     }
 
     function place(digit, asPencil) {
       var current = board();
       if (current.done || selected < 0 || puzzle().givens.charAt(selected) !== '0') return;
       if (!current.notes) current.notes = blankNotes();
-      var usePencil = asPencil || pencilOn;
+      if (!current.manual) current.manual = blankNotes();
+      var usePencil = !autoOn && (asPencil || pencilOn);
       if (usePencil && digit !== '0') {
         if (current.entries.charAt(selected) !== '0') return;
         var marks = current.notes[selected] || '';
         current.notes[selected] = marks.indexOf(digit) >= 0
           ? marks.replace(digit, '')
           : (marks + digit).split('').sort().join('');
+        current.manual[selected] = current.notes[selected];
       } else if (digit === '0') {
-        if (usePencil || current.entries.charAt(selected) === '0') current.notes[selected] = '';
+        if (usePencil || (!autoOn && current.entries.charAt(selected) === '0')) {
+          current.notes[selected] = '';
+          current.manual[selected] = '';
+        }
         if (!usePencil) {
           var cleared = current.entries.split('');
           cleared[selected] = '0';
@@ -180,15 +234,19 @@
         chars[selected] = digit;
         current.entries = chars.join('');
         current.notes[selected] = '';
-        clearSeenNotes(current, selected, digit);
+        current.manual[selected] = '';
+        clearSeenNotes(current.notes, selected, digit);
+        clearSeenNotes(current.manual, selected, digit);
       }
+      if (autoOn) fillAuto(current);
       current.done = false;
       persist();
       focusCell = true;
       render();
     }
 
-    function clearSeenNotes(current, index, digit) {
+    function clearSeenNotes(list, index, digit) {
+      if (!list) return;
       var row = Math.floor(index / 9);
       var col = index % 9;
       var boxRow = Math.floor(row / 3) * 3;
@@ -198,9 +256,7 @@
         var r = Math.floor(i / 9);
         var c = i % 9;
         var sameBox = r >= boxRow && r < boxRow + 3 && c >= boxCol && c < boxCol + 3;
-        if ((r === row || c === col || sameBox) && current.notes[i]) {
-          current.notes[i] = current.notes[i].replace(digit, '');
-        }
+        if ((r === row || c === col || sameBox) && list[i]) list[i] = list[i].replace(digit, '');
       }
     }
 
@@ -214,22 +270,43 @@
     }
 
     LEVELS.forEach(function (name) {
-      if (!puzzles[name]) return;
       var button = document.createElement('button');
       button.type = 'button';
       button.className = 'sudoku-level';
       button.textContent = LABELS[name];
-      button.addEventListener('click', function () {
-        if (level === name) return;
-        level = name;
-        selected = puzzles[level].givens.indexOf('0');
-        if (selected < 0) selected = 0;
-        feedback.textContent = '';
-        feedback.className = 'sudoku-feedback';
-        render();
-      });
+      button.addEventListener('click', function () { choose(name); });
       levels.appendChild(button);
     });
+
+    async function choose(name) {
+      if (level === name && Object.prototype.hasOwnProperty.call(puzzles, name)) return;
+      level = name;
+      pencilOn = false;
+      feedback.textContent = '';
+      feedback.className = 'sudoku-feedback';
+      if (!Object.prototype.hasOwnProperty.call(puzzles, name)) {
+        var ticket = ++request;
+        render();
+        var drawn = await drawLevel(sb, name);
+        if (ticket !== request) {
+          if (!drawn.error) puzzles[name] = drawn.puzzle;
+          return;
+        }
+        if (drawn.error) {
+          feedback.textContent = 'Sudoku could not be loaded.';
+          feedback.className = 'sudoku-feedback is-wrong';
+          render();
+          return;
+        }
+        puzzles[name] = drawn.puzzle;
+      }
+      if (puzzles[name]) {
+        selected = puzzles[name].givens.indexOf('0');
+        if (selected < 0) selected = 0;
+        focusCell = true;
+      }
+      render();
+    }
 
     for (var digit = 1; digit <= 9; digit += 1) {
       (function (value) {
@@ -243,11 +320,30 @@
       })(digit);
     }
     pencil.addEventListener('click', function () {
+      if (autoOn) return;
       pencilOn = !pencilOn;
       focusCell = true;
       render();
     });
     tools.appendChild(pencil);
+    auto.addEventListener('click', function () {
+      if (!puzzle()) return;
+      if (!autoOn) {
+        var current = board();
+        current.manual = current.notes.slice();
+        autoOn = true;
+        pencilOn = false;
+        fillAuto(current);
+      } else {
+        autoOn = false;
+        var restored = board();
+        restored.notes = restored.manual.slice();
+      }
+      persist();
+      focusCell = true;
+      render();
+    });
+    tools.appendChild(auto);
     var erase = document.createElement('button');
     erase.type = 'button';
     erase.className = 'sudoku-key';
@@ -287,11 +383,7 @@
       feedback.className = 'sudoku-feedback';
       var sb = client();
       var result = { error: true };
-      if (sb) {
-        result = puzzle().leveled === false
-          ? await sb.rpc('check_sudoku_today', { entries: current.entries })
-          : await sb.rpc('check_sudoku_today', { level: level, entries: current.entries });
-      }
+      if (sb) result = await sb.rpc('check_sudoku_today', { level: level, entries: current.entries });
       checking = false;
       var data = result.data || {};
       if (result.error || data.ok !== true || data.valid === false) {
@@ -313,17 +405,30 @@
     });
 
     function render() {
-      var current = board();
-      var given = puzzle().givens;
-      var bad = conflicts(current.entries);
-      var full = current.entries.indexOf('0') === -1;
-      persist();
-
       Array.prototype.forEach.call(levels.children, function (button) {
         var on = button.textContent === LABELS[level];
         button.classList.toggle('is-on', on);
         button.setAttribute('aria-pressed', on ? 'true' : 'false');
       });
+
+      var active = level && puzzles[level];
+      grid.hidden = !active;
+      if (!active) {
+        pad.hidden = true;
+        tools.hidden = true;
+        check.hidden = true;
+        if (level) {
+          state.level = level;
+          localStorage.setItem(STORAGE_PREFIX + date, JSON.stringify(state));
+        }
+        return;
+      }
+
+      var current = board();
+      var given = puzzle().givens;
+      var bad = conflicts(current.entries);
+      var full = current.entries.indexOf('0') === -1;
+      persist();
 
       grid.innerHTML = '';
       var selectedRow = Math.floor(selected / 9);
@@ -370,8 +475,11 @@
       tools.hidden = current.done;
       check.hidden = current.done;
       check.disabled = checking || !full;
-      pencil.classList.toggle('is-on', pencilOn);
-      pencil.setAttribute('aria-pressed', pencilOn ? 'true' : 'false');
+      pencil.disabled = autoOn || current.done;
+      pencil.classList.toggle('is-on', pencilOn && !autoOn);
+      pencil.setAttribute('aria-pressed', pencilOn && !autoOn ? 'true' : 'false');
+      auto.classList.toggle('is-on', autoOn);
+      auto.setAttribute('aria-pressed', autoOn ? 'true' : 'false');
       var selectedMarks = selected >= 0 && current.notes ? (current.notes[selected] || '') : '';
       Array.prototype.forEach.call(pad.children, function (button) {
         var value = button.textContent;
@@ -392,9 +500,6 @@
       }
     }
 
-    var available = LEVELS.filter(function (name) { return puzzles[name]; });
-    if (available.length === 1 && puzzles[available[0]].leveled === false) levels.hidden = true;
-
     root.innerHTML = '';
     root.appendChild(levels);
     root.appendChild(grid);
@@ -403,6 +508,7 @@
     root.appendChild(tools);
     root.appendChild(check);
     render();
+    if (savedLevel) choose(savedLevel);
   }
 
   async function boot() {
@@ -415,16 +521,7 @@
     var sb = client();
     if (!sb) return;
 
-    var drawn = await drawPuzzles(sb);
-    if (drawn.error) {
-      var note = document.createElement('p');
-      note.className = 'trivia-status';
-      note.textContent = 'Sudoku could not be loaded.';
-      root.appendChild(note);
-      return;
-    }
-    if (!Object.keys(drawn.puzzles).length) return;
-    mount(root, drawn.puzzles, date);
+    mount(root, sb, date);
   }
 
   function noteGrid(marks, hit) {
@@ -443,36 +540,15 @@
     return wrap;
   }
 
-  function puzzleFrom(data, leveled) {
+  function puzzleFrom(data) {
     if (!data || data.ok !== true || typeof data.givens !== 'string' || data.givens.length !== 81) return null;
-    return { id: String(data.id || ''), givens: data.givens, leveled: leveled };
+    return { id: String(data.id || ''), givens: data.givens };
   }
 
-  async function drawPuzzles(sb) {
-    var leveled = await Promise.all(LEVELS.map(function (level) {
-      return sb.rpc('draw_sudoku_today', { level: level });
-    }));
-    var missingLevel = leveled.every(function (result) {
-      return result.error && /could not find the function/i.test(result.error.message || '');
-    });
-    if (missingLevel) {
-      var single = await sb.rpc('draw_sudoku_today');
-      if (single.error) return { error: true, puzzles: {} };
-      var one = puzzleFrom(single.data, false);
-      return { error: false, puzzles: one ? { easy: one } : {} };
-    }
-    var puzzles = {};
-    var failed = false;
-    leveled.forEach(function (result, index) {
-      if (result.error) {
-        failed = true;
-        return;
-      }
-      var puzzle = puzzleFrom(result.data, true);
-      if (puzzle) puzzles[LEVELS[index]] = puzzle;
-    });
-    if (!Object.keys(puzzles).length && failed) return { error: true, puzzles: {} };
-    return { error: false, puzzles: puzzles };
+  async function drawLevel(sb, level) {
+    var result = await sb.rpc('draw_sudoku_today', { level: level });
+    if (result.error) return { error: true, puzzle: null };
+    return { error: false, puzzle: puzzleFrom(result.data) };
   }
 
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
