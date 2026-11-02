@@ -4,5 +4,5 @@
 // 3. Run supabase/trivia.sql in the SQL editor.
 // 4. Authentication → Providers → Email: turn off public sign-ups.
 // 5. Authentication → Users: create one login for yourself.
-window.ID_SUPABASE_URL = 'YOUR_PROJECT_URL';
+window.ID_SUPABASE_URL = 'https://edeluwnifzqfjaodxkhs.supabase.co';
 window.ID_SUPABASE_ANON_KEY = 'YOUR_ANON_KEY';
