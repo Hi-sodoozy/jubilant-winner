@@ -1911,6 +1911,42 @@ a.website-case-client:hover {
   margin-top: auto;
 }
 
+.game-admin-runway {
+  margin: -0.25rem 0 1rem;
+  font-weight: 800;
+}
+
+.game-admin-runway:empty {
+  display: none;
+}
+
+.game-admin-card.is-ok {
+  border-color: #1c7c4a;
+}
+
+.game-admin-stat.is-ok,
+.game-admin-runway.is-ok {
+  color: #146b3a;
+}
+
+.game-admin-card.is-low {
+  border-color: #c48a00;
+}
+
+.game-admin-stat.is-low,
+.game-admin-runway.is-low {
+  color: #8a5a00;
+}
+
+.game-admin-card.is-out {
+  border-color: var(--pop);
+}
+
+.game-admin-stat.is-out,
+.game-admin-runway.is-out {
+  color: var(--pop);
+}
+
 .game-admin-back {
   margin: 0 0 1rem;
   padding: 0.4rem 0.85rem;

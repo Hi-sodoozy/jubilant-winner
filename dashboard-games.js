@@ -26,10 +26,94 @@
     el.classList.toggle('is-wrong', !!isError);
   }
 
+  var LOW_DAYS = 14;
+  var runway = [];
+
   function setStat(name, text, compact) {
     document.querySelectorAll('[data-stat="' + name + '"]').forEach(function (el) {
       el.textContent = el.hasAttribute('data-stat-compact') ? (compact || text) : text;
+      el.classList.remove('is-ok', 'is-low', 'is-out');
     });
+    document.querySelectorAll('.game-admin-card[data-open="' + name + '"]').forEach(function (card) {
+      card.classList.remove('is-ok', 'is-low', 'is-out');
+    });
+  }
+
+  function dayCount(ready, perDay) {
+    var days = Math.floor((Number(ready) || 0) / (perDay || 1));
+    return days < 0 ? 0 : days;
+  }
+
+  function dayText(days) {
+    if (days <= 0) return 'None left';
+    if (days === 1) return '1 day left';
+    return days + ' days left';
+  }
+
+  function dayTone(days) {
+    if (days <= 0) return 'is-out';
+    if (days < LOW_DAYS) return 'is-low';
+    return 'is-ok';
+  }
+
+  function paintDays(name, days, detail, compact, live) {
+    setStat(name, detail, compact);
+    if (live === false && days <= 0) return;
+    var tone = dayTone(days);
+    document.querySelectorAll('[data-stat="' + name + '"], .game-admin-card[data-open="' + name + '"]').forEach(function (el) {
+      el.classList.add(tone);
+    });
+  }
+
+  function bankDetail(days, ready, total, extra) {
+    var line = dayText(days);
+    if (total === 0) line += '. Nothing in the bank.';
+    else if (ready === 0) line += '. ' + total + ' in the bank, all used in the last 12 months.';
+    else if (ready === total) line += '. ' + total + ' in the bank.';
+    else line += '. ' + ready + ' unused, out of ' + total + ' in the bank.';
+    if (extra) line += ' ' + extra;
+    return line;
+  }
+
+  function noteRunway(label, days, live) {
+    runway.push({ label: label, days: days, live: live !== false });
+  }
+
+  function listLabels(items) {
+    var names = items.map(function (item) { return item.label; });
+    if (names.length < 2) return names[0] || '';
+    if (names.length === 2) return names[0] + ' and ' + names[1];
+    return names.slice(0, -1).join(', ') + ', and ' + names[names.length - 1];
+  }
+
+  function writeGlance() {
+    var el = document.getElementById('gameRunway');
+    if (!el) return;
+    var live = runway.filter(function (item) { return item.live; });
+    el.className = 'game-admin-runway';
+    if (!live.length) {
+      el.textContent = '';
+      return;
+    }
+    var empty = live.filter(function (item) { return item.days <= 0; });
+    var low = live.filter(function (item) { return item.days > 0 && item.days < LOW_DAYS; });
+    var shortest = live.slice().sort(function (a, b) { return a.days - b.days; })[0];
+    if (empty.length) {
+      el.classList.add('is-out');
+      var text = 'Add more for ' + listLabels(empty) + '.';
+      if (low.length) {
+        text += ' ' + low.map(function (item) { return item.label + ' has ' + dayText(item.days) + '.'; }).join(' ');
+      }
+      el.textContent = text;
+      return;
+    }
+    if (low.length) {
+      el.classList.add('is-low');
+      el.textContent = low.map(function (item) { return item.label + ' has ' + dayText(item.days) + '.'; }).join(' ');
+      return;
+    }
+    el.classList.add('is-ok');
+    el.textContent = 'All set for two weeks. ' + shortest.label + ' is the shortest, with ' + dayText(shortest.days) + '.';
   }
 
   function showGame(name) {
@@ -565,8 +649,10 @@
 
   async function refreshStats() {
     var db = client();
+    runway = [];
     if (!db) {
       setStatus('game-trivia-status', 'Trivia is not connected yet.', true);
+      writeGlance();
       return;
     }
     var trivia = await db.rpc('trivia_bank_stats', { gate: gate() });
@@ -576,21 +662,35 @@
       setStatus('game-trivia-status', explain(trivia.error), true);
     } else {
       var data = trivia.data || {};
-      setStat('trivia', (data.total || 0) + ' total · ' + (data.ready || 0) + ' ready');
+      var triviaReady = Number(data.ready) || 0;
+      var triviaDays = dayCount(triviaReady, 10);
+      var triviaExtra = triviaDays <= 0 && triviaReady > 0 ? 'A day needs 10.' : '';
+      paintDays('trivia', triviaDays, bankDetail(triviaDays, triviaReady, Number(data.total) || 0, triviaExtra), dayText(triviaDays));
+      noteRunway('Trivia', triviaDays, true);
     }
     if (connections.error) {
       setStat('connections', '');
       setStatus('game-conn-status', explain(connections.error, 'connections_bank_stats'), true);
     } else {
-      setStat('connections', ((connections.data && connections.data.total) || 0) + ' puzzles');
+      var conn = connections.data || {};
+      var connTotal = Number(conn.total) || 0;
+      if (conn.ready == null) {
+        setStat('connections', connTotal + ' in the bank');
+      } else {
+        var connReady = Number(conn.ready) || 0;
+        var connDays = dayCount(connReady, 1);
+        paintDays('connections', connDays, bankDetail(connDays, connReady, connTotal), dayText(connDays));
+        noteRunway('Connections', connDays, true);
+      }
     }
-    await showBank('word_bank_stats', 'word', 'game-word-status');
-    await showBank('sudoku_bank_stats', 'sudoku', 'game-sudoku-status');
-    await showBank('crossword_bank_stats', 'crossword', 'game-cross-status');
-    await showBank('tiny_crossword_bank_stats', 'tiny', 'game-tiny-status');
+    await showBank('word_bank_stats', 'word', 'game-word-status', 'Word', false);
+    await showBank('sudoku_bank_stats', 'sudoku', 'game-sudoku-status', 'Sudoku', true);
+    await showBank('crossword_bank_stats', 'crossword', 'game-cross-status', 'Crossword', false);
+    await showBank('tiny_crossword_bank_stats', 'tiny', 'game-tiny-status', 'Tiny Crossword', true);
+    writeGlance();
   }
 
-  async function showBank(rpcName, name, statusId) {
+  async function showBank(rpcName, name, statusId, label, live) {
     var db = client();
     if (!db) return;
     var result = await db.rpc(rpcName, { gate: gate() });
@@ -601,17 +701,32 @@
     }
     var data = result.data || {};
     if (data.easy && data.medium && data.hard) {
-      var full = ['easy', 'medium', 'hard'].map(function (level) {
+      var levels = ['easy', 'medium', 'hard'].map(function (level) {
         var part = data[level] || {};
-        return level.charAt(0).toUpperCase() + level.slice(1) + ': ' + (part.total || 0) + ' in the bank, ' + (part.ready || 0) + ' ready';
-      }).join('. ') + '.';
-      var compact = ['easy', 'medium', 'hard'].map(function (level) {
-        return level.charAt(0).toUpperCase() + level.slice(1) + ' ' + ((data[level] && data[level].total) || 0);
-      }).join(' · ');
-      setStat(name, full, compact);
+        var ready = Number(part.ready) || 0;
+        var total = Number(part.total) || 0;
+        return {
+          name: level.charAt(0).toUpperCase() + level.slice(1),
+          ready: ready,
+          total: total,
+          days: dayCount(ready, 1)
+        };
+      });
+      var shortest = levels.slice().sort(function (a, b) { return a.days - b.days; })[0].days;
+      var names = levels.filter(function (level) { return level.days === shortest; }).map(function (level) { return level.name; });
+      var compact = names.length === levels.length ? dayText(shortest) : names.join(' and ') + ': ' + (shortest <= 0 ? 'none left' : dayText(shortest).charAt(0).toLowerCase() + dayText(shortest).slice(1));
+      var full = levels.map(function (level) {
+        return level.name + ': ' + bankDetail(level.days, level.ready, level.total);
+      }).join(' ');
+      paintDays(name, shortest, full, compact, live);
+      levels.forEach(function (level) { noteRunway(label + ' ' + level.name.toLowerCase(), level.days, live); });
       return;
     }
-    setStat(name, (data.total || 0) + ' total · ' + (data.ready || 0) + ' ready');
+    var ready = Number(data.ready) || 0;
+    var total = Number(data.total) || 0;
+    var days = dayCount(ready, 1);
+    paintDays(name, days, bankDetail(days, ready, total), dayText(days), live);
+    noteRunway(label, days, live);
   }
 
   async function upload(name, rows, rpcName, statusId, clearId) {
