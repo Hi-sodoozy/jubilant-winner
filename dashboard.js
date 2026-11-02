@@ -4,7 +4,7 @@
   var ASSESSMENT_KEY = 'enerval_dashboard_assessment';
   var CLIENTS_MAX_KEY = 'enerval_dashboard_clients_max';
   var ASSESSMENT_MAX_KEY = 'enerval_dashboard_assessment_max';
-  var PASSWORD = 'enerval';
+  var PASSWORD = 'Enabled';
   var ABSOLUTE_MAX = 500;
   var DEFAULT_MAX = 10;
 
