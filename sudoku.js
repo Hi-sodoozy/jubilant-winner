@@ -383,7 +383,10 @@
       feedback.className = 'sudoku-feedback';
       var sb = client();
       var result = { error: true };
-      if (sb) result = await sb.rpc('check_sudoku_today', { level: level, entries: current.entries });
+      if (sb) {
+        result = await sb.rpc('check_sudoku_today', { level: level, entries: current.entries });
+        if (missingFn(result.error)) result = await sb.rpc('check_sudoku_today', { entries: current.entries });
+      }
       checking = false;
       var data = result.data || {};
       if (result.error || data.ok !== true || data.valid === false) {
@@ -545,10 +548,23 @@
     return { id: String(data.id || ''), givens: data.givens };
   }
 
+  function missingFn(error) {
+    return !!(error && /could not find the function/i.test(error.message || ''));
+  }
+
+  var legacyDraw = null;
+
   async function drawLevel(sb, level) {
     var result = await sb.rpc('draw_sudoku_today', { level: level });
-    if (result.error) return { error: true, puzzle: null };
-    return { error: false, puzzle: puzzleFrom(result.data) };
+    if (!missingFn(result.error)) {
+      if (result.error) return { error: true, puzzle: null };
+      return { error: false, puzzle: puzzleFrom(result.data) };
+    }
+    if (legacyDraw) return legacyDraw;
+    var single = await sb.rpc('draw_sudoku_today');
+    if (single.error) return { error: true, puzzle: null };
+    legacyDraw = { error: false, puzzle: puzzleFrom(single.data) };
+    return legacyDraw;
   }
 
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
