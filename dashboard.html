@@ -2,25 +2,23 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Dashboard â€“ Iain Duguid</title>
+  <title>Dashboard – Iain Duguid</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="keywords" content="Iain Duguid, Melbourne, Australia, Radio, Media, Connect Businesses with Customers, Podcast, Project Management, Voiceover, Voice, Production" />
-  <meta name="description" content="Iain Duguid â€“ Content &amp; Communications. Melbourne, Australia." />
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="/styles-light.css" />
+  <meta name="robots" content="noindex, nofollow" />
+  <link rel="stylesheet" href="styles-iain.css" />
 </head>
 <body>
   <div class="shell">
     <header class="site-header">
       <div class="site-header-inner">
-        <a href="/#hero" class="brand">
+        <a href="index.html#hero" class="brand">
           <div class="brand-mark" aria-hidden="true"></div>
           <div>
             <div class="brand-text-primary">Iain Duguid</div>
             <div class="brand-text-secondary">Dashboard</div>
           </div>
         </a>
-        <a href="/" class="dashboard-back">Back to site</a>
+        <a href="index.html" class="dashboard-back">Back to site</a>
       </div>
     </header>
 
@@ -40,10 +38,6 @@
       <section class="section dashboard-content" id="dashboardContent" hidden>
         <div class="section-inner">
           <h1 class="dashboard-heading">Dashboard</h1>
-          <div class="dashboard-actions">
-            <a href="/edit-content.html" class="btn-primary" id="dashboardEditContentBtn">Edit website content</a>
-            <a href="#write-blog" class="btn-primary" id="dashboardWriteBlogBtn">Write Blog Post</a>
-          </div>
           <div class="dashboard-metrics">
             <article class="dashboard-metric">
               <h2 class="dashboard-metric-label">Number of Clients</h2>
@@ -59,8 +53,8 @@
                 <button type="button" class="dashboard-metric-save" id="clientsSave">Save</button>
               </div>
               <div class="dashboard-metric-controls">
-                <button type="button" class="dashboard-metric-btn dashboard-metric-down" id="clientsDown" aria-label="Decrease">â†“</button>
-                <button type="button" class="dashboard-metric-btn dashboard-metric-up" id="clientsUp" aria-label="Increase">â†‘</button>
+                <button type="button" class="dashboard-metric-btn dashboard-metric-down" id="clientsDown" aria-label="Decrease">↓</button>
+                <button type="button" class="dashboard-metric-btn dashboard-metric-up" id="clientsUp" aria-label="Increase">↑</button>
               </div>
             </article>
             <article class="dashboard-metric">
@@ -77,40 +71,55 @@
                 <button type="button" class="dashboard-metric-save" id="assessmentSave">Save</button>
               </div>
               <div class="dashboard-metric-controls">
-                <button type="button" class="dashboard-metric-btn dashboard-metric-down" id="assessmentDown" aria-label="Decrease">â†“</button>
-                <button type="button" class="dashboard-metric-btn dashboard-metric-up" id="assessmentUp" aria-label="Increase">â†‘</button>
+                <button type="button" class="dashboard-metric-btn dashboard-metric-down" id="assessmentDown" aria-label="Decrease">↓</button>
+                <button type="button" class="dashboard-metric-btn dashboard-metric-up" id="assessmentUp" aria-label="Increase">↑</button>
               </div>
             </article>
           </div>
 
-          <section class="dashboard-blog-section dashboard-posts-overview" id="blog-posts-overview" aria-labelledby="posts-overview-heading">
-            <h2 class="dashboard-blog-heading" id="posts-overview-heading">Live blog posts</h2>
-            <p class="dashboard-posts-empty" id="dashboardPostsEmpty" hidden>No posts yet. Publish one below.</p>
-            <div class="dashboard-posts-list" id="dashboardBlogList"></div>
-          </section>
-
-          <section class="dashboard-blog-section" id="write-blog" aria-labelledby="write-blog-heading">
-            <h2 class="dashboard-blog-heading" id="write-blog-heading">Write Blog Post</h2>
-            <form class="dashboard-blog-form" id="blogPostForm">
+          <div class="dashboard-games">
+            <h2 class="dashboard-blog-heading">Trivia</h2>
+            <p>Paste a batch or choose a text file. Same shape as below. Thousands at once is fine.</p>
+            <pre class="trivia-format">1. Which country has the most time zones when its overseas territories are included?
+A) Russia
+B) United States
+C) France
+D) United Kingdom
+Answer: C</pre>
+            <p id="game-trivia-stats" class="trivia-bank-stats"></p>
+            <p id="game-trivia-status" class="trivia-status" role="status"></p>
+            <form id="game-trivia-form">
               <div class="form-row">
-                <label for="blog-post-title">Heading <span class="required">*</span></label>
-                <input type="text" id="blog-post-title" name="title" required placeholder="Post title" />
+                <label for="game-trivia-paste">Trivia questions</label>
+                <textarea id="game-trivia-paste" rows="12" spellcheck="false" placeholder="Paste trivia questions here."></textarea>
               </div>
-              <div class="form-row">
-                <label for="blog-post-tags">Tags</label>
-                <input type="text" id="blog-post-tags" name="tags" placeholder="e.g. podcast, marketing, tips (comma-separated)" />
+              <div class="trivia-file-row">
+                <button type="submit" class="btn-primary">Add trivia</button>
+                <label for="game-trivia-file" class="btn-secondary">Choose a text file</label>
+                <input type="file" id="game-trivia-file" class="trivia-file-input" accept=".txt,.text,text/plain" />
               </div>
-              <div class="form-row">
-                <label for="blog-post-body">Content <span class="required">*</span></label>
-                <textarea id="blog-post-body" name="body" required rows="12" placeholder="Write your post content here. You can use simple HTML (e.g. &lt;p&gt;, &lt;strong&gt;, &lt;a href=&quot;...&quot;&gt;)."></textarea>
-              </div>
-              <div class="dashboard-blog-form-actions">
-                <button type="submit" class="btn-primary" id="blogSubmitBtn">Publish</button>
-                <button type="button" class="btn-secondary dashboard-edit-cancel" id="blogEditCancel" hidden>Cancel edit</button>
-              </div>
-              <p class="dashboard-blog-message" id="blogPostMessage" aria-live="polite"></p>
             </form>
-          </section>
+
+            <h2 class="dashboard-blog-heading">Connections</h2>
+            <p>Each puzzle is four lines. A theme, then a bar, then four words. A blank line between puzzles is fine.</p>
+            <pre class="trivia-format">1. Types of pasta | spaghetti, penne, rigatoni, fusilli
+Australian capitals | Sydney, Melbourne, Brisbane, Perth
+Words that follow fire | engine, drill, place, fly
+Famous painters | Dali, Monet, Kahlo, O'Keeffe</pre>
+            <p id="game-conn-stats" class="trivia-bank-stats"></p>
+            <p id="game-conn-status" class="trivia-status" role="status"></p>
+            <form id="game-conn-form">
+              <div class="form-row">
+                <label for="game-conn-paste">Connections puzzles</label>
+                <textarea id="game-conn-paste" rows="12" spellcheck="false" placeholder="Paste Connections puzzles here."></textarea>
+              </div>
+              <div class="trivia-file-row">
+                <button type="submit" class="btn-primary">Add Connections</button>
+                <label for="game-conn-file" class="btn-secondary">Choose a text file</label>
+                <input type="file" id="game-conn-file" class="trivia-file-input" accept=".txt,.text,text/plain" />
+              </div>
+            </form>
+          </div>
 
           <p class="dashboard-logout">
             <button type="button" class="btn-secondary" id="logoutBtn">Log out</button>
@@ -118,255 +127,10 @@
         </div>
       </section>
     </main>
-
-    <footer class="site-footer">
-      <div class="site-footer-inner">
-        <div>Â© Iain Duguid. All rights reserved.</div>
-        <div>Connecting businesses with their customers</div>
-      </div>
-    </footer>
   </div>
-
-  <script>
-  (function() {
-    var AUTH_KEY = 'enabled_dashboard_auth';
-    var CLIENTS_KEY = 'enabled_dashboard_clients';
-    var ASSESSMENT_KEY = 'enabled_dashboard_assessment';
-    var CLIENTS_MAX_KEY = 'enabled_dashboard_clients_max';
-    var ASSESSMENT_MAX_KEY = 'enabled_dashboard_assessment_max';
-    var PASSWORD = 'enabled';
-    var ABSOLUTE_MAX = 500;
-    var DEFAULT_MAX = 10;
-
-    var gate = document.getElementById('dashboardGate');
-    var content = document.getElementById('dashboardContent');
-    var form = document.getElementById('gateForm');
-    var input = document.getElementById('dashboardPassword');
-    var errorEl = document.getElementById('gateError');
-
-    function isAuthenticated() { return sessionStorage.getItem(AUTH_KEY) === '1'; }
-    function setAuthenticated(ok) { if (ok) sessionStorage.setItem(AUTH_KEY, '1'); else sessionStorage.removeItem(AUTH_KEY); }
-    function showGate() { gate.hidden = false; content.hidden = true; }
-    function showDashboard() { gate.hidden = true; content.hidden = false; errorEl.textContent = ''; input.value = ''; initMetrics(); renderBlogList(); }
-
-    if (isAuthenticated()) showDashboard(); else showGate();
-
-    form.addEventListener('submit', function(e) {
-      e.preventDefault();
-      if (input.value.trim() === PASSWORD) { setAuthenticated(true); showDashboard(); }
-      else { errorEl.textContent = 'Incorrect password. Try again.'; input.focus(); }
-    });
-
-    document.getElementById('logoutBtn').addEventListener('click', function() { setAuthenticated(false); showGate(); });
-
-    function getStored(key, def) { var v = localStorage.getItem(key); return v !== null ? parseInt(v, 10) : def; }
-    function setStored(key, val) { localStorage.setItem(key, String(val)); }
-    function getMax(key, def) { var m = getStored(key, def); return Math.max(1, Math.min(ABSOLUTE_MAX, isNaN(m) ? def : m)); }
-
-    function initMetrics() {
-      var clientsValEl = document.getElementById('clientsValue');
-      var assessmentValEl = document.getElementById('assessmentValue');
-      var clientsEditRow = document.getElementById('clientsEditRow');
-      var assessmentEditRow = document.getElementById('assessmentEditRow');
-      var clientsMaxInput = document.getElementById('clientsMaxInput');
-      var assessmentMaxInput = document.getElementById('assessmentMaxInput');
-
-      function render() {
-        var cMax = getMax(CLIENTS_MAX_KEY, DEFAULT_MAX);
-        var aMax = getMax(ASSESSMENT_MAX_KEY, DEFAULT_MAX);
-        var c = getStored(CLIENTS_KEY, 0);
-        var a = getStored(ASSESSMENT_KEY, 0);
-        if (c > cMax) { setStored(CLIENTS_KEY, cMax); c = cMax; }
-        if (a > aMax) { setStored(ASSESSMENT_KEY, aMax); a = aMax; }
-        clientsValEl.textContent = c + '/' + cMax;
-        assessmentValEl.textContent = a + '/' + aMax;
-        clientsMaxInput.value = cMax;
-        assessmentMaxInput.value = aMax;
-      }
-
-      function adjust(key, maxKey, delta) {
-        var maxVal = getMax(maxKey, DEFAULT_MAX);
-        var n = getStored(key, 0) + delta;
-        n = Math.max(0, Math.min(maxVal, n));
-        setStored(key, n);
-        render();
-      }
-
-      function saveMax(maxKey, inputEl, editRow) {
-        var v = parseInt(inputEl.value, 10);
-        if (isNaN(v) || v < 1 || v > ABSOLUTE_MAX) { inputEl.focus(); return; }
-        setStored(maxKey, v);
-        var valKey = maxKey === CLIENTS_MAX_KEY ? CLIENTS_KEY : ASSESSMENT_KEY;
-        if (getStored(valKey, 0) > v) setStored(valKey, v);
-        editRow.classList.add('dashboard-metric-edit-row-hidden');
-        render();
-      }
-
-      document.getElementById('clientsUp').onclick = function() { adjust(CLIENTS_KEY, CLIENTS_MAX_KEY, 1); };
-      document.getElementById('clientsDown').onclick = function() { adjust(CLIENTS_KEY, CLIENTS_MAX_KEY, -1); };
-      document.getElementById('assessmentUp').onclick = function() { adjust(ASSESSMENT_KEY, ASSESSMENT_MAX_KEY, 1); };
-      document.getElementById('assessmentDown').onclick = function() { adjust(ASSESSMENT_KEY, ASSESSMENT_MAX_KEY, -1); };
-      document.getElementById('clientsEdit').onclick = function() { clientsEditRow.classList.remove('dashboard-metric-edit-row-hidden'); clientsMaxInput.focus(); };
-      document.getElementById('assessmentEdit').onclick = function() { assessmentEditRow.classList.remove('dashboard-metric-edit-row-hidden'); assessmentMaxInput.focus(); };
-      document.getElementById('clientsSave').onclick = function() { saveMax(CLIENTS_MAX_KEY, clientsMaxInput, clientsEditRow); };
-      document.getElementById('assessmentSave').onclick = function() { saveMax(ASSESSMENT_MAX_KEY, assessmentMaxInput, assessmentEditRow); };
-      clientsMaxInput.addEventListener('keydown', function(e) { if (e.key === 'Enter') { e.preventDefault(); saveMax(CLIENTS_MAX_KEY, clientsMaxInput, clientsEditRow); } });
-      assessmentMaxInput.addEventListener('keydown', function(e) { if (e.key === 'Enter') { e.preventDefault(); saveMax(ASSESSMENT_MAX_KEY, assessmentMaxInput, assessmentEditRow); } });
-      render();
-    }
-
-    var BLOG_STORAGE_KEY = 'iainduguid_blog_posts';
-    var blogForm = document.getElementById('blogPostForm');
-    var blogMessage = document.getElementById('blogPostMessage');
-    var writeBlogBtn = document.getElementById('dashboardWriteBlogBtn');
-    var blogSubmitBtn = document.getElementById('blogSubmitBtn');
-    var blogEditCancel = document.getElementById('blogEditCancel');
-    var currentEditId = null;
-
-    function getBlogPosts() {
-      try {
-        var raw = localStorage.getItem(BLOG_STORAGE_KEY);
-        return raw ? JSON.parse(raw) : [];
-      } catch (e) { return []; }
-    }
-
-    function saveBlogPosts(posts) {
-      try {
-        localStorage.setItem(BLOG_STORAGE_KEY, JSON.stringify(posts));
-        return true;
-      } catch (e) { return false; }
-    }
-
-    function renderBlogList() {
-      var listEl = document.getElementById('dashboardBlogList');
-      var emptyEl = document.getElementById('dashboardPostsEmpty');
-      if (!listEl) return;
-      var posts = getBlogPosts();
-      posts.sort(function(a, b) {
-        var ta = (a.createdAt && parseInt(a.createdAt, 10)) || 0;
-        var tb = (b.createdAt && parseInt(b.createdAt, 10)) || 0;
-        return tb - ta;
-      });
-      if (emptyEl) emptyEl.hidden = posts.length > 0;
-      listEl.innerHTML = '';
-      posts.forEach(function(p) {
-        var dateStr = p.createdAt ? new Date(parseInt(p.createdAt, 10)).toLocaleDateString('en-AU', { day: 'numeric', month: 'short', year: 'numeric' }) : '';
-        var row = document.createElement('div');
-        row.className = 'dashboard-post-row';
-        row.innerHTML =
-          '<span class="dashboard-post-row-title">' + escapeHtml(p.title || 'Untitled') + '</span>' +
-          '<span class="dashboard-post-row-date">' + escapeHtml(dateStr) + '</span>' +
-          '<span class="dashboard-post-row-actions">' +
-            '<button type="button" class="dashboard-post-btn dashboard-post-edit" data-id="' + escapeHtml(p.id) + '" aria-label="Edit post">Edit</button> ' +
-            '<button type="button" class="dashboard-post-btn dashboard-post-delete" data-id="' + escapeHtml(p.id) + '" aria-label="Delete post">Delete</button>' +
-          '</span>';
-        listEl.appendChild(row);
-      });
-      listEl.querySelectorAll('.dashboard-post-edit').forEach(function(btn) {
-        btn.addEventListener('click', function() { startEditPost(btn.getAttribute('data-id')); });
-      });
-      listEl.querySelectorAll('.dashboard-post-delete').forEach(function(btn) {
-        btn.addEventListener('click', function() { deletePost(btn.getAttribute('data-id')); });
-      });
-    }
-
-    function escapeHtml(s) {
-      var div = document.createElement('div');
-      div.textContent = s;
-      return div.innerHTML;
-    }
-
-    function deletePost(id) {
-      if (!id || !confirm('Delete this post? This cannot be undone.')) return;
-      var posts = getBlogPosts().filter(function(p) { return p.id !== id; });
-      if (saveBlogPosts(posts)) {
-        if (currentEditId === id) cancelEditPost();
-        renderBlogList();
-      }
-    }
-
-    function startEditPost(id) {
-      var posts = getBlogPosts();
-      var post = posts.filter(function(p) { return p.id === id; })[0];
-      if (!post) return;
-      currentEditId = id;
-      var titleInput = document.getElementById('blog-post-title');
-      var tagsInput = document.getElementById('blog-post-tags');
-      var bodyInput = document.getElementById('blog-post-body');
-      if (titleInput) titleInput.value = post.title || '';
-      if (tagsInput) tagsInput.value = Array.isArray(post.tags) ? post.tags.join(', ') : (post.tags || '');
-      if (bodyInput) bodyInput.value = post.body || '';
-      if (blogSubmitBtn) blogSubmitBtn.textContent = 'Update post';
-      if (blogEditCancel) blogEditCancel.hidden = false;
-      if (blogMessage) blogMessage.textContent = '';
-      document.getElementById('write-blog').scrollIntoView({ behavior: 'smooth' });
-    }
-
-    function cancelEditPost() {
-      currentEditId = null;
-      var titleInput = document.getElementById('blog-post-title');
-      var tagsInput = document.getElementById('blog-post-tags');
-      var bodyInput = document.getElementById('blog-post-body');
-      if (titleInput) titleInput.value = '';
-      if (tagsInput) tagsInput.value = '';
-      if (bodyInput) bodyInput.value = '';
-      if (blogSubmitBtn) blogSubmitBtn.textContent = 'Publish';
-      if (blogEditCancel) blogEditCancel.hidden = true;
-      if (blogMessage) blogMessage.textContent = '';
-    }
-
-    if (blogEditCancel) blogEditCancel.addEventListener('click', cancelEditPost);
-
-    if (writeBlogBtn) writeBlogBtn.addEventListener('click', function() { document.getElementById('write-blog').scrollIntoView({ behavior: 'smooth' }); });
-    if (blogForm) {
-      blogForm.addEventListener('submit', function(e) {
-        e.preventDefault();
-        var titleInput = document.getElementById('blog-post-title');
-        var tagsInput = document.getElementById('blog-post-tags');
-        var bodyInput = document.getElementById('blog-post-body');
-        if (!titleInput || !bodyInput) return;
-        var tagsVal = (tagsInput && tagsInput.value.trim()) ? tagsInput.value.trim() : '';
-        var tags = tagsVal ? tagsVal.split(',').map(function(t) { return t.trim(); }).filter(Boolean) : [];
-        var posts = getBlogPosts();
-        if (currentEditId) {
-          var idx = posts.findIndex(function(p) { return p.id === currentEditId; });
-          if (idx === -1) { cancelEditPost(); return; }
-          posts[idx] = {
-            id: posts[idx].id,
-            title: titleInput.value.trim(),
-            tags: tags,
-            body: bodyInput.value.trim(),
-            createdAt: posts[idx].createdAt
-          };
-          if (saveBlogPosts(posts)) {
-            if (blogMessage) { blogMessage.textContent = 'Post updated.'; blogMessage.style.color = 'var(--deep-teal)'; }
-            cancelEditPost();
-            renderBlogList();
-          } else {
-            if (blogMessage) { blogMessage.textContent = 'Could not save. Try again.'; blogMessage.style.color = '#f87171'; }
-          }
-        } else {
-          var post = {
-            id: 'post-' + Date.now(),
-            title: titleInput.value.trim(),
-            tags: tags,
-            body: bodyInput.value.trim(),
-            createdAt: String(Date.now())
-          };
-          posts.push(post);
-          if (saveBlogPosts(posts)) {
-            if (blogMessage) { blogMessage.textContent = 'Published! View on the Blog page.'; blogMessage.style.color = 'var(--deep-teal)'; }
-            titleInput.value = '';
-            if (tagsInput) tagsInput.value = '';
-            bodyInput.value = '';
-            renderBlogList();
-          } else {
-            if (blogMessage) { blogMessage.textContent = 'Could not save. Try again.'; blogMessage.style.color = '#f87171'; }
-          }
-        }
-      });
-    }
-  })();
-  </script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="supabase-config.js"></script>
+  <script src="dashboard.js"></script>
+  <script src="dashboard-games.js"></script>
 </body>
 </html>

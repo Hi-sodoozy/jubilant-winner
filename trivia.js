@@ -199,11 +199,7 @@
       return;
     }
     var data = result.data || {};
-    if (data.ok !== true) {
-      var ready = typeof data.eligible === 'number' ? data.eligible : 0;
-      status(root, 'Not enough fresh questions for today. ' + ready + ' ready, and the day needs 10 that have not been used in the last 12 months.');
-      return;
-    }
+    if (data.ok !== true) return;
     mount(root, asQuiz(data), date);
   }
 

@@ -1826,7 +1826,18 @@ a.website-case-client:hover {
 }
 
 .dashboard-logout {
-  margin: 0;
+  margin: 2rem 0 0;
+}
+
+.dashboard-games {
+  max-width: 46rem;
+  margin-top: 2.5rem;
+  padding-top: 2rem;
+  border-top: 3px solid var(--ink);
+}
+
+.dashboard-games textarea {
+  min-height: 14rem;
 }
 
 .dashboard-actions {
