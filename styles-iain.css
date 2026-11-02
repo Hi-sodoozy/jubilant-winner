@@ -1,28 +1,33 @@
-/* styles.css – Enabled (light / friendly theme) */
+/* Iain Duguid – fun studio theme */
 
-@import url("https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,600;0,9..144,700;1,9..144,600;1,9..144,700&family=Nunito:wght@500;700;800&display=swap");
 
 :root {
-  --midnight: #0f172a;
-  --deep-teal: #134e4a;
-  --teal-soft: #2d6a6a;
-  --teal-pale: #e8f5f4;
-  --sand: #e7e5df;
-  --cream: #faf9f6;
-  --text-light-primary: #f1f5f9;
-  --text-light-secondary: #64748b;
-  --text-dark: #1e293b;
-  --text-muted: #475569;
-  --lime: #a3e635;
-  --lime-hover: #84cc16;
-  --blue: #3b82f6;
-  --blue-hover: #2563eb;
-  --radius-lg: 20px;
+  --midnight: #1c1430;
+  --deep-teal: #1c1430;
+  --teal-soft: #e23d7a;
+  --teal-pale: #ffe8a3;
+  --sand: #ffd0ea;
+  --cream: #fff8ee;
+  --text-light-primary: #fff8ee;
+  --text-light-secondary: #ffe14a;
+  --text-dark: #1c1430;
+  --text-muted: #5c4d73;
+  --lime: #ffe14a;
+  --lime-hover: #ffcf1a;
+  --blue: #5b4dff;
+  --blue-hover: #3d32e6;
+  --radius-lg: 18px;
   --radius-pill: 999px;
   --space-section-y: 5rem;
   --max-width: 1120px;
-  --shadow-soft: 0 4px 24px rgba(15, 23, 42, 0.06);
-  --shadow-card: 0 8px 32px rgba(15, 23, 42, 0.08);
+  --shadow-soft: 4px 4px 0 #1c1430;
+  --shadow-card: 7px 7px 0 #1c1430;
+  --ink: #1c1430;
+  --sun: #ffe14a;
+  --pop: #e23d7a;
+  --font-display: "Fraunces", Georgia, serif;
+  --font-ui: "Nunito", "IBM Plex Sans", system-ui, sans-serif;
 }
 
 * {
@@ -39,7 +44,7 @@ body {
   padding: 0;
   background-color: var(--cream);
   color: var(--text-dark);
-  font-family: "IBM Plex Sans", system-ui, -apple-system, sans-serif;
+  font-family: var(--font-ui);
   scroll-behavior: smooth;
   overflow-x: hidden;
 }
@@ -2304,4 +2309,253 @@ a.website-case-client:hover {
   flex-wrap: wrap;
   gap: 0.75rem;
   margin-top: 1.75rem;
+}
+
+/* Fun studio layer */
+.shell {
+  background-color: transparent;
+  background-image: radial-gradient(#ffd0ea 1.3px, transparent 1.4px);
+  background-size: 22px 22px;
+}
+
+h1, h2, h3,
+.hero-title,
+.page-title,
+.page-intro-title,
+.section-help-title,
+.section-need-title,
+.section-two-col-right-title,
+.contact-title,
+.card-title,
+.need-card-title,
+.service-title,
+.casa-card-title,
+.website-option-title,
+.benefits-heading,
+.brand {
+  font-family: var(--font-display);
+}
+
+.site-header {
+  background: rgba(255, 248, 238, 0.94);
+  border-bottom: 3px solid var(--ink);
+  box-shadow: none;
+}
+
+.brand-mark {
+  border-radius: 40% 60% 55% 45%;
+  background: var(--pop);
+  border: 2.5px solid var(--ink);
+  transform: rotate(-10deg);
+  box-shadow: 3px 3px 0 var(--ink);
+}
+
+.brand-text-primary {
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.brand-text-secondary {
+  font-family: var(--font-ui);
+  font-weight: 800;
+  letter-spacing: 0.01em;
+}
+
+.nav,
+.nav-cta,
+.btn-primary,
+.btn-secondary,
+.btn-card,
+.btn-service-cta,
+.ticker-segment,
+.game-soon {
+  font-family: var(--font-ui);
+}
+
+.nav a {
+  border-bottom-width: 0;
+  border-radius: 999px;
+  padding: 0.2rem 0.45rem;
+}
+
+.nav a:hover,
+.nav a[aria-current="page"] {
+  background: var(--sun);
+  border-color: transparent;
+  color: var(--ink);
+}
+
+.nav a.nav-cta {
+  background: var(--ink);
+  color: var(--sun);
+  border: 2.5px solid var(--ink);
+  font-weight: 800;
+  box-shadow: 3px 3px 0 var(--pop);
+}
+
+.nav a.nav-cta:hover {
+  background: var(--pop);
+  color: #fff;
+  border-color: var(--ink);
+}
+
+.hero-title {
+  font-weight: 700;
+  letter-spacing: -0.035em;
+}
+
+.hero-kicker {
+  display: inline-block;
+  margin: 0 0 0.9rem;
+  padding: 0.25rem 0.7rem;
+  border: 2.5px solid var(--ink);
+  border-radius: 999px;
+  background: #fff;
+  box-shadow: 3px 3px 0 var(--pop);
+  font-family: var(--font-ui);
+  font-weight: 800;
+  font-size: 0.85rem;
+  letter-spacing: 0.01em;
+}
+
+.hero-title-line2 {
+  font-style: italic;
+  color: var(--pop);
+}
+
+.btn-primary,
+.btn-secondary,
+.btn-card,
+.btn-service-cta {
+  border: 2.5px solid var(--ink);
+  box-shadow: 4px 4px 0 var(--ink);
+  font-weight: 800;
+}
+
+.btn-primary:hover,
+.btn-secondary:hover,
+.btn-card:hover,
+.btn-service-cta:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 6px 6px 0 var(--ink);
+}
+
+.btn-secondary {
+  background: #fff;
+  color: var(--ink);
+}
+
+.btn-secondary:hover {
+  background: #fff;
+  border-color: var(--ink);
+}
+
+.hero-panel,
+.todo-card,
+.card,
+.need-card,
+.casa-card,
+.website-option,
+.contact-form,
+.blog-post-card {
+  background: #fff;
+  border: 2.5px solid var(--ink);
+  box-shadow: var(--shadow-card);
+}
+
+.hero-panel {
+  transform: rotate(1.4deg);
+  background: #fffef6;
+}
+
+.todo-card {
+  transform: rotate(-1deg);
+  background: #fff;
+}
+
+.ticker {
+  background: var(--ink);
+  border-top: 3px solid var(--ink);
+  border-bottom: 3px solid var(--ink);
+}
+
+.ticker-segment {
+  color: var(--sun);
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: 0.85rem;
+}
+
+.section-referral {
+  background: var(--sand);
+  border-top: 3px solid var(--ink);
+  border-bottom: 3px solid var(--ink);
+}
+
+.form-row input,
+.form-row textarea,
+.blog-search-input {
+  border: 2.5px solid var(--ink);
+  border-radius: 14px;
+  background: #fff;
+  box-shadow: 3px 3px 0 #ffd0ea;
+}
+
+.form-row input:focus,
+.form-row textarea:focus,
+.blog-search-input:focus {
+  border-color: var(--pop);
+  box-shadow: 3px 3px 0 var(--sun);
+}
+
+.site-footer {
+  background: var(--ink);
+  color: var(--sun);
+  border-top: 3px solid var(--pop);
+}
+
+.game-soon {
+  background: var(--sun);
+  color: var(--ink);
+  border: 2px solid var(--ink);
+  box-shadow: 2px 2px 0 var(--ink);
+}
+
+.game-card:nth-child(odd) {
+  transform: rotate(-0.6deg);
+}
+
+.game-card:nth-child(even) {
+  transform: rotate(0.7deg);
+}
+
+.nav-dropdown-panel {
+  border: 2.5px solid var(--ink);
+  box-shadow: 6px 6px 0 var(--ink);
+  border-radius: 16px;
+}
+
+.nav-dashboard-dot {
+  width: 10px;
+  height: 10px;
+  background: var(--pop);
+  border: 2px solid var(--ink);
+}
+
+@media (max-width: 768px) {
+  .nav a {
+    padding: 0.75rem 1rem;
+    border-radius: 12px;
+  }
+
+  .nav-cta {
+    box-shadow: 3px 3px 0 var(--pop);
+  }
+
+  .hero-panel,
+  .todo-card,
+  .game-card {
+    transform: none;
+  }
 }
