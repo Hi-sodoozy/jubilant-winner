@@ -5,4 +5,4 @@
 // 4. Authentication → Providers → Email: turn off public sign-ups.
 // 5. Authentication → Users: create one login for yourself.
 window.ID_SUPABASE_URL = 'https://edeluwnifzqfjaodxkhs.supabase.co';
-window.ID_SUPABASE_ANON_KEY = 'YOUR_ANON_KEY';
+window.ID_SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVkZWx1d25pZnpxZmphb2R4a2hzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTM1NzUzMDAsImV4cCI6MjEwOTE1MTMwMH0.yvzilNdvYyLWDV7boglBYw1InCIeP-U_K0gom3H7djI';
