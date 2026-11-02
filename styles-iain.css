@@ -3129,7 +3129,8 @@ h1, h2, h3,
 }
 
 .sudoku-levels,
-.sudoku-pad {
+.sudoku-pad,
+.sudoku-tools {
   display: flex;
   flex-wrap: wrap;
   gap: 0.55rem;
@@ -3156,6 +3157,7 @@ h1, h2, h3,
 }
 
 .sudoku-level.is-on,
+.sudoku-key.is-on,
 .sudoku-key:hover,
 .sudoku-level:hover {
   background: var(--sun);
@@ -3171,6 +3173,10 @@ h1, h2, h3,
 }
 
 .sudoku-cell {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   aspect-ratio: 1;
   border: 1px solid #e4d7ea;
   background: #fff;
@@ -3180,6 +3186,28 @@ h1, h2, h3,
   font-size: clamp(0.95rem, 4.2vw, 1.3rem);
   padding: 0;
   cursor: pointer;
+}
+
+.sudoku-notes {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+  color: var(--text-muted);
+  font-size: clamp(0.42rem, 1.7vw, 0.62rem);
+  font-weight: 800;
+  line-height: 1;
+}
+
+.sudoku-note {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sudoku-note.is-hit {
+  color: var(--pop);
 }
 
 .sudoku-cell.is-given {
@@ -3230,8 +3258,13 @@ h1, h2, h3,
   color: var(--pop);
 }
 
-.sudoku-pad {
+.sudoku-pad,
+.sudoku-tools {
   margin-top: 0.85rem;
+}
+
+.sudoku-pencil.is-on {
+  background: var(--sun);
 }
 
 .sudoku-key {

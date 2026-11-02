@@ -49,8 +49,31 @@
     return {
       id: puzzle.id,
       entries: chars.join(''),
+      notes: cleanNotes(saved && saved.id === puzzle.id ? saved.notes : null, chars.join(''), puzzle.givens),
       done: !!(saved && saved.id === puzzle.id && saved.done)
     };
+  }
+
+  function blankNotes() {
+    var notes = [];
+    var i;
+    for (i = 0; i < 81; i += 1) notes.push('');
+    return notes;
+  }
+
+  function cleanNotes(raw, entries, givens) {
+    var notes = blankNotes();
+    var source = Array.isArray(raw) ? raw : [];
+    var i;
+    for (i = 0; i < 81; i += 1) {
+      if (givens.charAt(i) !== '0' || entries.charAt(i) !== '0') continue;
+      var seen = {};
+      String(source[i] || '').replace(/[^1-9]/g, '').split('').forEach(function (mark) {
+        seen[mark] = true;
+      });
+      notes[i] = Object.keys(seen).sort().join('');
+    }
+    return notes;
   }
 
   function conflicts(entries) {
@@ -100,6 +123,7 @@
     if (selected < 0) selected = 0;
     var focusCell = false;
     var checking = false;
+    var pencilOn = false;
 
     var levels = document.createElement('div');
     levels.className = 'sudoku-levels';
@@ -109,6 +133,12 @@
     grid.setAttribute('aria-label', 'Sudoku');
     var pad = document.createElement('div');
     pad.className = 'sudoku-pad';
+    var tools = document.createElement('div');
+    tools.className = 'sudoku-tools';
+    var pencil = document.createElement('button');
+    pencil.type = 'button';
+    pencil.className = 'sudoku-level sudoku-pencil';
+    pencil.textContent = 'Pencil';
     var feedback = document.createElement('p');
     feedback.className = 'sudoku-feedback';
     feedback.setAttribute('role', 'status');
@@ -127,16 +157,51 @@
       localStorage.setItem(STORAGE_PREFIX + date, JSON.stringify(state));
     }
 
-    function place(digit) {
+    function place(digit, asPencil) {
       var current = board();
       if (current.done || selected < 0 || puzzle().givens.charAt(selected) !== '0') return;
-      var chars = current.entries.split('');
-      chars[selected] = digit;
-      current.entries = chars.join('');
+      if (!current.notes) current.notes = blankNotes();
+      var usePencil = asPencil || pencilOn;
+      if (usePencil && digit !== '0') {
+        if (current.entries.charAt(selected) !== '0') return;
+        var marks = current.notes[selected] || '';
+        current.notes[selected] = marks.indexOf(digit) >= 0
+          ? marks.replace(digit, '')
+          : (marks + digit).split('').sort().join('');
+      } else if (digit === '0') {
+        if (usePencil || current.entries.charAt(selected) === '0') current.notes[selected] = '';
+        if (!usePencil) {
+          var cleared = current.entries.split('');
+          cleared[selected] = '0';
+          current.entries = cleared.join('');
+        }
+      } else {
+        var chars = current.entries.split('');
+        chars[selected] = digit;
+        current.entries = chars.join('');
+        current.notes[selected] = '';
+        clearSeenNotes(current, selected, digit);
+      }
       current.done = false;
       persist();
       focusCell = true;
       render();
+    }
+
+    function clearSeenNotes(current, index, digit) {
+      var row = Math.floor(index / 9);
+      var col = index % 9;
+      var boxRow = Math.floor(row / 3) * 3;
+      var boxCol = Math.floor(col / 3) * 3;
+      var i;
+      for (i = 0; i < 81; i += 1) {
+        var r = Math.floor(i / 9);
+        var c = i % 9;
+        var sameBox = r >= boxRow && r < boxRow + 3 && c >= boxCol && c < boxCol + 3;
+        if ((r === row || c === col || sameBox) && current.notes[i]) {
+          current.notes[i] = current.notes[i].replace(digit, '');
+        }
+      }
     }
 
     function move(rowStep, colStep) {
@@ -173,24 +238,30 @@
         button.className = 'sudoku-key';
         button.textContent = String(value);
         button.setAttribute('aria-label', 'Enter ' + value);
-        button.addEventListener('click', function () { place(String(value)); });
+        button.addEventListener('click', function () { place(String(value), false); });
         pad.appendChild(button);
       })(digit);
     }
+    pencil.addEventListener('click', function () {
+      pencilOn = !pencilOn;
+      focusCell = true;
+      render();
+    });
+    tools.appendChild(pencil);
     var erase = document.createElement('button');
     erase.type = 'button';
     erase.className = 'sudoku-key';
     erase.textContent = 'Erase';
-    erase.addEventListener('click', function () { place('0'); });
-    pad.appendChild(erase);
+    erase.addEventListener('click', function () { place('0', pencilOn); });
+    tools.appendChild(erase);
 
     grid.addEventListener('keydown', function (event) {
       var key = event.key;
       if (key >= '1' && key <= '9') {
-        place(key);
+        place(key, event.shiftKey);
         event.preventDefault();
       } else if (key === 'Backspace' || key === 'Delete' || key === '0') {
-        place('0');
+        place('0', event.shiftKey || pencilOn);
         event.preventDefault();
       } else if (key === 'ArrowLeft') {
         move(0, -1);
@@ -275,8 +346,14 @@
           button.classList.add('is-peer');
         }
         if (selectedDigit !== '0' && digit === selectedDigit) button.classList.add('is-same');
-        button.textContent = digit === '0' ? '' : digit;
-        button.setAttribute('aria-label', 'Row ' + (row + 1) + ', column ' + (col + 1) + (digit === '0' ? ', empty' : ', ' + digit));
+        var marks = (current.notes && current.notes[i]) || '';
+        if (digit !== '0') button.textContent = digit;
+        else if (marks) button.appendChild(noteGrid(marks, selectedDigit));
+        var label = 'Row ' + (row + 1) + ', column ' + (col + 1);
+        if (digit !== '0') label += ', ' + digit;
+        else if (marks) label += ', notes ' + marks.split('').join(', ');
+        else label += ', empty';
+        button.setAttribute('aria-label', label);
         button.tabIndex = i === selected ? 0 : -1;
         button.disabled = current.done;
         (function (index) {
@@ -290,11 +367,19 @@
       }
 
       pad.hidden = current.done;
+      tools.hidden = current.done;
       check.hidden = current.done;
       check.disabled = checking || !full;
+      pencil.classList.toggle('is-on', pencilOn);
+      pencil.setAttribute('aria-pressed', pencilOn ? 'true' : 'false');
+      var selectedMarks = selected >= 0 && current.notes ? (current.notes[selected] || '') : '';
       Array.prototype.forEach.call(pad.children, function (button) {
+        var value = button.textContent;
         button.disabled = current.done || selected < 0 || given.charAt(selected) !== '0';
+        button.classList.toggle('is-on', pencilOn && selectedMarks.indexOf(value) >= 0);
+        button.setAttribute('aria-label', (pencilOn ? 'Pencil ' : 'Enter ') + value);
       });
+      erase.disabled = current.done || selected < 0 || given.charAt(selected) !== '0';
 
       if (current.done) {
         feedback.textContent = 'That’s today’s Sudoku.';
@@ -315,6 +400,7 @@
     root.appendChild(grid);
     root.appendChild(feedback);
     root.appendChild(pad);
+    root.appendChild(tools);
     root.appendChild(check);
     render();
   }
@@ -339,6 +425,22 @@
     }
     if (!Object.keys(drawn.puzzles).length) return;
     mount(root, drawn.puzzles, date);
+  }
+
+  function noteGrid(marks, hit) {
+    var wrap = document.createElement('span');
+    wrap.className = 'sudoku-notes';
+    var n;
+    for (n = 1; n <= 9; n += 1) {
+      var slot = document.createElement('span');
+      slot.className = 'sudoku-note';
+      if (marks.indexOf(String(n)) >= 0) {
+        slot.textContent = String(n);
+        if (String(n) === hit) slot.classList.add('is-hit');
+      }
+      wrap.appendChild(slot);
+    }
+    return wrap;
   }
 
   function puzzleFrom(data, leveled) {
