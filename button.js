@@ -2,7 +2,6 @@
   var STORAGE_PREFIX = 'iain-button:';
   var TRIES = 6;
   var TARGET = 10;
-  var CLOSE = 0.1;
   var LIMIT = 60;
 
   function localDate() {
@@ -64,13 +63,15 @@
       return Math.floor(whole / 60) + ':' + (secs < 10 ? '0' : '') + secs + '.' + (hundredths < 10 ? '0' : '') + hundredths;
     }
 
+    function onTarget(value) {
+      return value < LIMIT && value.toFixed(2) === TARGET.toFixed(2);
+    }
+
     function offText(value) {
       if (value >= LIMIT) return 'Timed out.';
+      if (onTarget(value)) return 'Right on it.';
       var off = Math.abs(value - TARGET);
-      if (off < 0.005) return 'Right on it.';
-      var text = off.toFixed(2) + (value < TARGET ? ' early' : ' late');
-      if (off < CLOSE) return text + '. Right on it.';
-      return text + '.';
+      return off.toFixed(2) + (value < TARGET ? ' early' : ' late') + '.';
     }
 
     function closest() {
@@ -111,13 +112,14 @@
         feedback.textContent = 'Press on 10.';
         feedback.className = 'red-feedback';
       } else if (done && best !== null) {
-        feedback.textContent = best < CLOSE
+        var won = tries.some(onTarget);
+        feedback.textContent = won
           ? 'Right on it. That’s today’s Red Button.'
           : 'Closest was ' + best.toFixed(2) + ' off.';
-        feedback.className = 'red-feedback' + (best < CLOSE ? ' is-right' : '');
+        feedback.className = 'red-feedback' + (won ? ' is-right' : '');
       } else if (last !== null) {
         feedback.textContent = last >= LIMIT ? '1:00. Timed out.' : last.toFixed(2) + ' seconds. ' + offText(last);
-        feedback.className = 'red-feedback' + (last < LIMIT && Math.abs(last - TARGET) < CLOSE ? ' is-right' : '');
+        feedback.className = 'red-feedback' + (onTarget(last) ? ' is-right' : '');
       } else {
         feedback.textContent = '';
         feedback.className = 'red-feedback';
@@ -125,8 +127,7 @@
       list.innerHTML = '';
       tries.forEach(function (value, index) {
         var item = document.createElement('li');
-        var off = Math.abs(value - TARGET);
-        if (best !== null && Math.abs(off - best) < 0.0005) item.className = 'is-best';
+        if (onTarget(value)) item.className = 'is-best';
         item.textContent = value >= LIMIT ? '1:00. Timed out.' : value.toFixed(2) + ' seconds. ' + offText(value);
         item.setAttribute('aria-label', 'Try ' + (index + 1) + ', ' + item.textContent);
         list.appendChild(item);
@@ -142,7 +143,7 @@
       tries.push(stored);
       save();
       render();
-      if (!timedOut && Math.abs(stored - TARGET) < CLOSE && window.puzzleCelebrate) window.puzzleCelebrate(button);
+      if (!timedOut && onTarget(stored) && window.puzzleCelebrate) window.puzzleCelebrate(button);
     }
 
     function startClock() {
