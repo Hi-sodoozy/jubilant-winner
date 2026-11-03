@@ -14,13 +14,12 @@
   var LETTERS = ['A', 'B', 'C', 'D'];
   var CHUNK = 400;
 
-  function melbourneDate(date) {
-    return new Intl.DateTimeFormat('en-CA', {
-      timeZone: 'Australia/Melbourne',
-      year: 'numeric',
-      month: '2-digit',
-      day: '2-digit'
-    }).format(date || new Date());
+  function localDate() {
+    if (window.ID_LOCAL_DATE) return window.ID_LOCAL_DATE();
+    var now = new Date();
+    var month = now.getMonth() + 1;
+    var day = now.getDate();
+    return now.getFullYear() + '-' + (month < 10 ? '0' : '') + month + '-' + (day < 10 ? '0' : '') + day;
   }
 
   function shiftMonths(iso, months) {
@@ -143,7 +142,7 @@
   }
 
   function renderBank(rows, searching) {
-    var today = melbourneDate(new Date());
+    var today = localDate(new Date());
     var cutoff = shiftMonths(today, -12);
     listEl.innerHTML = '';
 

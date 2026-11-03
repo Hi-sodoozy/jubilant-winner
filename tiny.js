@@ -1,13 +1,12 @@
 (function () {
   var STORAGE_PREFIX = 'iain-tiny:';
 
-  function melbourneDate(date) {
-    return new Intl.DateTimeFormat('en-CA', {
-      timeZone: 'Australia/Melbourne',
-      year: 'numeric',
-      month: '2-digit',
-      day: '2-digit'
-    }).format(date || new Date());
+  function localDate() {
+    if (window.ID_LOCAL_DATE) return window.ID_LOCAL_DATE();
+    var now = new Date();
+    var month = now.getMonth() + 1;
+    var day = now.getDate();
+    return now.getFullYear() + '-' + (month < 10 ? '0' : '') + month + '-' + (day < 10 ? '0' : '') + day;
   }
 
   function client() {
@@ -251,7 +250,7 @@
       if (checked === state.letters) return;
       checked = state.letters;
       checking = true;
-      var result = await sb.rpc('check_tiny_crossword_today', { letters: state.letters });
+      var result = await window.ID_RPC(sb, 'check_tiny_crossword_today', { letters: state.letters });
       checking = false;
       var data = result.data || {};
       if (result.error || data.ok !== true || data.valid === false) {
@@ -414,12 +413,12 @@
   async function boot() {
     var root = document.getElementById('tiny-root');
     if (!root) return;
-    var date = melbourneDate(new Date());
+    var date = localDate(new Date());
     var dateEl = document.getElementById('tiny-date');
     if (dateEl) dateEl.textContent = date;
     var sb = client();
     if (!sb) return;
-    var drawn = await sb.rpc('draw_tiny_crossword_today');
+    var drawn = await window.ID_RPC(sb, 'draw_tiny_crossword_today');
     if (drawn.error) {
       var note = document.createElement('p');
       note.className = 'trivia-status';

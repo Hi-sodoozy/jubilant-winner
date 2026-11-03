@@ -1,13 +1,12 @@
 (function () {
   var STORAGE_PREFIX = 'iain-trivia:';
 
-  function melbourneDate(date) {
-    return new Intl.DateTimeFormat('en-CA', {
-      timeZone: 'Australia/Melbourne',
-      year: 'numeric',
-      month: '2-digit',
-      day: '2-digit'
-    }).format(date || new Date());
+  function localDate() {
+    if (window.ID_LOCAL_DATE) return window.ID_LOCAL_DATE();
+    var now = new Date();
+    var month = now.getMonth() + 1;
+    var day = now.getDate();
+    return now.getFullYear() + '-' + (month < 10 ? '0' : '') + month + '-' + (day < 10 ? '0' : '') + day;
   }
 
   function client() {
@@ -183,7 +182,7 @@
   async function boot() {
     var root = document.getElementById('trivia-root');
     if (!root) return;
-    var date = melbourneDate(new Date());
+    var date = localDate(new Date());
     var dateEl = document.getElementById('trivia-date');
     if (dateEl) dateEl.textContent = date;
 
@@ -193,7 +192,7 @@
       return;
     }
 
-    var result = await sb.rpc('draw_trivia_today');
+    var result = await window.ID_RPC(sb, 'draw_trivia_today');
     if (result.error) {
       status(root, 'The quiz could not be loaded. Run supabase/trivia.sql in the Supabase SQL editor.');
       return;

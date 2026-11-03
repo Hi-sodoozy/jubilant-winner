@@ -3801,6 +3801,78 @@ h1, h2, h3,
   text-decoration: line-through;
 }
 
+.red-board {
+  max-width: 28rem;
+}
+
+.red-button {
+  display: block;
+  width: min(72vw, 16rem);
+  height: min(72vw, 16rem);
+  margin: 0.4rem 0 1rem;
+  border: 4px solid var(--ink);
+  border-radius: 50%;
+  background: #e10600;
+  box-shadow: 8px 8px 0 var(--ink);
+  color: #fff8ee;
+  font-family: var(--font-display);
+  font-size: 2rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.red-button:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 10px 10px 0 var(--ink);
+}
+
+.red-button.is-running {
+  animation: red-pulse 1.4s ease-in-out infinite;
+}
+
+.red-button:disabled {
+  cursor: default;
+  opacity: 0.72;
+  animation: none;
+}
+
+.red-count,
+.red-feedback {
+  margin: 0 0 0.7rem;
+  font-weight: 800;
+}
+
+.red-feedback.is-right {
+  color: #146b3a;
+}
+
+.red-tries {
+  margin: 0.4rem 0 0;
+  padding: 0;
+  list-style: none;
+  font-weight: 800;
+}
+
+.red-tries li {
+  margin: 0 0 0.35rem;
+}
+
+.red-tries li.is-best {
+  color: #146b3a;
+}
+
+@keyframes red-pulse {
+  0%,
+  100% { transform: scale(1); }
+  50% { transform: scale(1.04); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .red-button.is-running {
+    animation: none;
+  }
+}
+
 @media (max-width: 640px) {
   .cross-clues {
     grid-template-columns: 1fr;

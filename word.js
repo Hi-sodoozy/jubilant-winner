@@ -3,13 +3,12 @@
   var TRIES = 6;
   var ROWS = ['QWERTYUIOP', 'ASDFGHJKL', 'ZXCVBNM'];
 
-  function melbourneDate(date) {
-    return new Intl.DateTimeFormat('en-CA', {
-      timeZone: 'Australia/Melbourne',
-      year: 'numeric',
-      month: '2-digit',
-      day: '2-digit'
-    }).format(date || new Date());
+  function localDate() {
+    if (window.ID_LOCAL_DATE) return window.ID_LOCAL_DATE();
+    var now = new Date();
+    var month = now.getMonth() + 1;
+    var day = now.getDate();
+    return now.getFullYear() + '-' + (month < 10 ? '0' : '') + month + '-' + (day < 10 ? '0' : '') + day;
   }
 
   function client() {
@@ -175,7 +174,7 @@
       busy = true;
       feedback.textContent = '';
       feedback.className = 'word-feedback';
-      var result = await sb.rpc('guess_word_today', { guess: state.current });
+      var result = await window.ID_RPC(sb, 'guess_word_today', { guess: state.current });
       busy = false;
       var data = result.data || {};
       if (result.error || data.ok !== true || data.valid === false || !Array.isArray(data.marks)) {
@@ -235,12 +234,12 @@
   async function boot() {
     var root = document.getElementById('word-root');
     if (!root) return;
-    var date = melbourneDate(new Date());
+    var date = localDate(new Date());
     var dateEl = document.getElementById('word-date');
     if (dateEl) dateEl.textContent = date;
     var sb = client();
     if (!sb) return;
-    var drawn = await sb.rpc('draw_word_today');
+    var drawn = await window.ID_RPC(sb, 'draw_word_today');
     if (drawn.error) {
       var note = document.createElement('p');
       note.className = 'trivia-status';

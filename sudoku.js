@@ -3,13 +3,12 @@
   var LABELS = { easy: 'Easy', medium: 'Medium', hard: 'Hard' };
   var STORAGE_PREFIX = 'iain-sudoku:';
 
-  function melbourneDate(date) {
-    return new Intl.DateTimeFormat('en-CA', {
-      timeZone: 'Australia/Melbourne',
-      year: 'numeric',
-      month: '2-digit',
-      day: '2-digit'
-    }).format(date || new Date());
+  function localDate() {
+    if (window.ID_LOCAL_DATE) return window.ID_LOCAL_DATE();
+    var now = new Date();
+    var month = now.getMonth() + 1;
+    var day = now.getDate();
+    return now.getFullYear() + '-' + (month < 10 ? '0' : '') + month + '-' + (day < 10 ? '0' : '') + day;
   }
 
   function client() {
@@ -373,8 +372,8 @@
       var sb = client();
       var result = { error: true };
       if (sb) {
-        result = await sb.rpc('check_sudoku_today', { level: level, entries: current.entries });
-        if (missingFn(result.error)) result = await sb.rpc('check_sudoku_today', { entries: current.entries });
+        result = await window.ID_RPC(sb, 'check_sudoku_today', { level: level, entries: current.entries });
+        if (missingFn(result.error)) result = await window.ID_RPC(sb, 'check_sudoku_today', { entries: current.entries });
       }
       checking = false;
       var data = result.data || {};
@@ -533,7 +532,7 @@
   async function boot() {
     var root = document.getElementById('sudoku-root');
     if (!root) return;
-    var date = melbourneDate(new Date());
+    var date = localDate(new Date());
     var dateEl = document.getElementById('sudoku-date');
     if (dateEl) dateEl.textContent = date;
 
@@ -571,13 +570,13 @@
   var legacyDraw = null;
 
   async function drawLevel(sb, level) {
-    var result = await sb.rpc('draw_sudoku_today', { level: level });
+    var result = await window.ID_RPC(sb, 'draw_sudoku_today', { level: level });
     if (!missingFn(result.error)) {
       if (result.error) return { error: true, puzzle: null };
       return { error: false, puzzle: puzzleFrom(result.data) };
     }
     if (legacyDraw) return legacyDraw;
-    var single = await sb.rpc('draw_sudoku_today');
+    var single = await window.ID_RPC(sb, 'draw_sudoku_today');
     if (single.error) return { error: true, puzzle: null };
     legacyDraw = { error: false, puzzle: puzzleFrom(single.data) };
     return legacyDraw;

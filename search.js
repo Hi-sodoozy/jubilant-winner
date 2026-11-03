@@ -1,13 +1,12 @@
 (function () {
   var STORAGE_PREFIX = 'iain-search:';
 
-  function melbourneDate(date) {
-    return new Intl.DateTimeFormat('en-CA', {
-      timeZone: 'Australia/Melbourne',
-      year: 'numeric',
-      month: '2-digit',
-      day: '2-digit'
-    }).format(date || new Date());
+  function localDate() {
+    if (window.ID_LOCAL_DATE) return window.ID_LOCAL_DATE();
+    var now = new Date();
+    var month = now.getMonth() + 1;
+    var day = now.getDate();
+    return now.getFullYear() + '-' + (month < 10 ? '0' : '') + month + '-' + (day < 10 ? '0' : '') + day;
   }
 
   function client() {
@@ -123,7 +122,7 @@
       var endRow = Math.floor(end / puzzle.width);
       var endCol = end % puzzle.width;
       checking = true;
-      var result = await sb.rpc('check_word_search_today', {
+      var result = await window.ID_RPC(sb, 'check_word_search_today', {
         start_row: startRow,
         start_col: startCol,
         end_row: endRow,
@@ -228,12 +227,12 @@
   async function boot() {
     var root = document.getElementById('search-root');
     if (!root) return;
-    var date = melbourneDate(new Date());
+    var date = localDate(new Date());
     var dateEl = document.getElementById('search-date');
     if (dateEl) dateEl.textContent = date;
     var sb = client();
     if (!sb) return;
-    var drawn = await sb.rpc('draw_word_search_today');
+    var drawn = await window.ID_RPC(sb, 'draw_word_search_today');
     if (drawn.error) {
       var note = document.createElement('p');
       note.className = 'trivia-status';
