@@ -342,6 +342,7 @@
     }
     var data = result.data || {};
     if (data.ok !== true) return;
+    if (window.ID_PLAY) window.ID_PLAY('connections');
     mount(root, prepare(data), date);
   }
 

@@ -1836,6 +1836,45 @@ a.website-case-client:hover {
   border-top: 3px solid var(--ink);
 }
 
+.game-analytics {
+  margin: 0 0 2rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 3px solid var(--ink);
+}
+
+.game-analytics-status:empty {
+  display: none;
+}
+
+.game-analytics-totals {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem 1.75rem;
+  margin: 0 0 1rem;
+  font-weight: 800;
+}
+
+.game-analytics-totals p {
+  margin: 0;
+}
+
+.game-analytics-totals strong {
+  display: block;
+  font-family: var(--font-display);
+  font-size: 2rem;
+  line-height: 1.1;
+}
+
+.game-analytics-plays {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(11rem, 1fr));
+  gap: 0.35rem 1rem;
+  font-weight: 800;
+}
+
 .dashboard-games textarea {
   min-height: 11rem;
 }
@@ -3803,6 +3842,16 @@ h1, h2, h3,
 
 .red-board {
   max-width: 28rem;
+}
+
+.red-clock {
+  margin: 0 0 0.85rem;
+  font-family: var(--font-display);
+  font-size: clamp(2.6rem, 8vw, 4.2rem);
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.03em;
+  line-height: 1;
 }
 
 .red-button {

@@ -271,6 +271,7 @@
         var drawn = await drawLevel(sb, name);
         if (ticket !== request) {
           if (!drawn.error) puzzles[name] = drawn.puzzle;
+          if (!drawn.error && drawn.puzzle && window.ID_PLAY) window.ID_PLAY('sudoku');
           return;
         }
         if (drawn.error) {
@@ -280,6 +281,7 @@
           return;
         }
         puzzles[name] = drawn.puzzle;
+        if (drawn.puzzle && window.ID_PLAY) window.ID_PLAY('sudoku');
       }
       if (puzzles[name]) {
         selected = puzzles[name].givens.indexOf('0');

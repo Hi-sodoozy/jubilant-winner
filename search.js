@@ -245,6 +245,7 @@
     var height = Number(data.height);
     var words = Array.isArray(data.words) ? data.words.map(function (word) { return String(word || '').toUpperCase(); }).filter(Boolean) : [];
     if (data.ok !== true || typeof data.grid !== 'string' || data.grid.length !== width * height || words.length < 3) return;
+    if (window.ID_PLAY) window.ID_PLAY('search');
     mount(root, sb, {
       id: String(data.id || ''),
       width: width,

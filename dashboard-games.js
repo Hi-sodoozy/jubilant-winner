@@ -790,7 +790,57 @@
     await showBank('crossword_bank_stats', 'crossword', 'game-cross-status', 'Crossword', true);
     await showBank('tiny_crossword_bank_stats', 'tiny', 'game-tiny-status', 'Tiny Crossword', true);
     await showBank('word_search_bank_stats', 'search', 'game-search-status', 'Word Search', true);
+    await showAnalytics();
     writeGlance();
+  }
+
+  var PLAY_GAMES = [
+    ['trivia', 'Trivia'],
+    ['connections', 'Connections'],
+    ['sudoku', 'Sudoku'],
+    ['tiny', 'Tiny Crossword'],
+    ['word', 'Word'],
+    ['crossword', 'Crossword'],
+    ['search', 'Word Search'],
+    ['button', 'The Red Button']
+  ];
+
+  async function showAnalytics() {
+    var status = document.getElementById('gameAnalyticsStatus');
+    var browsers = document.getElementById('analyticsBrowsers');
+    var returning = document.getElementById('analyticsReturning');
+    var list = document.getElementById('analyticsPlays');
+    var totals = document.querySelector('.game-analytics-totals');
+    if (!status || !browsers || !returning || !list) return;
+    function fail() {
+      status.textContent = 'Analytics could not be loaded.';
+      if (totals) totals.hidden = true;
+      list.hidden = true;
+    }
+    var db = client();
+    if (!db) {
+      fail();
+      return;
+    }
+    var result = await db.rpc('analytics_stats', { gate: gate() });
+    if (result.error || !result.data || result.data.ok !== true) {
+      fail();
+      return;
+    }
+    status.textContent = '';
+    if (totals) totals.hidden = false;
+    list.hidden = false;
+    var data = result.data;
+    var plays = data.plays || {};
+    browsers.textContent = String(Number(data.browsers) || 0);
+    returning.textContent = String(Number(data.returning) || 0);
+    list.innerHTML = '';
+    PLAY_GAMES.forEach(function (pair) {
+      var count = Number(plays[pair[0]]) || 0;
+      var item = document.createElement('li');
+      item.textContent = pair[1] + ': ' + count + (count === 1 ? ' play' : ' plays');
+      list.appendChild(item);
+    });
   }
 
   async function showBank(rpcName, name, statusId, label, live) {

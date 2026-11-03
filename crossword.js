@@ -392,6 +392,7 @@
     }
     var puzzle = puzzleFrom(drawn.data);
     if (!puzzle) return;
+    if (window.ID_PLAY) window.ID_PLAY('crossword');
     mount(root, sb, puzzle, date);
   }
 

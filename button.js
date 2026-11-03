@@ -3,6 +3,7 @@
   var TRIES = 6;
   var TARGET = 10;
   var CLOSE = 0.1;
+  var LIMIT = 60;
 
   function localDate() {
     if (window.ID_LOCAL_DATE) return window.ID_LOCAL_DATE();
@@ -26,9 +27,13 @@
     var date = localDate();
     var tries = load(date);
     var startedAt = 0;
+    var clockTimer = 0;
     var button = document.createElement('button');
     button.type = 'button';
     button.className = 'red-button';
+    var clock = document.createElement('p');
+    clock.className = 'red-clock';
+    clock.setAttribute('aria-live', 'off');
     var count = document.createElement('p');
     count.className = 'red-count';
     var feedback = document.createElement('p');
@@ -45,7 +50,22 @@
       return (performance.now() - start) / 1000;
     }
 
+    function clockText(seconds) {
+      var capped = Math.min(Math.max(seconds, 0), LIMIT);
+      if (capped >= LIMIT) return '1:00.00';
+      var whole = Math.floor(capped);
+      var hundredths = Math.floor((capped - whole) * 100 + 1e-6);
+      if (hundredths >= 100) {
+        whole += 1;
+        hundredths = 0;
+      }
+      if (whole >= LIMIT) return '1:00.00';
+      var secs = whole % 60;
+      return Math.floor(whole / 60) + ':' + (secs < 10 ? '0' : '') + secs + '.' + (hundredths < 10 ? '0' : '') + hundredths;
+    }
+
     function offText(value) {
+      if (value >= LIMIT) return 'Timed out.';
       var off = Math.abs(value - TARGET);
       if (off < 0.005) return 'Right on it.';
       var text = off.toFixed(2) + (value < TARGET ? ' early' : ' late');
@@ -62,6 +82,11 @@
       return best;
     }
 
+    function stopClock() {
+      if (clockTimer) window.clearInterval(clockTimer);
+      clockTimer = 0;
+    }
+
     function render() {
       var running = !!startedAt;
       var done = tries.length >= TRIES;
@@ -69,6 +94,8 @@
       var last = tries.length ? tries[tries.length - 1] : null;
       button.classList.toggle('is-running', running);
       button.disabled = done;
+      clock.classList.toggle('is-running', running);
+      if (!running) clock.textContent = last === null ? '0:00.00' : clockText(last);
       if (done) {
         button.textContent = 'Done';
         button.setAttribute('aria-label', 'No tries left today');
@@ -89,8 +116,8 @@
           : 'Closest was ' + best.toFixed(2) + ' off.';
         feedback.className = 'red-feedback' + (best < CLOSE ? ' is-right' : '');
       } else if (last !== null) {
-        feedback.textContent = last.toFixed(2) + ' seconds. ' + offText(last);
-        feedback.className = 'red-feedback' + (Math.abs(last - TARGET) < CLOSE ? ' is-right' : '');
+        feedback.textContent = last >= LIMIT ? '1:00. Timed out.' : last.toFixed(2) + ' seconds. ' + offText(last);
+        feedback.className = 'red-feedback' + (last < LIMIT && Math.abs(last - TARGET) < CLOSE ? ' is-right' : '');
       } else {
         feedback.textContent = '';
         feedback.className = 'red-feedback';
@@ -100,10 +127,36 @@
         var item = document.createElement('li');
         var off = Math.abs(value - TARGET);
         if (best !== null && Math.abs(off - best) < 0.0005) item.className = 'is-best';
-        item.textContent = value.toFixed(2) + ' seconds. ' + offText(value);
+        item.textContent = value >= LIMIT ? '1:00. Timed out.' : value.toFixed(2) + ' seconds. ' + offText(value);
         item.setAttribute('aria-label', 'Try ' + (index + 1) + ', ' + item.textContent);
         list.appendChild(item);
       });
+    }
+
+    function finish(value) {
+      if (!startedAt) return;
+      var timedOut = value >= LIMIT;
+      var stored = timedOut ? LIMIT : value;
+      stopClock();
+      startedAt = 0;
+      tries.push(stored);
+      save();
+      render();
+      if (!timedOut && Math.abs(stored - TARGET) < CLOSE && window.puzzleCelebrate) window.puzzleCelebrate(button);
+    }
+
+    function startClock() {
+      stopClock();
+      clock.textContent = clockText(secondsFrom(startedAt));
+      clockTimer = window.setInterval(function () {
+        if (!startedAt) {
+          stopClock();
+          return;
+        }
+        var value = secondsFrom(startedAt);
+        if (value >= LIMIT) finish(value);
+        else clock.textContent = clockText(value);
+      }, 50);
     }
 
     function freshDay() {
@@ -111,6 +164,7 @@
       if (next === date) return false;
       date = next;
       tries = load(date);
+      stopClock();
       startedAt = 0;
       var dateEl = document.getElementById('button-date');
       if (dateEl) dateEl.textContent = date;
@@ -118,10 +172,17 @@
     }
 
     document.addEventListener('visibilitychange', function () {
-      if (document.visibilityState === 'visible' && freshDay()) render();
+      if (document.visibilityState !== 'visible') return;
+      if (freshDay()) {
+        render();
+        return;
+      }
+      if (startedAt && secondsFrom(startedAt) >= LIMIT) finish(LIMIT);
     });
     window.setInterval(function () {
-      if (freshDay()) render();
+      if (freshDay()) {
+        render();
+      }
     }, 30000);
 
     button.addEventListener('click', function () {
@@ -132,21 +193,20 @@
       if (tries.length >= TRIES) return;
       if (!startedAt) {
         startedAt = performance.now();
+        if (window.ID_PLAY) window.ID_PLAY('button');
         feedback.textContent = '';
         feedback.className = 'red-feedback';
         render();
+        startClock();
         return;
       }
       var value = secondsFrom(startedAt);
       if (value < 0.4) return;
-      startedAt = 0;
-      tries.push(value);
-      save();
-      render();
-      if (Math.abs(value - TARGET) < CLOSE && window.puzzleCelebrate) window.puzzleCelebrate(button);
+      finish(value);
     });
 
     root.innerHTML = '';
+    root.appendChild(clock);
     root.appendChild(button);
     root.appendChild(count);
     root.appendChild(feedback);

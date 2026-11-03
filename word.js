@@ -250,6 +250,7 @@
     var data = drawn.data || {};
     var length = Number(data.length);
     if (data.ok !== true || length < 4 || length > 8) return;
+    if (window.ID_PLAY) window.ID_PLAY('word');
     mount(root, sb, {
       id: String(data.id || ''),
       length: length,

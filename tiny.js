@@ -428,6 +428,7 @@
     }
     var puzzle = puzzleFrom(drawn.data);
     if (!puzzle) return;
+    if (window.ID_PLAY) window.ID_PLAY('tiny');
     mount(root, sb, puzzle, date);
   }
 

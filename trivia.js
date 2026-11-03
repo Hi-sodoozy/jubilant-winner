@@ -199,6 +199,7 @@
     }
     var data = result.data || {};
     if (data.ok !== true) return;
+    if (window.ID_PLAY) window.ID_PLAY('trivia');
     mount(root, asQuiz(data), date);
   }
 
