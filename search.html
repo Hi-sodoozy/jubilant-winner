@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Word Search – Games</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Today’s Word Search from Iain Duguid. Find every hidden word." />
+  <link rel="stylesheet" href="styles-iain.css" />
+</head>
+<body data-page-id="search">
+  <div class="shell">
+    <header class="games-bar">
+      <a href="games.html" class="games-brand">Games</a>
+      <a href="index.html" class="games-home">Iain Duguid</a>
+    </header>
+
+    <main>
+      <section class="section page-intro" id="top">
+        <div class="section-inner">
+          <h1 class="page-intro-title">Word Search</h1>
+          <p class="page-intro-subtitle">Find every word.</p>
+          <p class="trivia-today">Today <span id="search-date"></span></p>
+        </div>
+      </section>
+
+      <section class="section section-need">
+        <div class="section-inner">
+          <div id="search-root" class="search-board"></div>
+          <p class="trivia-back"><a href="games.html">Back to games</a></p>
+        </div>
+      </section>
+    </main>
+
+    <footer class="games-foot">
+      <span>Games</span>
+      <a href="index.html">Iain Duguid</a>
+    </footer>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="supabase-config.js"></script>
+  <script src="celebrate.js"></script>
+  <script src="search.js"></script>
+</body>
+</html>

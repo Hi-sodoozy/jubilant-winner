@@ -112,6 +112,11 @@
                   <span class="game-admin-hint">One puzzle a day</span>
                   <span class="game-admin-stat" data-stat="crossword" data-stat-compact></span>
                 </button>
+                <button type="button" class="game-admin-card" data-open="search">
+                  <span class="game-admin-name">Word Search</span>
+                  <span class="game-admin-hint">One puzzle a day</span>
+                  <span class="game-admin-stat" data-stat="search" data-stat-compact></span>
+                </button>
               </div>
             </div>
 
@@ -305,6 +310,42 @@ DOWN
                   <button type="submit" class="btn-primary">Add crosswords</button>
                   <label for="game-cross-file" class="btn-secondary">Choose a text file</label>
                   <input type="file" id="game-cross-file" class="trivia-file-input" accept=".txt,.text,text/plain" />
+                </div>
+              </form>
+            </section>
+
+            <section class="game-admin-panel" data-game-panel="search" hidden>
+              <button type="button" class="game-admin-back" data-game-back>All games</button>
+              <h2>Word Search</h2>
+              <p>List the words, leave a blank line, then the letter grid. A blank line starts the next puzzle.</p>
+              <p class="game-admin-stat" data-stat="search"></p>
+              <details class="game-admin-format">
+                <summary>Show the format</summary>
+                <pre class="trivia-format">HEART
+MOON
+PINE
+STAR
+EMBER
+
+HEARTQJS
+ZBVFKTXU
+DLMOONWA
+GCKYWBXR
+PINEBFEQ
+STARXBXU
+QJVGMBFD
+VKGEHZLQ</pre>
+              </details>
+              <p id="game-search-status" class="trivia-status" role="status"></p>
+              <form id="game-search-form">
+                <div class="form-row">
+                  <label for="game-search-paste">Word searches</label>
+                  <textarea id="game-search-paste" rows="10" spellcheck="false" placeholder="Paste words, then a letter grid."></textarea>
+                </div>
+                <div class="trivia-file-row">
+                  <button type="submit" class="btn-primary">Add word searches</button>
+                  <label for="game-search-file" class="btn-secondary">Choose a text file</label>
+                  <input type="file" id="game-search-file" class="trivia-file-input" accept=".txt,.text,text/plain" />
                 </div>
               </form>
             </section>

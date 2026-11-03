@@ -3553,3 +3553,256 @@ h1, h2, h3,
     animation: none;
   }
 }
+
+.word-board,
+.cross-board,
+.search-board {
+  max-width: 40rem;
+}
+
+.cross-current {
+  min-height: 1.4em;
+  margin: 0 0 0.75rem;
+  font-weight: 800;
+}
+
+.word-hint-btn {
+  margin-top: 0.85rem;
+  padding: 0.35rem 0.9rem;
+  border: 2.5px solid var(--ink);
+  border-radius: 999px;
+  background: #fff;
+  box-shadow: 3px 3px 0 var(--sun);
+  color: var(--ink);
+  font-family: var(--font-ui);
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.word-hint-btn:hover {
+  background: var(--sun);
+}
+
+.word-hint {
+  margin: 0.85rem 0 0;
+  font-weight: 800;
+}
+
+.word-hint[hidden],
+.word-hint-btn[hidden] {
+  display: none;
+}
+
+.word-grid {
+  display: grid;
+  grid-template-columns: repeat(var(--length), minmax(0, 1fr));
+  width: min(100%, 22rem);
+  gap: 0.35rem;
+}
+
+.word-cell {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  aspect-ratio: 1;
+  border: 2.5px solid var(--ink);
+  border-radius: 8px;
+  background: #fff;
+  font-family: var(--font-display);
+  font-size: clamp(1rem, 4vw, 1.45rem);
+  font-weight: 700;
+}
+
+.word-cell.is-correct,
+.word-key.is-correct {
+  border-color: #146b3a;
+  background: #1c7c4a;
+  color: #fff8ee;
+}
+
+.word-cell.is-present,
+.word-key.is-present {
+  background: var(--sun);
+}
+
+.word-cell.is-absent,
+.word-key.is-absent {
+  border-color: #c9bfb2;
+  background: #e4dcd0;
+  color: var(--text-muted);
+}
+
+.word-keys {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  width: min(100%, 26rem);
+  margin-top: 0.4rem;
+}
+
+.word-key-row {
+  display: flex;
+  justify-content: center;
+  gap: 0.28rem;
+}
+
+.word-key {
+  flex: 1;
+  min-width: 0;
+  min-height: 2.7rem;
+  border: 2.5px solid var(--ink);
+  border-radius: 8px;
+  background: #fff;
+  color: var(--ink);
+  font-family: var(--font-ui);
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.word-key.is-wide {
+  flex: 1.5;
+  font-size: 0.72rem;
+}
+
+.word-feedback,
+.cross-feedback,
+.search-feedback {
+  min-height: 1.4em;
+  margin: 0.85rem 0;
+  font-weight: 800;
+}
+
+.word-feedback.is-wrong,
+.cross-feedback.is-wrong,
+.search-feedback.is-wrong {
+  color: var(--pop);
+}
+
+.cross-grid,
+.search-grid {
+  display: grid;
+  grid-template-columns: repeat(var(--cols), minmax(0, 1fr));
+  gap: 2px;
+  padding: 2px;
+  border: 2.5px solid var(--ink);
+  background: var(--ink);
+  box-shadow: 4px 4px 0 var(--ink);
+}
+
+.cross-grid {
+  width: min(100%, 34rem);
+}
+
+.search-grid {
+  width: min(100%, 28rem);
+  touch-action: none;
+  user-select: none;
+}
+
+.cross-cell,
+.search-cell {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  aspect-ratio: 1;
+  border: 0;
+  background: #fff;
+  color: var(--ink);
+  font-family: var(--font-display);
+  font-weight: 700;
+  padding: 0;
+}
+
+.cross-cell {
+  font-size: clamp(0.7rem, 2.2vw, 1.2rem);
+}
+
+.search-cell {
+  font-size: clamp(0.85rem, 3vw, 1.25rem);
+}
+
+.cross-cell.is-block {
+  background: var(--ink);
+}
+
+.cross-cell.is-word {
+  background: #fff4cc;
+}
+
+.cross-cell.is-selected,
+.search-cell.is-path {
+  background: var(--sun);
+}
+
+.search-cell.is-found {
+  background: #e5f8ea;
+  color: #146b3a;
+}
+
+.cross-num {
+  position: absolute;
+  top: 1px;
+  left: 2px;
+  font-family: var(--font-ui);
+  font-size: 0.55rem;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.cross-capture {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+}
+
+.cross-clues {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.cross-clues h2 {
+  margin: 0 0 0.35rem;
+  font-family: var(--font-ui);
+  font-size: 0.95rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.cross-clue {
+  border: 0;
+  background: transparent;
+  color: var(--ink);
+  font-family: var(--font-ui);
+  font-weight: 700;
+  text-align: left;
+  padding: 0.15rem 0.2rem;
+  cursor: pointer;
+}
+
+.cross-clue.is-on {
+  background: var(--sun);
+}
+
+.search-words {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem 0.9rem;
+  max-width: 28rem;
+  margin-top: 0.9rem;
+  font-weight: 800;
+}
+
+.search-word.is-found {
+  color: #146b3a;
+  text-decoration: line-through;
+}
+
+@media (max-width: 640px) {
+  .cross-clues {
+    grid-template-columns: 1fr;
+  }
+}

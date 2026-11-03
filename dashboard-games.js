@@ -269,6 +269,108 @@
     return { puzzles: puzzles, errors: errors };
   }
 
+  function wordSearchLine(grid, width, start, end) {
+    var sr = Math.floor(start / width);
+    var sc = start % width;
+    var er = Math.floor(end / width);
+    var ec = end % width;
+    var dr = er - sr;
+    var dc = ec - sc;
+    var steps = Math.max(Math.abs(dr), Math.abs(dc));
+    if (!steps) return '';
+    var rowStep = dr === 0 ? 0 : (dr > 0 ? 1 : -1);
+    var colStep = dc === 0 ? 0 : (dc > 0 ? 1 : -1);
+    if (rowStep * steps !== dr || colStep * steps !== dc) return '';
+    var word = '';
+    var i;
+    for (i = 0; i <= steps; i += 1) word += grid[(sr + rowStep * i) * width + (sc + colStep * i)];
+    return word;
+  }
+
+  function wordInGrid(grid, width, height, word) {
+    var dirs = [[0, 1], [1, 0], [1, 1], [1, -1], [0, -1], [-1, 0], [-1, -1], [-1, 1]];
+    var r;
+    var c;
+    var d;
+    for (r = 0; r < height; r += 1) {
+      for (c = 0; c < width; c += 1) {
+        for (d = 0; d < dirs.length; d += 1) {
+          var endR = r + dirs[d][0] * (word.length - 1);
+          var endC = c + dirs[d][1] * (word.length - 1);
+          if (endR < 0 || endC < 0 || endR >= height || endC >= width) continue;
+          if (wordSearchLine(grid, width, r * width + c, endR * width + endC) === word) return true;
+        }
+      }
+    }
+    return false;
+  }
+
+  function parseWordSearches(text) {
+    var lines = String(text || '').replace(/\r\n/g, '\n').replace(/\r/g, '\n').split('\n');
+    var puzzles = [];
+    var errors = [];
+    var words = [];
+    var grid = [];
+    var phase = 'words';
+    var number = 1;
+
+    function finish() {
+      if (!words.length && !grid.length) return;
+      var width = grid.length ? grid[0].length : 0;
+      var problem = '';
+      if (words.length < 3) problem = 'needs at least 3 words';
+      else if (grid.length < 5 || width < 5 || grid.length > 15 || width > 15) problem = 'needs a grid from 5 to 15 squares';
+      else if (grid.some(function (row) { return row.length !== width; })) problem = 'has uneven rows';
+      else {
+        var seen = {};
+        words.forEach(function (word) {
+          if (seen[word]) problem = 'repeats ' + word;
+          seen[word] = true;
+          if (!problem && !wordInGrid(grid.join(''), width, grid.length, word)) problem = 'cannot find ' + word;
+        });
+      }
+      if (problem) errors.push('Word search ' + number + ' ' + problem + '.');
+      else puzzles.push({ width: width, height: grid.length, grid: grid.join(''), words: words.slice() });
+      number += 1;
+      words = [];
+      grid = [];
+      phase = 'words';
+    }
+
+    lines.forEach(function (raw, index) {
+      var line = raw.trim();
+      if (!line) {
+        if (phase === 'words' && words.length) phase = 'grid';
+        else finish();
+        return;
+      }
+      if (/^words$/i.test(line)) {
+        phase = 'words';
+        return;
+      }
+      if (/^grid$/i.test(line)) {
+        phase = 'grid';
+        return;
+      }
+      var letters = line.replace(/[^A-Za-z]/g, '').toUpperCase();
+      if (phase === 'grid') {
+        if (!/^[A-Z]{5,15}$/.test(letters) || letters.length !== line.replace(/\s+/g, '').length) {
+          errors.push('Line ' + (index + 1) + ' is not a grid row.');
+          return;
+        }
+        grid.push(letters);
+        return;
+      }
+      if (!/^[A-Z]{3,12}$/.test(letters) || letters.length !== line.replace(/\s+/g, '').length) {
+        errors.push('Line ' + (index + 1) + ' needs a word of 3 to 12 letters.');
+        return;
+      }
+      words.push(letters);
+    });
+    finish();
+    return { puzzles: puzzles, errors: errors };
+  }
+
   function parseWords(text) {
     var lines = String(text || '').replace(/\r\n/g, '\n').replace(/\r/g, '\n').split('\n');
     var words = [];
@@ -683,10 +785,11 @@
         noteRunway('Connections', connDays, true);
       }
     }
-    await showBank('word_bank_stats', 'word', 'game-word-status', 'Word', false);
+    await showBank('word_bank_stats', 'word', 'game-word-status', 'Word', true);
     await showBank('sudoku_bank_stats', 'sudoku', 'game-sudoku-status', 'Sudoku', true);
-    await showBank('crossword_bank_stats', 'crossword', 'game-cross-status', 'Crossword', false);
+    await showBank('crossword_bank_stats', 'crossword', 'game-cross-status', 'Crossword', true);
     await showBank('tiny_crossword_bank_stats', 'tiny', 'game-tiny-status', 'Tiny Crossword', true);
+    await showBank('word_search_bank_stats', 'search', 'game-search-status', 'Word Search', true);
     writeGlance();
   }
 
@@ -879,13 +982,29 @@
     if (parsed.errors.length) setStatus('game-cross-status', document.getElementById('game-cross-status').textContent + ' ' + errorNote(parsed.errors), false);
   }
 
+  async function ingestWordSearches(text, clear) {
+    if (!String(text || '').trim()) {
+      setStatus('game-search-status', 'Paste word searches, or choose a text file.', true);
+      return;
+    }
+    var parsed = parseWordSearches(text);
+    if (!parsed.puzzles.length) {
+      setStatus('game-search-status', errorNote(parsed.errors) || 'No word searches found.', true);
+      return;
+    }
+    var unique = uniqueRows(parsed.puzzles, function (puzzle) { return puzzle.grid; });
+    await upload('word searches', unique, 'add_word_searches', 'game-search-status', clear ? 'game-search-paste' : '');
+    if (parsed.errors.length) setStatus('game-search-status', document.getElementById('game-search-status').textContent + ' ' + errorNote(parsed.errors), false);
+  }
+
   var FILE_STATUS = {
     'game-trivia-file': 'game-trivia-status',
     'game-conn-file': 'game-conn-status',
     'game-word-file': 'game-word-status',
     'game-sudoku-file': 'game-sudoku-status',
     'game-cross-file': 'game-cross-status',
-    'game-tiny-file': 'game-tiny-status'
+    'game-tiny-file': 'game-tiny-status',
+    'game-search-file': 'game-search-status'
   };
 
   function bindFile(inputId, handler) {
@@ -934,6 +1053,10 @@
       event.preventDefault();
       ingestCrosswords(document.getElementById('game-cross-paste').value, true);
     });
+    document.getElementById('game-search-form').addEventListener('submit', function (event) {
+      event.preventDefault();
+      ingestWordSearches(document.getElementById('game-search-paste').value, true);
+    });
     document.getElementById('game-tiny-form').addEventListener('submit', function (event) {
       event.preventDefault();
       ingestTiny(document.getElementById('game-tiny-paste').value, true);
@@ -943,6 +1066,7 @@
     bindFile('game-word-file', ingestWords);
     bindFile('game-sudoku-file', ingestSudoku);
     bindFile('game-cross-file', ingestCrosswords);
+    bindFile('game-search-file', ingestWordSearches);
     bindFile('game-tiny-file', ingestTiny);
     refreshStats();
   }

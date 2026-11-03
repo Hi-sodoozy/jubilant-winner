@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Word – Games</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Today’s Word from Iain Duguid. One word, six tries." />
+  <link rel="stylesheet" href="styles-iain.css" />
+</head>
+<body data-page-id="word">
+  <div class="shell">
+    <header class="games-bar">
+      <a href="games.html" class="games-brand">Games</a>
+      <a href="index.html" class="games-home">Iain Duguid</a>
+    </header>
+
+    <main>
+      <section class="section page-intro" id="top">
+        <div class="section-inner">
+          <h1 class="page-intro-title">Word</h1>
+          <p class="page-intro-subtitle">One word. Six tries.</p>
+          <p class="trivia-today">Today <span id="word-date"></span></p>
+        </div>
+      </section>
+
+      <section class="section section-need">
+        <div class="section-inner">
+          <div id="word-root" class="word-board"></div>
+          <p class="trivia-back"><a href="games.html">Back to games</a></p>
+        </div>
+      </section>
+    </main>
+
+    <footer class="games-foot">
+      <span>Games</span>
+      <a href="index.html">Iain Duguid</a>
+    </footer>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="supabase-config.js"></script>
+  <script src="celebrate.js"></script>
+  <script src="word.js"></script>
+</body>
+</html>
