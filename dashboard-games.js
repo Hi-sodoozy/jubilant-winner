@@ -832,6 +832,9 @@
     list.hidden = false;
     var data = result.data;
     var plays = data.plays || {};
+    if (typeof plays === 'string') {
+      try { plays = JSON.parse(plays); } catch (e) { plays = {}; }
+    }
     browsers.textContent = String(Number(data.browsers) || 0);
     returning.textContent = String(Number(data.returning) || 0);
     list.innerHTML = '';
@@ -882,13 +885,14 @@
     noteRunway(label, days, live);
   }
 
-  async function upload(name, rows, rpcName, statusId, clearId) {
+  async function upload(name, rows, rpcName, statusId, clearId, quiet) {
     var db = client();
     if (!db) {
-      setStatus(statusId, 'Add the Supabase URL and anon key before saving.', true);
-      return;
+      var missing = 'Add the Supabase URL and anon key before saving.';
+      if (!quiet) setStatus(statusId, missing, true);
+      return { ok: false, message: missing };
     }
-    if (busy) return;
+    if (busy) return { ok: false, message: 'Wait for the current save to finish.' };
     busy = true;
     var added = 0;
     var updated = 0;
@@ -896,26 +900,32 @@
     var i;
     for (i = 0; i < rows.length; i += CHUNK) {
       var slice = rows.slice(i, i + CHUNK);
-      setStatus(statusId, 'Adding ' + Math.min(i + slice.length, rows.length) + ' of ' + rows.length + '…');
+      if (!quiet) setStatus(statusId, 'Adding ' + Math.min(i + slice.length, rows.length) + ' of ' + rows.length + '…');
       var result = await db.rpc(rpcName, { payload: slice, gate: gate() });
       if (result.error) {
         busy = false;
         var soFar = added ? 'Added ' + added + ' before stopping. ' : '';
-        setStatus(statusId, soFar + explain(result.error, rpcName), true);
-        refreshStats();
-        return;
+        var message = soFar + explain(result.error, rpcName);
+        if (!quiet) {
+          setStatus(statusId, message, true);
+          refreshStats();
+        }
+        return { ok: false, message: message };
       }
       added += (result.data && result.data.added) || 0;
       updated += (result.data && result.data.updated) || 0;
       skipped += (result.data && result.data.skipped) || 0;
     }
     busy = false;
-    if (clearId) document.getElementById(clearId).value = '';
+    if (!quiet && clearId) document.getElementById(clearId).value = '';
     var note = 'Added ' + added + ' ' + name + '.';
     if (updated) note += ' Moved ' + updated + ' to a new level.';
     if (skipped) note += ' Skipped ' + skipped + ' already saved or incomplete.';
-    setStatus(statusId, note);
-    refreshStats();
+    if (!quiet) {
+      setStatus(statusId, note);
+      refreshStats();
+    }
+    return { ok: true, message: note };
   }
 
   async function ingestTrivia(text, clear) {
@@ -1047,6 +1057,119 @@
     if (parsed.errors.length) setStatus('game-search-status', document.getElementById('game-search-status').textContent + ' ' + errorNote(parsed.errors), false);
   }
 
+  var BATCH_HEADS = [
+    ['word search', 'search'],
+    ['tiny crossword', 'tiny'],
+    ['crossword', 'crossword'],
+    ['connections', 'connections'],
+    ['sudoku', 'sudoku'],
+    ['trivia', 'trivia'],
+    ['word', 'word']
+  ];
+
+  function batchHeading(line) {
+    var text = String(line || '').trim().replace(/^#{1,3}\s*/, '').replace(/^=+\s*/, '').replace(/\s*=+$/, '').replace(/:$/, '').trim().toLowerCase();
+    var i;
+    for (i = 0; i < BATCH_HEADS.length; i += 1) {
+      if (text === BATCH_HEADS[i][0]) return BATCH_HEADS[i][1];
+    }
+    return '';
+  }
+
+  function splitBatch(text) {
+    var lines = String(text || '').replace(/\r\n/g, '\n').replace(/\r/g, '\n').split('\n');
+    var sections = {};
+    var current = '';
+    var found = false;
+    lines.forEach(function (line) {
+      var head = batchHeading(line);
+      if (head) {
+        found = true;
+        current = head;
+        if (!sections[current]) sections[current] = [];
+        return;
+      }
+      if (!current) return;
+      sections[current].push(line);
+    });
+    var out = {};
+    Object.keys(sections).forEach(function (key) {
+      out[key] = sections[key].join('\n').trim();
+    });
+    return { found: found, sections: out };
+  }
+
+  function batchRows(id, text) {
+    if (id === 'trivia') {
+      var trivia = parseTrivia(text);
+      return { rows: uniqueRows(trivia.questions, function (question) { return norm(question.prompt); }), errors: trivia.errors, label: 'trivia questions', rpc: 'add_trivia_questions' };
+    }
+    if (id === 'connections') {
+      var connections = parseConnections(text);
+      return { rows: connections.puzzles, errors: connections.errors, label: 'Connections puzzles', rpc: 'add_connections_puzzles' };
+    }
+    if (id === 'word') {
+      var words = parseWords(text);
+      return { rows: uniqueRows(words.words, function (word) { return word.answer; }), errors: words.errors, label: 'words', rpc: 'add_words' };
+    }
+    if (id === 'sudoku') {
+      var sudoku = parseSudoku(text);
+      var byGrid = {};
+      var order = [];
+      sudoku.puzzles.forEach(function (puzzle) {
+        if (!byGrid[puzzle.givens]) order.push(puzzle.givens);
+        byGrid[puzzle.givens] = puzzle;
+      });
+      return { rows: order.map(function (givens) { return byGrid[givens]; }), errors: sudoku.errors, label: 'sudoku puzzles', rpc: 'add_sudoku' };
+    }
+    if (id === 'tiny') {
+      var tiny = parseTiny(text);
+      return { rows: uniqueRows(tiny.puzzles, function (puzzle) { return puzzle.grid; }), errors: tiny.errors, label: 'tiny crosswords', rpc: 'add_tiny_crosswords' };
+    }
+    if (id === 'crossword') {
+      var crossword = parseCrosswords(text);
+      return { rows: uniqueRows(crossword.puzzles, function (puzzle) { return puzzle.grid; }), errors: crossword.errors, label: 'crosswords', rpc: 'add_crosswords' };
+    }
+    var search = parseWordSearches(text);
+    return { rows: uniqueRows(search.puzzles, function (puzzle) { return puzzle.grid; }), errors: search.errors, label: 'word searches', rpc: 'add_word_searches' };
+  }
+
+  async function ingestBatch(text, clear) {
+    if (!String(text || '').trim()) {
+      setStatus('game-batch-status', 'Paste the games, or choose a text file.', true);
+      return;
+    }
+    var split = splitBatch(text);
+    if (!split.found) {
+      setStatus('game-batch-status', 'Start each game with its name on its own line.', true);
+      return;
+    }
+    var order = ['trivia', 'connections', 'word', 'sudoku', 'tiny', 'crossword', 'search'];
+    var notes = [];
+    var failed = false;
+    var i;
+    for (i = 0; i < order.length; i += 1) {
+      var section = split.sections[order[i]];
+      if (!section) continue;
+      var prepared = batchRows(order[i], section);
+      if (!prepared.rows.length) {
+        failed = true;
+        notes.push(errorNote(prepared.errors) || 'No ' + prepared.label + ' found.');
+        continue;
+      }
+      var saved = await upload(prepared.label, prepared.rows, prepared.rpc, 'game-batch-status', '', true);
+      notes.push(saved.message);
+      if (!saved.ok) {
+        failed = true;
+        break;
+      }
+      if (prepared.errors.length) notes.push(errorNote(prepared.errors));
+    }
+    setStatus('game-batch-status', notes.join(' '), failed);
+    if (!failed && clear) document.getElementById('game-batch-paste').value = '';
+    refreshStats();
+  }
+
   var FILE_STATUS = {
     'game-trivia-file': 'game-trivia-status',
     'game-conn-file': 'game-conn-status',
@@ -1054,7 +1177,8 @@
     'game-sudoku-file': 'game-sudoku-status',
     'game-cross-file': 'game-cross-status',
     'game-tiny-file': 'game-tiny-status',
-    'game-search-file': 'game-search-status'
+    'game-search-file': 'game-search-status',
+    'game-batch-file': 'game-batch-status'
   };
 
   function bindFile(inputId, handler) {
@@ -1118,6 +1242,14 @@
     bindFile('game-cross-file', ingestCrosswords);
     bindFile('game-search-file', ingestWordSearches);
     bindFile('game-tiny-file', ingestTiny);
+    bindFile('game-batch-file', ingestBatch);
+    var batchForm = document.getElementById('game-batch-form');
+    if (batchForm) {
+      batchForm.addEventListener('submit', function (event) {
+        event.preventDefault();
+        ingestBatch(document.getElementById('game-batch-paste').value, true);
+      });
+    }
     refreshStats();
   }
 

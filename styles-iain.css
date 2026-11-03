@@ -1842,6 +1842,10 @@ a.website-case-client:hover {
   border-bottom: 3px solid var(--ink);
 }
 
+.game-batch {
+  margin: 0 0 2rem;
+}
+
 .game-analytics-status:empty {
   display: none;
 }

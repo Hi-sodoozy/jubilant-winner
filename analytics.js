@@ -43,9 +43,11 @@
     return window.supabase.createClient(url, key);
   }
 
+  var played = {};
+
   function send(name, args, mark) {
     try {
-      if (localStorage.getItem(mark)) return;
+      if (mark && localStorage.getItem(mark)) return;
     } catch (e) {
       return;
     }
@@ -55,7 +57,7 @@
     args.browser = id;
     args.on_date = day();
     sb.rpc(name, args).then(function (result) {
-      if (result.error) return;
+      if (result.error || !mark) return;
       try { localStorage.setItem(mark, '1'); } catch (e) { /* keep playing */ }
     });
   }
@@ -65,8 +67,9 @@
   };
 
   window.ID_PLAY = function (game) {
-    if (!game) return;
-    send('record_play', { game: game }, 'iain-play:' + game + ':' + day());
+    if (!game || played[game]) return;
+    played[game] = true;
+    send('record_play', { game_name: game }, '');
   };
 
   window.ID_VISIT();

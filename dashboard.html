@@ -88,6 +88,41 @@
                 </div>
                 <ul class="game-analytics-plays" id="analyticsPlays"></ul>
               </div>
+              <div class="game-batch">
+                <h2 class="game-admin-title">All games</h2>
+                <p>Paste every game at once. Put the game name on its own line, then that game’s usual puzzles. The names are Trivia, Connections, Word, Sudoku, Tiny Crossword, Crossword, and Word Search.</p>
+                <details class="game-admin-format">
+                  <summary>Show the format</summary>
+                  <pre class="trivia-format">Trivia
+1. Which country has the most time zones?
+A) Russia
+B) United States
+C) France
+D) United Kingdom
+Answer: C
+
+Connections
+Birds | crane, robin, eagle, swan
+Trees | maple, birch, cedar, aspen
+Rocks | stone, flint, shale, slate
+Water | river, ocean, creek, brook
+
+Word
+CRANE | A tall bird</pre>
+                </details>
+                <p id="game-batch-status" class="trivia-status" role="status"></p>
+                <form id="game-batch-form">
+                  <div class="form-row">
+                    <label for="game-batch-paste">All games</label>
+                    <textarea id="game-batch-paste" rows="12" spellcheck="false" placeholder="Trivia, then Connections, then the other games."></textarea>
+                  </div>
+                  <div class="trivia-file-row">
+                    <button type="submit" class="btn-primary">Add all games</button>
+                    <label for="game-batch-file" class="btn-secondary">Choose a text file</label>
+                    <input type="file" id="game-batch-file" class="trivia-file-input" accept=".txt,.text,text/plain" />
+                  </div>
+                </form>
+              </div>
               <h2 class="game-admin-title">Puzzle banks</h2>
               <p class="game-admin-runway" id="gameRunway"></p>
               <div class="game-admin-list">
